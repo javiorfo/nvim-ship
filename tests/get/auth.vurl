@@ -1,0 +1,12 @@
+#######################
+# VURL file           #
+# Author: Javier Orfo #
+#######################
+
+~[BASE]~
+url https://httpbin.org/bearer
+method GET
+
+~[HEADERS]~
+accept application/json
+Authorization Bearer xxx

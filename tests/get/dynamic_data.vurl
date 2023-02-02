@@ -1,0 +1,11 @@
+#######################
+# VURL file           #
+# Author: Javier Orfo #
+#######################
+
+~[BASE]~
+url https://httpbin.org/base64/SFRUUEJJTiBpcyBhd2Vzb21l
+method GET 
+
+~[HEADERS]~
+accept text/html

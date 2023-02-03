@@ -1,9 +1,9 @@
 -- ####################################################
 -- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javi-7/nvim-vurl #
+-- # URL:         https://github.com/javio7/nvim-vurl #
 -- ####################################################
 
-local Logger = require'vurl.utils'.logger
+local Logger = require'vurl.util'.logger
 local M = {}
 
 M.DEFAULTS = {

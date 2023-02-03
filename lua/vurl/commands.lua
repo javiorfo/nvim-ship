@@ -1,10 +1,10 @@
 -- ####################################################
 -- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javi-7/nvim-vurl #
+-- # URL:         https://github.com/javio7/nvim-vurl #
 -- ####################################################
 
 local core = require'vurl.core'
-local Logger = require'vurl.utils'.logger
+local Logger = require'vurl.util'.logger
 local M = {}
 
 function M.send()

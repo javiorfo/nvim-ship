@@ -8,11 +8,11 @@
 ## Installation
 `Vim Plug`
 ```vim
-Plug 'javi-7/nvim-vurl'
+Plug 'javio7/nvim-vurl'
 ```
 `Packer`
 ```lua
-use 'javi-7/nvim-vurl'
+use 'javio7/nvim-vurl'
 ```
 
 ## Usage

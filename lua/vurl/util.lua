@@ -1,6 +1,6 @@
 -- ####################################################
 -- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javi-7/nvim-vurl #
+-- # URL:         https://github.com/javio7/nvim-vurl #
 -- ####################################################
 
 local M = {}
@@ -13,9 +13,9 @@ M.sections = {
 
 M.status_time_tmp_file = "/tmp/vurl_tmp"
 M.vurl_response_extension = "vurlr"
-M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/vurl", "") .. "script/vurl"
+M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/vurl", "") .. "bin/vurl.sh"
 
-local logger = require'osfa.logger':new("VURL")
+local logger = require'vurl.logger':new("VURL")
 M.logger = logger
 
 function M.sections_to_skip(section_to_process)
@@ -28,6 +28,14 @@ function M.sections_to_skip(section_to_process)
     if section_to_process == M.sections.BODY then
         return { M.sections.HEADERS, M.sections.BASE }
     end
+end
+
+function M.trim(s)
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+function M.table_value_from_readline(line)
+    return string.match(line, "(.+)%s(.+)")
 end
 
 return M

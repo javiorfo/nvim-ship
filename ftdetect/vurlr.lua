@@ -1,6 +1,6 @@
 -- ####################################################
 -- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javi-7/nvim-vurl #
+-- # URL:         https://github.com/javio7/nvim-vurl #
 -- ####################################################
 
 vim.cmd[[autocmd BufRead,BufNewFile *.vurlr set filetype=vurlr]]

@@ -1,4 +1,4 @@
-#!/bin/bash
+##!/usr/bin/env bash
 # Author: Javier Orfo
 
 while getopts "t:m:u:f:h:c:s:d:" ARG; do
@@ -80,7 +80,7 @@ if [ ${#RES_LINE} -gt 2 ] && [[ $RES_LINE = \{* ]]; then
     
     # Paste formatted JSON
     if [ $VURL_SHOW_HEADERS = 'none' ]; then
-        cat $TMP_JSON > $VURL_FILE
+        cat $TMP_JSON > $VURL_FIL
     else
         sed "${FORMATTED_JSON_LINE_NR} r ${TMP_JSON}" $TMP_RES > $VURL_FILE
     fi

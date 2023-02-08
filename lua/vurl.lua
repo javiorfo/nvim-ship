@@ -11,7 +11,7 @@ M.DEFAULTS = {
         timeout = 60
     },
     response = {
-        show_headers = 'res'
+        show_headers = 'all'
     },
     view = {
         horizontal = true,

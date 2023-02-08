@@ -49,16 +49,16 @@ local function read_body(file)
                     if not is_body then
                         if line:find("^{") or line:find("^<") then
                             is_body = true
-                            result.body = (result.body or "") .. util.trim(line)
+                            result.vurl_body = (result.vurl_body or "") .. util.trim(line)
                         end
                     else
-                        result.body = (result.body or "") .. util.trim(line)
+                        result.vurl_body = (result.vurl_body or "") .. util.trim(line)
                     end
                     if not is_body then
                         local k, v = util.table_value_from_readline(line)
-                        if k == "file" then
+                        if k then
                             result[k] = util.trim(v)
-                            break
+                            if k == "vurl_body_file" then break end
                         end
                     end
                 else
@@ -73,9 +73,30 @@ end
 local function process_headers(headers)
     local result = ""
     for k, v in pairs(headers) do
-       result = result .. string.format("' -H \"%s: %s\"'", k, v)
+        result = result .. string.format("' -H \"%s: %s\"'", k, v)
     end
     return result
+end
+
+local function process_body(body)
+    local result = ""
+    for k, v in pairs(body) do
+        if k == "vurl_body_file" then
+            return string.format("'-d \"@%s\"'", v)
+        end
+        if k == "vurl_body" then
+            return string.format("'-d \"%s\"'", v)
+        end
+        local string_format = "&%s=%s"
+        if #result == 0 then string_format = "%s=%s" end
+        result = result .. string.format(string_format, k, v)
+    end
+
+    if #result == 0 then
+        return result
+    else
+        return string.format("'-d \"%s\"'", result)
+    end
 end
 
 local function status_and_time()
@@ -139,10 +160,13 @@ function M.send()
 --     print(vim.inspect(base))
 --     print(vim.inspect(headers))
 --     print(vim.inspect(body))
+    local headers_list = process_headers(headers)
+    local body_param = process_body(body)
     local output_folder, response_file = build_output_folder_and_file()
-    local curl = string.format("%s -t %s -m %s -u %s -h %s -c %s -f %s -s %s -d %s", util.script_path,
-        setup.request.timeout, base.method, base.url, setup.response.show_headers, process_headers(headers),
-        response_file, setup.output.save, output_folder)
+
+    local curl = string.format("%s -t %s -m %s -u %s -h %s -c %s -f %s -s %s -d %s -b %s", util.script_path,
+        setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
+        response_file, setup.output.save, output_folder, body_param)
 
     local vurl_spinner = spinner:new(spinner.job_to_run(curl))
     local is_interrupted = vurl_spinner:start()

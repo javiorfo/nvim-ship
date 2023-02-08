@@ -1,0 +1,16 @@
+#######################
+# VURL file           #
+# Author: Javier Orfo #
+#######################
+
+~[BASE]~
+url https://httpbin.org/redirect-to
+method POST
+
+~[HEADERS]~
+content-type x-www-form-urlencoded
+accept text/html
+
+~[BODY]~
+url https://github.com/javio7
+status_code 302

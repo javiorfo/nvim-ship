@@ -1,7 +1,7 @@
 ##!/usr/bin/env bash
 # Author: Javier Orfo
 
-while getopts "t:m:u:f:h:c:s:d:" ARG; do
+while getopts "t:m:u:f:h:c:s:d:b:" ARG; do
   case $ARG in
     t)
       VURL_TIMEOUT=$OPTARG
@@ -27,6 +27,9 @@ while getopts "t:m:u:f:h:c:s:d:" ARG; do
     d)
       VURL_OUTPUT_FOLDER=$OPTARG
       ;;
+    b)
+      VURL_BODY=$OPTARG
+      ;;
   esac
 done
 
@@ -46,7 +49,7 @@ fi
 FILTER_TR="| tr '\015' '\t'"
 
 # Custom cUrl
-CUSTOM_CURL="curl -s $SHOW_RES_HEAD --connect-timeout $VURL_TIMEOUT $VURL_HEADERS \
+CUSTOM_CURL="curl -s $SHOW_RES_HEAD --connect-timeout $VURL_TIMEOUT $VURL_HEADERS $VURL_BODY \
 -w '\nVURL_CODE_TIME=%{http_code},%{time_total}\n%{onerror}ERROR %{errormsg}' \
 -X $VURL_METHOD '$VURL_URL' 2>&1 $FILTER_SED $FILTER_TR > $VURL_FILE"
 

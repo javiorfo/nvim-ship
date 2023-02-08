@@ -35,7 +35,7 @@ function M.trim(s)
 end
 
 function M.table_value_from_readline(line)
-    return string.match(line, "(.+)%s(.+)")
+    return line:match("^(%S+)(.+)")
 end
 
 return M

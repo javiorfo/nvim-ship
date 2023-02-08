@@ -82,10 +82,10 @@ local function process_body(body)
     local result = ""
     for k, v in pairs(body) do
         if k == "vurl_body_file" then
-            return string.format("'-d \"@%s\"'", v)
+            return string.format("\"@%s\"", v)
         end
         if k == "vurl_body" then
-            return string.format("'-d \"%s\"'", v)
+            return string.format("'%s'", v)
         end
         local string_format = "&%s=%s"
         if #result == 0 then string_format = "%s=%s" end
@@ -95,7 +95,7 @@ local function process_body(body)
     if #result == 0 then
         return result
     else
-        return string.format("'-d \"%s\"'", result)
+        return string.format("'%s'", result)
     end
 end
 
@@ -104,7 +104,7 @@ local function status_and_time()
     local line = io.lines(util.status_time_tmp_file)()
     local status, time = line:match("([^,]+),([^,]+)")
     status = string.format("%s <%s>", status, get_status_description(status))
-    Logger:info(string.format("Complete! | Status -> %s | Time -> %s", status, time))
+    Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
 end
 
 local function clean(response_file)

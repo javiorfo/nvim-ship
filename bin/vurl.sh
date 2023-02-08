@@ -38,6 +38,9 @@ if [ $VURL_SAVE = "true" ]; then
     [[ -d $VURL_OUTPUT_FOLDER ]] || mkdir -p $VURL_OUTPUT_FOLDER
 fi
 
+# Check if body is included
+[[ ${#VURL_BODY} -gt 0 ]] && VURL_BODY="-d '${VURL_BODY}'"
+
 # Headers options
 if [ $VURL_SHOW_HEADERS = 'res' ]; then
     SHOW_RES_HEAD="-i"

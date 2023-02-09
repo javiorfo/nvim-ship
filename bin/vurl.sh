@@ -98,9 +98,12 @@ formatted_response() {
 if [ ${#RES_LINE} -gt 2 ] && ([[ $RES_LINE = \{* ]] || [[ $RES_LINE = \[* ]]); then
     # JSON
     formatted_response "jq"
-elif [[ $RES_LINE = *"<?xml"* ]] || [[ $RES_LINE = *"<html>"* ]]; then
-    # XML and HTML
-    formatted_response "tidy"
+elif [[ $RES_LINE = *"<?xml"* ]]; then
+    # XML
+    formatted_response "tidy -xml -quiet"
+    elif[[ $RES_LINE = *"<html>"* ]]; then
+        # HTML
+        formatted_response "tidy -quiet"
 else
     # Delete VURL_CODE_TIME
     sed "${VURL_CODE_TIME_LINE_NR}d" $VURL_FILE | sed '/VURL_CODE_TIME/d' > $TMP_RES

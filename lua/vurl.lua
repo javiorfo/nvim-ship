@@ -8,21 +8,21 @@ local M = {}
 
 M.DEFAULTS = {
     request = {
-        timeout = 60
+        timeout = 60,
+        autosave = true
     },
     response = {
-        show_headers = 'all'
-    },
-    view = {
+        show_headers = 'all',
         horizontal = true,
-        size = 20
+        size = 20,
+        redraw = false
     },
     output = {
         save = false,
         override = true,
         folder = "output",
     },
-    special = {}
+    special = {} -- TODO
 }
 
 
@@ -36,6 +36,13 @@ function M.setup(opts)
                 Logger:error("Setup Error: request.timeout must be a number value.")
             end
         end
+        if r.autosave then
+            if type(r.autosave) == "boolean" then
+                M.DEFAULTS.request.autosave = r.autosave
+            else
+                Logger:error("Setup Error: request.autosave must be a boolean value.")
+            end
+        end
     end
 
     if opts.response then
@@ -47,22 +54,25 @@ function M.setup(opts)
                 Logger:error("Setup Error: the value for response.show_headers must be 'all', 'res' or 'none'.")
             end
         end
-    end
-
-    if opts.view then
-        local r = opts.view
         if r.horizontal then
             if type(r.horizontal) == "boolean" then
-                M.DEFAULTS.view.horizontal = r.horizontal
+                M.DEFAULTS.response.horizontal = r.horizontal
             else
-                Logger:error("Setup Error: view.horizontal must be a boolean value.")
+                Logger:error("Setup Error: response.horizontal must be a boolean value.")
             end
         end
         if r.size then
             if type(r.size) == "number" then
-                M.DEFAULTS.view.size = r.size
+                M.DEFAULTS.response.size = r.size
             else
-                Logger:error("Setup Error: view.size must be a number value.")
+                Logger:error("Setup Error: response.size must be a number value.")
+            end
+        end
+        if r.redraw then
+            if type(r.redraw) == "boolean" then
+                M.DEFAULTS.response.redraw = r.redraw
+            else
+                Logger:error("Setup Error: response.redraw must be a boolean value.")
             end
         end
     end

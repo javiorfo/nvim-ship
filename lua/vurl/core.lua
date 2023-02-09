@@ -115,8 +115,8 @@ local function clean(response_file)
 end
 
 local function open_buffer(response_file)
-    local orientation = setup.view.horizontal and "sp" or "vsp"
-    vim.cmd(string.format("%d%s %s", setup.view.size, orientation, response_file))
+    local orientation = setup.response.horizontal and "sp" or "vsp"
+    vim.cmd(string.format("%d%s %s", setup.response.size, orientation, response_file))
 end
 
 local function build_output_folder_and_file()
@@ -130,6 +130,7 @@ local function build_output_folder_and_file()
     if not setup.output.override then
         prefix = tostring(os.date('%Y%m%d-%H%M%S-'))
     end
+
     if output_folder == "." or output_folder == "" then
         local filename = prefix .. vim.fn.expand("%:p:r")
         return output_folder, string.format("%s.%s", filename, util.vurl_response_extension)
@@ -145,6 +146,10 @@ local function build_output_folder_and_file()
 end
 
 function M.send()
+    if setup.request.autosave then
+        vim.cmd("w")
+    end
+
     local file = vim.fn.expand("%:p")
     local base = read_section(file, util.sections.BASE)
     local headers = read_section(file, util.sections.HEADERS)
@@ -177,7 +182,7 @@ function M.send()
         clean(response_file)
     else
         vim.cmd("redraw")
-        Logger:info("Call interrupted")
+        Logger:info("Call interrupted!")
     end
 end
 

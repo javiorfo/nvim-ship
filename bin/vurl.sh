@@ -63,38 +63,47 @@ touch /tmp/vurl_tmp
 grep 'VURL_CODE_TIME' $VURL_FILE | sed 's/VURL_CODE_TIME=//g' > /tmp/vurl_tmp
 
 # Extract data response
-RES_LINE=$(grep -B1 'VURL_CODE_TIME' $VURL_FILE | grep -v 'VURL_CODE_TIME') 
+RES_LINE=$(grep -v -e '^$' $VURL_FILE | grep -B1 'VURL_CODE_TIME' | grep -v 'VURL_CODE_TIME') 
 
 # Extract VURL_CODE_TIME
-VURL_CODE_TIME_LINE_NR=$(grep -n 'VURL_CODE_TIME' $VURL_FILE | cut -f1 -d:)
+VURL_CODE_TIME_LINE_NR=$(grep -v -e '^$' $VURL_FILE | grep -n 'VURL_CODE_TIME' | cut -f1 -d:)
 
 # Create ramdom temporary file
 TMP_RES=$(mktemp)
 
-# Check if JSON response is unformatted
-if [ ${#RES_LINE} -gt 2 ] && [[ $RES_LINE = \{* ]]; then
-    # Format JSON
-    TMP_JSON=$(mktemp)
-    echo $RES_LINE | jq > $TMP_JSON
-    
+# Format response
+formatted_response() {
+    # Format response
+    TMP_RES_FILE=$(mktemp)
+    echo $RES_LINE | $@ > $TMP_RES_FILE
+        
     # Extract line numbers to delete
-    JSON_LINE_NR=$(($VURL_CODE_TIME_LINE_NR - 1))
-    FORMATTED_JSON_LINE_NR=$(($JSON_LINE_NR - 1))
-    
+    RESPONSE_LINE_NR=$(($VURL_CODE_TIME_LINE_NR - 1))
+    FORMATTED_RESPONSE_LINE_NR=$(($RESPONSE_LINE_NR - 1))
+        
     # Delete lines 
-    sed "${JSON_LINE_NR},${VURL_CODE_TIME_LINE_NR}d" $VURL_FILE > $TMP_RES
-    
-    # Paste formatted JSON
+    sed "${RESPONSE_LINE_NR},${VURL_CODE_TIME_LINE_NR}d" $VURL_FILE | sed '/VURL_CODE_TIME/d' > $TMP_RES
+        
+    # Paste formatted response
     if [ $VURL_SHOW_HEADERS = 'none' ]; then
-        cat $TMP_JSON > $VURL_FIL
+        cat $TMP_RES_FILE > $VURL_FILE
     else
-        sed "${FORMATTED_JSON_LINE_NR} r ${TMP_JSON}" $TMP_RES > $VURL_FILE
+        sed "${FORMATTED_RESPONSE_LINE_NR} r ${TMP_RES_FILE}" $TMP_RES > $VURL_FILE
     fi
 
-    rm $TMP_JSON
+    rm $TMP_RES_FILE
+}
+
+# Check if response is unformatted
+if [ ${#RES_LINE} -gt 2 ] && ([[ $RES_LINE = \{* ]] || [[ $RES_LINE = \[* ]]); then
+    # JSON
+    formatted_response "jq"
+elif [[ $RES_LINE = *"<?xml"* ]] || [[ $RES_LINE = *"<html>"* ]]; then
+    # XML and HTML
+    formatted_response "tidy"
 else
     # Delete VURL_CODE_TIME
-    sed "${VURL_CODE_TIME_LINE_NR}d" $VURL_FILE > $TMP_RES
+    sed "${VURL_CODE_TIME_LINE_NR}d" $VURL_FILE | sed '/VURL_CODE_TIME/d' > $TMP_RES
     cat $TMP_RES > $VURL_FILE
 fi
 

@@ -4,7 +4,7 @@
 #######################
 
 ~[BASE]~
-url https://httpbin.org/get
+url https://cat-fact.herokuapp.com/facts/
 method GET 
 
 ~[HEADERS]~

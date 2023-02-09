@@ -1,0 +1,16 @@
+#######################
+# VURL file           #
+# Author: Javier Orfo #
+#######################
+
+~[BASE]~
+url https://countries.trevorblades.com/
+method POST
+
+~[HEADERS]~
+content-type application/json
+
+~[BODY]~
+{
+    "query": "{ continents { code name } }"
+}

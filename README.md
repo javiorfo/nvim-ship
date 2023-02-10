@@ -1,5 +1,5 @@
 # nvim-cafe (WIP)
-### :coffee: Call A Full Endpoint
+### :coffee: C.A.F.E. (Call A Faster Endpoint)
 *nvim-cafe is a Neovim plugin cURL client (REST, GraphQL, etc) written in Lua.*
 
 ## Caveats

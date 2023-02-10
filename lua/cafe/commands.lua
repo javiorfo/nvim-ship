@@ -1,10 +1,10 @@
--- #######################################################
--- # Maintainer:  Javier Orfo                            #
--- # URL:         https://github.com/javio7/nvim-diamond #
--- #######################################################
+-- ####################################################
+-- # Maintainer:  Javier Orfo                         #
+-- # URL:         https://github.com/javio7/nvim-cafe #
+-- ####################################################
 
-local core = require'diamond.core'
-local Logger = require'diamond.util'.logger
+local core = require'cafe.core'
+local Logger = require'cafe.util'.logger
 local M = {}
 
 function M.send()
@@ -12,9 +12,9 @@ function M.send()
 end
 
 function M.create(args)
-    local filename = (args[1] or "unamed") .. ".dmnd"
+    local filename = (args[1] or "unamed") .. ".cafe"
     vim.cmd("e " .. filename)
-    vim.fn.setline(1, "# Created by nvim-diamond")
+    vim.fn.setline(1, "# Created by CAFE")
     vim.fn.setline(2, "")
     vim.fn.setline(3, "~[BASE]~")
     vim.fn.setline(4, "url https://host.com/path")
@@ -31,11 +31,11 @@ function M.create(args)
     Logger:info(filename .. " created!")
 end
 
-function M.close_dmndr()
+function M.close_cafer()
     pcall(function()
         for _, nr in ipairs(vim.api.nvim_list_bufs()) do
             local buf_name = vim.api.nvim_buf_get_name(nr)
-            if buf_name:find(".dmndr$") then
+            if buf_name:find(".cafer$") then
                vim.cmd("bd! " .. buf_name)
             end
         end

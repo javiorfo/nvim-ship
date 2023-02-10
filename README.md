@@ -1,18 +1,18 @@
-# nvim-diamond (WIP)
-*nvim-diamond is a Neovim plugin cURL client (REST, GraphQL, etc) written in Lua.*
+# nvim-cafe AKA Call A Fine Endpoint (WIP)
+*nvim-cafe is a Neovim plugin cURL client (REST, GraphQL, etc) written in Lua.*
 
 ## Caveats
-- nvim-diamond is based on `curl` so is required to be installed and `jq` for JSON formatting. 
+- nvim-cafe is based on `curl` so is required to be installed and `jq` for JSON formatting. 
 - This plugin has been developed on and for Linux following open source philosophy.
 
 ## Installation
 `Vim Plug`
 ```vim
-Plug 'javio7/nvim-diamond'
+Plug 'javio7/nvim-cafe'
 ```
 `Packer`
 ```lua
-use 'javio7/nvim-diamond'
+use 'javio7/nvim-cafe'
 ```
 
 ## Usage

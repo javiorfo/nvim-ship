@@ -1,10 +1,10 @@
 #######################
-# Diamond file        #
+# CAFE file           #
 # Author: Javier Orfo #
 #######################
 
 ~[BASE]~
-url https://cat-fact.herokuapp.com/facts/
+url https://httpbin.org/response-headers?freeform=myqueryparam
 method GET 
 
 ~[HEADERS]~

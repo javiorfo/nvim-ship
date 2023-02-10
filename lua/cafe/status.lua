@@ -1,7 +1,7 @@
--- #######################################################
--- # Maintainer:  Javier Orfo                            #
--- # URL:         https://github.com/javio7/nvim-diamond #
--- #######################################################
+-- ####################################################
+-- # Maintainer:  Javier Orfo                         #
+-- # URL:         https://github.com/javio7/nvim-cafe #
+-- ####################################################
 
 return {
     get_http_status = function(code)

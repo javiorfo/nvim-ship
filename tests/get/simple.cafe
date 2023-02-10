@@ -1,12 +1,11 @@
 #######################
-# Diamond file        #
+# CAFE file           #
 # Author: Javier Orfo #
 #######################
 
 ~[BASE]~
-url https://httpbin.org/bearer
-method GET
+url https://cat-fact.herokuapp.com/facts/
+method GET 
 
 ~[HEADERS]~
 accept application/json
-Authorization Bearer xxx

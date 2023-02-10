@@ -1,9 +1,9 @@
--- #######################################################
--- # Maintainer:  Javier Orfo                            #
--- # URL:         https://github.com/javio7/nvim-diamond #
--- #######################################################
+-- ####################################################
+-- # Maintainer:  Javier Orfo                         #
+-- # URL:         https://github.com/javio7/nvim-cafe #
+-- ####################################################
 
-local logger = require'diamond.util'.logger
+local logger = require'cafe.util'.logger
 local M = {}
 
 function M:new(fn_to_stop_spinner)

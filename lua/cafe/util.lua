@@ -1,7 +1,7 @@
--- #######################################################
--- # Maintainer:  Javier Orfo                            #
--- # URL:         https://github.com/javio7/nvim-diamond #
--- #######################################################
+-- ####################################################
+-- # Maintainer:  Javier Orfo                         #
+-- # URL:         https://github.com/javio7/nvim-cafe #
+-- ####################################################
 
 local M = {}
 
@@ -11,11 +11,11 @@ M.sections = {
     BODY = "%~%[BODY%]%~"
 }
 
-M.status_time_tmp_file = "/tmp/diamond_tmp"
-M.diamond_response_extension = "dmndr"
-M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/diamond", "") .. "bin/diamond.sh"
+M.status_time_tmp_file = "/tmp/cafe_tmp"
+M.cafe_response_extension = "cafer"
+M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/cafe", "") .. "bin/cafe.sh"
 
-local logger = require'diamond.logger':new("Diamond")
+local logger = require'cafe.logger':new("CAFE")
 M.logger = logger
 
 function M.sections_to_skip(section_to_process)

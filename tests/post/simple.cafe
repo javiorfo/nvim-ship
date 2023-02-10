@@ -1,11 +1,11 @@
 #######################
-# Diamond file        #
+# CAFE file           #
 # Author: Javier Orfo #
 #######################
 
 ~[BASE]~
-url https://httpbin.org/put
-method PUT
+url https://httpbin.org/post
+method POST
 
 ~[HEADERS]~
 content-type application/json

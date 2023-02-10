@@ -1,9 +1,9 @@
--- #######################################################
--- # Maintainer:  Javier Orfo                            #
--- # URL:         https://github.com/javio7/nvim-diamond #
--- #######################################################
+-- ####################################################
+-- # Maintainer:  Javier Orfo                         #
+-- # URL:         https://github.com/javio7/nvim-cafe #
+-- ####################################################
 
-local Logger = require'diamond.util'.logger
+local Logger = require'cafe.util'.logger
 local M = {}
 
 local function is_http_method_valid(method)

@@ -1,18 +1,18 @@
-# VIM URL (WIP)
-*nvim-vurl is a Neovim plugin cURL client (REST, GraphQL, etc) written in Lua.*
+# nvim-diamond (WIP)
+*nvim-diamond is a Neovim plugin cURL client (REST, GraphQL, etc) written in Lua.*
 
 ## Caveats
-- VURL is based on `curl` so is required to be installed and `jq` for JSON formatting. 
+- nvim-diamond is based on `curl` so is required to be installed and `jq` for JSON formatting. 
 - This plugin has been developed on and for Linux following open source philosophy.
 
 ## Installation
 `Vim Plug`
 ```vim
-Plug 'javio7/nvim-vurl'
+Plug 'javio7/nvim-diamond'
 ```
 `Packer`
 ```lua
-use 'javio7/nvim-vurl'
+use 'javio7/nvim-diamond'
 ```
 
 ## Usage

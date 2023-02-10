@@ -1,14 +1,14 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-vurl #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Javier Orfo                            #
+-- # URL:         https://github.com/javio7/nvim-diamond #
+-- #######################################################
 
-local setup = require'vurl'.DEFAULTS
-local util = require'vurl.util'
+local setup = require'diamond'.DEFAULTS
+local util = require'diamond.util'
 local Logger = util.logger
-local get_status_description = require'vurl.status'.get_http_status
-local validator = require'vurl.validator'
-local spinner = require'vurl.spinner'
+local get_status_description = require'diamond.status'.get_http_status
+local validator = require'diamond.validator'
+local spinner = require'diamond.spinner'
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -49,16 +49,16 @@ local function read_body(file)
                     if not is_body then
                         if line:find("^{") or line:find("^<") then
                             is_body = true
-                            result.vurl_body = (result.vurl_body or "") .. util.trim(line)
+                            result.diamond_body = (result.diamond_body or "") .. util.trim(line)
                         end
                     else
-                        result.vurl_body = (result.vurl_body or "") .. util.trim(line)
+                        result.diamond_body = (result.diamond_body or "") .. util.trim(line)
                     end
                     if not is_body then
                         local k, v = util.table_value_from_readline(line)
                         if k then
                             result[k] = util.trim(v)
-                            if k == "vurl_body_file" then break end
+                            if k == "diamond_body_file" then break end
                         end
                     end
                 else
@@ -81,10 +81,10 @@ end
 local function process_body(body)
     local result = ""
     for k, v in pairs(body) do
-        if k == "vurl_body_file" then
+        if k == "diamond_body_file" then
             return string.format("\"@%s\"", v)
         end
-        if k == "vurl_body" then
+        if k == "diamond_body" then
             return string.format("'%s'", v)
         end
         local string_format = "&%s=%s"
@@ -123,7 +123,7 @@ local function build_output_folder_and_file()
     local output_folder = setup.output.folder
 
     if not setup.output.save then
-        return output_folder, string.format("/tmp/%s.%s", vim.fn.expand("%:t:r"), util.vurl_response_extension)
+        return output_folder, string.format("/tmp/%s.%s", vim.fn.expand("%:t:r"), util.diamond_response_extension)
     end
 
     local prefix = ""
@@ -133,14 +133,14 @@ local function build_output_folder_and_file()
 
     if output_folder == "." or output_folder == "" then
         local filename = prefix .. vim.fn.expand("%:p:r")
-        return output_folder, string.format("%s.%s", filename, util.vurl_response_extension)
+        return output_folder, string.format("%s.%s", filename, util.diamond_response_extension)
     else if output_folder:find("^/") or output_folder:find("^~/") then
             local filename = prefix .. vim.fn.expand("%:t:r")
-            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.vurl_response_extension)
+            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.diamond_response_extension)
         else
             local filename = prefix .. vim.fn.expand("%:t:r")
             output_folder = string.format("%s/%s", vim.fn.expand("%:h"), output_folder)
-            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.vurl_response_extension)
+            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.diamond_response_extension)
         end
     end
 end
@@ -173,8 +173,8 @@ function M.send()
         setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
         response_file, setup.output.save, output_folder, body_param)
 
-    local vurl_spinner = spinner:new(spinner.job_to_run(curl))
-    local is_interrupted = vurl_spinner:start()
+    local diamond_spinner = spinner:new(spinner.job_to_run(curl))
+    local is_interrupted = diamond_spinner:start()
 
     if not is_interrupted then
         open_buffer(response_file)

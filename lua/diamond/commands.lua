@@ -1,10 +1,10 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-vurl #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Javier Orfo                            #
+-- # URL:         https://github.com/javio7/nvim-diamond #
+-- #######################################################
 
-local core = require'vurl.core'
-local Logger = require'vurl.util'.logger
+local core = require'diamond.core'
+local Logger = require'diamond.util'.logger
 local M = {}
 
 function M.send()
@@ -12,9 +12,9 @@ function M.send()
 end
 
 function M.create(args)
-    local filename = (args[1] or "unamed") .. ".vurl"
+    local filename = (args[1] or "unamed") .. ".dmnd"
     vim.cmd("e " .. filename)
-    vim.fn.setline(1, "# Created by VURL")
+    vim.fn.setline(1, "# Created by nvim-diamond")
     vim.fn.setline(2, "")
     vim.fn.setline(3, "~[BASE]~")
     vim.fn.setline(4, "url https://host.com/path")
@@ -31,11 +31,11 @@ function M.create(args)
     Logger:info(filename .. " created!")
 end
 
-function M.close_vurlr()
+function M.close_dmndr()
     pcall(function()
         for _, nr in ipairs(vim.api.nvim_list_bufs()) do
             local buf_name = vim.api.nvim_buf_get_name(nr)
-            if buf_name:find(".vurlr$") then
+            if buf_name:find(".dmndr$") then
                vim.cmd("bd! " .. buf_name)
             end
         end

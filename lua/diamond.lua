@@ -1,9 +1,9 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-vurl #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Javier Orfo                            #
+-- # URL:         https://github.com/javio7/nvim-diamond #
+-- #######################################################
 
-local Logger = require'vurl.util'.logger
+local Logger = require'diamond.util'.logger
 local M = {}
 
 M.DEFAULTS = {

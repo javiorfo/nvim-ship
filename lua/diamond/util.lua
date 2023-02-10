@@ -1,7 +1,7 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-vurl #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Javier Orfo                            #
+-- # URL:         https://github.com/javio7/nvim-diamond #
+-- #######################################################
 
 local M = {}
 
@@ -11,11 +11,11 @@ M.sections = {
     BODY = "%~%[BODY%]%~"
 }
 
-M.status_time_tmp_file = "/tmp/vurl_tmp"
-M.vurl_response_extension = "vurlr"
-M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/vurl", "") .. "bin/vurl.sh"
+M.status_time_tmp_file = "/tmp/diamond_tmp"
+M.diamond_response_extension = "dmndr"
+M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/diamond", "") .. "bin/diamond.sh"
 
-local logger = require'vurl.logger':new("VURL")
+local logger = require'diamond.logger':new("Diamond")
 M.logger = logger
 
 function M.sections_to_skip(section_to_process)

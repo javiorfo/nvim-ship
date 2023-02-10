@@ -1,9 +1,9 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-vurl #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Javier Orfo                            #
+-- # URL:         https://github.com/javio7/nvim-diamond #
+-- #######################################################
 
-local logger = require'vurl.util'.logger
+local logger = require'diamond.util'.logger
 local M = {}
 
 function M:new(fn_to_stop_spinner)

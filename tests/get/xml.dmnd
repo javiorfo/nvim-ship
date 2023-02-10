@@ -1,11 +1,11 @@
 #######################
-# VURL file           #
+# Diamond file        #
 # Author: Javier Orfo #
 #######################
 
 ~[BASE]~
-url https://cat-fact.herokuapp.com/facts/
+url https://httpbin.org/xml
 method GET 
 
 ~[HEADERS]~
-accept application/json
+accept application/xml

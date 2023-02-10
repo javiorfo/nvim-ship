@@ -1,7 +1,0 @@
-*vurl.txt* nvim-vurl
-A Neovim plugin cURL client
-                  _ ~
-__   ___   _ _ __| |~
-\ \ / / | | | '__| |~
- \ V /| |_| | |  | |~
-  \_/  \__,_|_|  |_|~

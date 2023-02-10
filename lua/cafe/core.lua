@@ -1,7 +1,7 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-cafe #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Mr. Charkuils                          #
+-- # URL:         https://github.com/charkuils/nvim-cafe #
+-- #######################################################
 
 local setup = require'cafe'.DEFAULTS
 local util = require'cafe.util'

@@ -9,11 +9,11 @@
 ## Installation
 `Vim Plug`
 ```vim
-Plug 'javio7/nvim-cafe'
+Plug 'charluils/nvim-cafe'
 ```
 `Packer`
 ```lua
-use 'javio7/nvim-cafe'
+use 'charluils/nvim-cafe'
 ```
 
 ## Usage

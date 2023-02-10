@@ -1,5 +1,5 @@
 ##!/usr/bin/env bash
-# Author: Javier Orfo
+# Author: Mr. Charkuils
 
 CAFE=$HOME/.local/share/nvim/site/pack/packer/start/nvim-cafe/bin/cafe.sh
 DEST=/tmp/testing.cafer

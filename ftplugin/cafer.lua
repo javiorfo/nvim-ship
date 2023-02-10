@@ -3,4 +3,4 @@
 -- # URL:         https://github.com/charkuils/nvim-cafe #
 -- #######################################################
 
-vim.cmd[[autocmd BufRead,BufNewFile *.cafer set filetype=cafe]]
+vim.cmd[[autocmd FileChangedShell *.cafer execute]]

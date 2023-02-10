@@ -1,7 +1,7 @@
--- ####################################################
--- # Maintainer:  Javier Orfo                         #
--- # URL:         https://github.com/javio7/nvim-cafe #
--- ####################################################
+-- #######################################################
+-- # Maintainer:  Mr. Charkuils                          #
+-- # URL:         https://github.com/charkuils/nvim-cafe #
+-- #######################################################
 
 local logger = require'cafe.util'.logger
 local M = {}

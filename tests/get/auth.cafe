@@ -1,7 +1,7 @@
-#######################
-# CAFE file           #
-# Author: Javier Orfo #
-#######################
+#########################
+# CAFE file             #
+# Author: Mr. Charkuils #
+#########################
 
 ~[BASE]~
 url https://httpbin.org/bearer

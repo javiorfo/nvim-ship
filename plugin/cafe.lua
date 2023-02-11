@@ -13,7 +13,7 @@ local function cafe_command(method)
     return string.format([[lua if vim.bo.filetype == 'cafe' then 
                                    require('cafe.commands').%s
                                else
-                                   require('cafe.utils').logger:warn('This is not a CAFE filetype')
+                                   require('cafe.util').logger:warn('This is not a CAFE filetype')
                                end]], method)
 end
 

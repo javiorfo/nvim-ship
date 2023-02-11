@@ -1,7 +1,7 @@
 ##!/usr/bin/env bash
 # Author: Mr. Charkuils
 
-while getopts "t:m:u:f:h:c:s:d:b:" ARG; do
+while getopts "t:m:u:f:h:c:s:d:b:l:" ARG; do
   case $ARG in
     t)
       CAFE_TIMEOUT=$OPTARG
@@ -29,6 +29,9 @@ while getopts "t:m:u:f:h:c:s:d:b:" ARG; do
       ;;
     b)
       CAFE_BODY=$OPTARG
+      ;;
+    l)
+      CAFE_LOG_FILE=$OPTARG
       ;;
   esac
 done
@@ -59,14 +62,23 @@ CUSTOM_CURL="curl -s $SHOW_RES_HEAD --connect-timeout $CAFE_TIMEOUT $CAFE_HEADER
 eval $CUSTOM_CURL
 
 # Store status code and time
-touch /tmp/cafe_tmp
-grep 'CAFE_CODE_TIME' $CAFE_FILE | sed 's/CAFE_CODE_TIME=//g' > /tmp/cafe_tmp
+touch /tmp/cafe_code_time_tmp
+grep 'CAFE_CODE_TIME' $CAFE_FILE | sed 's/CAFE_CODE_TIME=//g' > /tmp/cafe_code_time_tmp
 
 # Extract data response
 RES_LINE=$(grep -v -e '^$' $CAFE_FILE | grep -B1 'CAFE_CODE_TIME' | grep -v 'CAFE_CODE_TIME') 
 
 # Extract CAFE_CODE_TIME
 CAFE_CODE_TIME_LINE_NR=$(grep -v -e '^$' $CAFE_FILE | grep -n 'CAFE_CODE_TIME' | cut -f1 -d:)
+
+# Log error if curl fails and exit
+if [[ -z $CAFE_CODE_TIME_LINE_NR ]]; then
+    echo -e "[ERROR] [$(date '+%D-%T')]" >> $CAFE_LOG_FILE
+    echo "CURL ==> $CUSTOM_CURL" >> $CAFE_LOG_FILE
+    cat $CAFE_FILE >> $CAFE_LOG_FILE
+    rm $CAFE_FILE
+    exit 1
+fi
 
 # Create ramdom temporary file
 TMP_RES=$(mktemp)

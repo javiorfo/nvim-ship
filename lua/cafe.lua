@@ -15,7 +15,7 @@ M.DEFAULTS = {
         show_headers = 'all',
         horizontal = true,
         size = 20,
-        redraw = false
+        redraw = true
     },
     output = {
         save = false,

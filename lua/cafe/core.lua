@@ -102,9 +102,19 @@ end
 local function status_and_time()
     vim.cmd("redraw")
     local line = io.lines(util.status_time_tmp_file)()
-    local status, time = line:match("([^,]+),([^,]+)")
-    status = string.format("%s <%s>", status, get_status_description(status))
-    Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
+    local status, time
+    local ok, _ = pcall(function()
+        status, time = line:match("([^,]+),([^,]+)")
+        return status, time
+    end)
+    if ok then
+        status = string.format("%s <%s>", status, get_status_description(status))
+        Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
+    else
+        local error_msg = string.format("Internal error. Please check %s for further information.",
+            util.cafe_log_file)
+        Logger:error(error_msg)
+    end
 end
 
 local function clean(response_file)
@@ -115,8 +125,14 @@ local function clean(response_file)
 end
 
 local function open_buffer(response_file)
-    local orientation = setup.response.horizontal and "sp" or "vsp"
-    vim.cmd(string.format("%d%s %s", setup.response.size, orientation, response_file))
+    if setup.response.redraw then
+        pcall(function() vim.cmd("bd! " .. response_file) end)
+    end
+
+    if vim.fn.filereadable(response_file) == 1 then
+        local orientation = setup.response.horizontal and "sp" or "vsp"
+        vim.cmd(string.format("%d%s %s", setup.response.size, orientation, response_file))
+    end
 end
 
 local function build_output_folder_and_file()
@@ -166,12 +182,17 @@ function M.send()
 --     print(vim.inspect(headers))
 --     print(vim.inspect(body))
     local headers_list = process_headers(headers)
+
     local body_param = process_body(body)
+    if body_param ~= "" then
+        body_param = " -b " .. body_param
+    end
+
     local output_folder, response_file = build_output_folder_and_file()
 
-    local curl = string.format("%s -t %s -m %s -u %s -h %s -c %s -f %s -s %s -d %s -b %s", util.script_path,
+    local curl = string.format("%s -t %s -m %s -u %s -h %s -c %s -f %s -s %s -d %s -l %s", util.script_path,
         setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
-        response_file, setup.output.save, output_folder, body_param)
+        response_file, setup.output.save, output_folder, util.cafe_log_file) .. body_param
 
     local cafe_spinner = spinner:new(spinner.job_to_run(curl))
     local is_interrupted = cafe_spinner:start()

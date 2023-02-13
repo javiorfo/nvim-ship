@@ -1,0 +1,35 @@
+*ship.txt* nvim-ship
+Neovim plugin for calling APIs (REST, GraphQL, etc)
+ ____  _   _ ___ ____  ~
+/ ___|| | | |_ _|  _ \ ~
+\___ \| |_| || || |_) |~
+ ___) |  _  || ||  __/ ~
+|____/|_| |_|___|_|    ~
+
+REFERENCE MANUAL
+================================================================================
+CONTENTS                                                             *nvim-ship*
+
+    0. Introduction ............. |ship-introduction|
+    1. Usage .................... |ship-usage|
+     1.1 Default Implementation . |ship-default|
+
+================================================================================
+INTRODUCTION                                                 *ship-introduction*
+
+nvim-ship is a Neovim plugin for calling APIs (REST, GraphQL, etc). Highly
+configurable with many options to set, like request and response views,
+environment variables, output files and a 'special' way to update a file with
+variables.
+
+================================================================================
+1. USAGE                                                         *ship-commands*
+
+The following are examples of different implementations of nvim-ship
+
+--------------------------------------------------------------------------------
+1.1 SIMPLE IMPLEMENTATION                                         *ship-default*
+
+
+--------------------------------------------------------------------------------
+

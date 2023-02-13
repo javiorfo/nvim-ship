@@ -1,14 +1,14 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
-local setup = require'cafe'.DEFAULTS
-local util = require'cafe.util'
+local setup = require'ship'.DEFAULTS
+local util = require'ship.util'
 local Logger = util.logger
-local get_status_description = require'cafe.status'.get_http_status
-local validator = require'cafe.validator'
-local spinner = require'cafe.spinner'
+local get_status_description = require'ship.status'.get_http_status
+local validator = require'ship.validator'
+local spinner = require'ship.spinner'
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -49,16 +49,16 @@ local function read_body(file)
                     if not is_body then
                         if line:find("^{") or line:find("^<") then
                             is_body = true
-                            result.cafe_body = (result.cafe_body or "") .. util.trim(line)
+                            result.ship_body = (result.ship_body or "") .. util.trim(line)
                         end
                     else
-                        result.cafe_body = (result.cafe_body or "") .. util.trim(line)
+                        result.ship_body = (result.ship_body or "") .. util.trim(line)
                     end
                     if not is_body then
                         local k, v = util.table_value_from_readline(line)
                         if k then
                             result[k] = util.trim(v)
-                            if k == "cafe_body_file" then break end
+                            if k == "ship_body_file" then break end
                         end
                     end
                 else
@@ -81,10 +81,10 @@ end
 local function process_body(body)
     local result = ""
     for k, v in pairs(body) do
-        if k == "cafe_body_file" then
+        if k == "ship_body_file" then
             return string.format("\"@%s\"", v)
         end
-        if k == "cafe_body" then
+        if k == "ship_body" then
             return string.format("'%s'", v)
         end
         local string_format = "&%s=%s"
@@ -112,7 +112,7 @@ local function status_and_time()
         Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
     else
         local error_msg = string.format("Internal error. Please check %s for further details.",
-            util.cafe_log_file)
+            util.ship_log_file)
         Logger:error(error_msg)
     end
 end
@@ -139,7 +139,7 @@ local function build_output_folder_and_file()
     local output_folder = setup.output.folder
 
     if not setup.output.save then
-        return output_folder, string.format("/tmp/%s.%s", vim.fn.expand("%:t:r"), util.cafe_response_extension)
+        return output_folder, string.format("/tmp/%s.%s", vim.fn.expand("%:t:r"), util.ship_response_extension)
     end
 
     local prefix = ""
@@ -149,14 +149,14 @@ local function build_output_folder_and_file()
 
     if output_folder == "." or output_folder == "" then
         local filename = prefix .. vim.fn.expand("%:p:r")
-        return output_folder, string.format("%s.%s", filename, util.cafe_response_extension)
+        return output_folder, string.format("%s.%s", filename, util.ship_response_extension)
     else if output_folder:find("^/") or output_folder:find("^~/") then
             local filename = prefix .. vim.fn.expand("%:t:r")
-            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.cafe_response_extension)
+            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.ship_response_extension)
         else
             local filename = prefix .. vim.fn.expand("%:t:r")
             output_folder = string.format("%s/%s", vim.fn.expand("%:h"), output_folder)
-            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.cafe_response_extension)
+            return output_folder, string.format("%s/%s.%s", output_folder, filename, util.ship_response_extension)
         end
     end
 end
@@ -192,10 +192,10 @@ function M.send()
 
     local curl = string.format("%s -t %s -m %s -u %s -h %s -c %s -f %s -s %s -d %s -l %s", util.script_path,
         setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
-        response_file, setup.output.save, output_folder, util.cafe_log_file) .. body_param
+        response_file, setup.output.save, output_folder, util.ship_log_file) .. body_param
 
-    local cafe_spinner = spinner:new(spinner.job_to_run(curl))
-    local is_interrupted = cafe_spinner:start()
+    local ship_spinner = spinner:new(spinner.job_to_run(curl))
+    local is_interrupted = ship_spinner:start()
 
     if not is_interrupted then
         open_buffer(response_file)

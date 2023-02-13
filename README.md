@@ -1,12 +1,12 @@
-# nvim-cafe (WIP)
-### :coffee: C.A.F.E. (Call A Flavorful Endpoint)
-*nvim-cafe is a Neovim plugin for calling APIs (REST, GraphQL, etc) written in Lua.*
+# nvim-ship (WIP)
+### :anchor: S.H.I.P. (Send Handwritten Inquisitive Petitions)
+*nvim-ship is a Neovim plugin for calling APIs (REST, GraphQL, etc) written in Lua.*
 
 ## Caveats
-- nvim-cafe needs `curl`, `jq` and `tidy` to be installed. Otherwise it will throw a warning message. 
+- nvim-ship needs `curl`, `jq` and `tidy` to be installed. Otherwise it will throw a warning message. 
 - This plugin has been developed on and for Linux following open source philosophy.
 
-| Feature | nvim-spinetta | NOTE |
+| Feature | nvim-ship | NOTE |
 | ------- | ------------- | ---- |
 | REST | :heavy_check_mark: | Supports all http methods (GET, POST, etc) |
 | GraphQL | :heavy_check_mark: | GraphQL queries on body |
@@ -32,17 +32,17 @@
 | Environment variables | :heavy_check_mark: | With a special way to update variables |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
 | Integration with Telescope | :x: |  |
-| Command to create cafe file | :heavy_check_mark: | executing `CAFECreate` |
-| Command to create env archetype | :heavy_check_mark: | executing `CAFECreateEnv` |
+| Command to create ship file | :heavy_check_mark: | executing `SHIPCreate` |
+| Command to create env archetype | :heavy_check_mark: | executing `SHIPCreateEnv` |
 
  ## Installation
 `Vim Plug`
 ```vim
-Plug 'charkuils/nvim-cafe'
+Plug 'charkuils/nvim-ship'
 ```
 `Packer`
 ```lua
-use 'charkuils/nvim-cafe'
+use 'charkuils/nvim-ship'
 ```
 
 ## Usage

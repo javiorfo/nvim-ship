@@ -1,11 +1,11 @@
 #########################
-# CAFE file             #
+# SHIP file             #
 # Author: Mr. Charkuils #
 #########################
 
 ~[BASE]~
-url https://httpbin.org/xml
-method GET 
+url https://httpbin.org/post
+method POST
 
 ~[HEADERS]~
-accept application/xml
+content-type application/json

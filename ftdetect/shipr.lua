@@ -1,6 +1,6 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
-vim.cmd[[autocmd BufRead,BufNewFile *.cafe set filetype=cafe]]
+vim.cmd[[autocmd BufRead,BufNewFile *.shipr set filetype=ship]]

@@ -1,9 +1,9 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
-local Logger = require'cafe.util'.logger
+local Logger = require'ship.util'.logger
 local M = {}
 
 local function is_http_method_valid(method)

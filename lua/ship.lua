@@ -1,9 +1,9 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
-local Logger = require'cafe.util'.logger
+local Logger = require'ship.util'.logger
 local M = {}
 
 M.DEFAULTS = {
@@ -27,8 +27,8 @@ M.DEFAULTS = {
         {
             name = "special_name", -- validate unique
             take = {
-                cafe_file = "filename.cafe",
-                cafe_field = "some_field"
+                ship_file = "filename.ship",
+                ship_field = "some_field"
             },
             update = {
                 lua_file = "filename.lua",

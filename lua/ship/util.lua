@@ -1,6 +1,6 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
 local M = {}
@@ -11,12 +11,12 @@ M.sections = {
     BODY = "%~%[BODY%]%~"
 }
 
-M.status_time_tmp_file = "/tmp/cafe_code_time_tmp"
-M.cafe_response_extension = "cafer"
-M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/cafe", "") .. "bin/cafe.sh"
-M.cafe_log_file = vim.fn.stdpath('log') .. "/cafe.log"
+M.status_time_tmp_file = "/tmp/ship_code_time_tmp"
+M.ship_response_extension = "shipr"
+M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/ship", "") .. "bin/ship.sh"
+M.ship_log_file = vim.fn.stdpath('log') .. "/ship.log"
 
-local logger = require 'cafe.logger':new("CAFE")
+local logger = require 'ship.logger':new("SHIP")
 M.logger = logger
 
 function M.sections_to_skip(section_to_process)

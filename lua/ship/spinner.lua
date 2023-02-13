@@ -1,9 +1,9 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
-local logger = require'cafe.util'.logger
+local logger = require'ship.util'.logger
 local M = {}
 
 function M:new(fn_to_stop_spinner)

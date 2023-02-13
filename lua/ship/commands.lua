@@ -1,10 +1,10 @@
 -- #######################################################
 -- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-cafe #
+-- # URL:         https://github.com/charkuils/nvim-ship #
 -- #######################################################
 
-local core = require'cafe.core'
-local Logger = require'cafe.util'.logger
+local core = require'ship.core'
+local Logger = require'ship.util'.logger
 local M = {}
 
 function M.send()
@@ -12,9 +12,9 @@ function M.send()
 end
 
 function M.create(args)
-    local filename = (args[1] or "unamed") .. ".cafe"
+    local filename = (args[1] or "unamed") .. ".ship"
     vim.cmd("e " .. filename)
-    vim.fn.setline(1, "# Created by CAFE")
+    vim.fn.setline(1, "# Created by NVIM-SHIP")
     vim.fn.setline(2, "")
     vim.fn.setline(3, "~[BASE]~")
     vim.fn.setline(4, "url https://host.com/path")
@@ -31,11 +31,11 @@ function M.create(args)
     Logger:info(filename .. " created!")
 end
 
-function M.close_cafer()
+function M.close_shipr()
     pcall(function()
         for _, nr in ipairs(vim.api.nvim_list_bufs()) do
             local buf_name = vim.api.nvim_buf_get_name(nr)
-            if buf_name:find(".cafer$") then
+            if buf_name:find(".shipr$") then
                vim.cmd("bd! " .. buf_name)
             end
         end

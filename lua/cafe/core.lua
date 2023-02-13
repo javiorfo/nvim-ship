@@ -111,7 +111,7 @@ local function status_and_time()
         status = string.format("%s <%s>", status, get_status_description(status))
         Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
     else
-        local error_msg = string.format("Internal error. Please check %s for further information.",
+        local error_msg = string.format("Internal error. Please check %s for further details.",
             util.cafe_log_file)
         Logger:error(error_msg)
     end

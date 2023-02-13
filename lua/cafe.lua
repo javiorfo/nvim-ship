@@ -22,7 +22,20 @@ M.DEFAULTS = {
         override = true,
         folder = "output",
     },
-    special = {} -- TODO
+    -- TODO special not implemented yet
+    special = {
+        {
+            name = "special_name", -- validate unique
+            take = {
+                cafe_file = "filename.cafe",
+                cafe_field = "some_field"
+            },
+            update = {
+                lua_file = "filename.lua",
+                lua_field = "some_field"
+            }
+        }
+    }
 }
 
 

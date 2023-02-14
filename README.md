@@ -32,6 +32,7 @@
 | Environment variables | :heavy_check_mark: | With a special way to update variables |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
 | Integration with Telescope | :x: |  |
+| Syntax highlighting | :heavy_check_mark: | Set by 'setup' or using [nvim-nyctovim](https://github.com/charkuils/nvim-nyctovim) |
 | Command to create ship file | :heavy_check_mark: | executing `SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `SHIPCreateEnv` |
 

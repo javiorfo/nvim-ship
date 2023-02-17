@@ -10,6 +10,9 @@
 | ------- | ------------- | ---- |
 | REST | :heavy_check_mark: | Supports all http methods (GET, POST, etc) |
 | GraphQL | :heavy_check_mark: | GraphQL queries on body |
+| gRPC | :x: |  |
+| WebSocket | :x: |  |
+| FTP | :x: |  |
 | Timeout | :heavy_check_mark: | Set by `setup` |
 | Request JSON body | :heavy_check_mark: |  |
 | Request HTML body | :heavy_check_mark: |  |
@@ -25,14 +28,14 @@
 | Response Plain Text | :heavy_check_mark: |  |
 | Response EDN | :x: |  |
 | Response YAML | :x: |  |
-| Show Headers | :heavy_check_mark: | Set by `setup`. (none, only response or all) |
-| Authorization | :heavy_check_mark: | API Key Auth, Basic Auth, Bearer Token, OAuth 2.0 |
+| Show Headers | :heavy_check_mark: | Set by `setup`. None, only response or all |
+| Authorization | :heavy_check_mark: | API Key Auth, Basic Auth, Bearer Token, OAuth 2.0, etc |
 | URL queries | :heavy_check_mark: |  |
 | Path parameters | :heavy_check_mark: |  |
 | Environment variables | :heavy_check_mark: | With a special way to update variables |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
 | Integration with Telescope | :x: |  |
-| Syntax highlighting | :heavy_check_mark: | Set by 'setup' or using [nvim-nyctovim](https://github.com/charkuils/nvim-nyctovim) |
+| Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-nyctovim](https://github.com/charkuils/nvim-nyctovim) |
 | Command to create ship file | :heavy_check_mark: | executing `SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `SHIPCreateEnv` |
 

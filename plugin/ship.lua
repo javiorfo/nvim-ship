@@ -17,7 +17,7 @@ local function ship_command(method)
                                end]], method)
 end
 
-vim.api.nvim_create_user_command('SHIPSend', ship_command("send()"), {})
+vim.api.nvim_create_user_command('SHIP', ship_command("send()"), {})
 vim.api.nvim_create_user_command('SHIPCloseResponse', "lua require('ship.commands').close_shipr()", {})
 
 vim.api.nvim_create_user_command('SHIPCreate', function(opts)
@@ -25,5 +25,5 @@ vim.api.nvim_create_user_command('SHIPCreate', function(opts)
 end, { nargs = "?" })
 
 vim.api.nvim_create_user_command('SHIPCreateEnv', function(opts)
-    require 'shishipmmands'.create_env(opts.fargs)
+    require 'ship.commands'.create_env(opts.fargs)
 end, { nargs = "?" })

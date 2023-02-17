@@ -45,9 +45,9 @@ end
 function M.create_env(args)
     local folder_name = args[1] or "env"
     vim.fn.system("mkdir -p " .. folder_name)
-    vim.fn.system("touch " .. folder_name .. "/dev.lua")
-    vim.fn.system("touch " .. folder_name .. "/test.lua")
-    vim.fn.system("touch " .. folder_name .. "/prod.lua")
+    vim.fn.system(string.format("echo 'return {}' > %s/dev.lua;", folder_name))
+    vim.fn.system(string.format("echo 'return {}' > %s/test.lua;", folder_name))
+    vim.fn.system(string.format("echo 'return {}' > %s/prod.lua;", folder_name))
     Logger:info(folder_name .. " created!")
 end
 

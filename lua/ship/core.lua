@@ -101,9 +101,9 @@ end
 
 local function status_and_time()
     vim.cmd("redraw")
-    local line = io.lines(util.status_time_tmp_file)()
     local status, time
     local ok, _ = pcall(function()
+        local line = io.lines(util.status_time_tmp_file)()
         status, time = line:match("([^,]+),([^,]+)")
         return status, time
     end)
@@ -190,9 +190,9 @@ function M.send()
 
     local output_folder, response_file = build_output_folder_and_file()
 
-    local curl = string.format("%s -t %s -m %s -u %s -h %s -c %s -f %s -s %s -d %s -l %s", util.script_path,
+    local curl = string.format("(echo -e \"[ERROR] [$(date '+%%D-%%T')]\" 1>&2; %s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s -l %s) 2>> %s", util.script_path,
         setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
-        response_file, setup.output.save, output_folder, util.ship_log_file) .. body_param
+        response_file, setup.output.save, output_folder, util.ship_log_file, util.ship_log_file) .. body_param
 
     local ship_spinner = spinner:new(spinner.job_to_run(curl))
     local is_interrupted = ship_spinner:start()

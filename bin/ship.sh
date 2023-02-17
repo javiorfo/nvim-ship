@@ -73,7 +73,7 @@ SHIP_CODE_TIME_LINE_NR=$(grep -v -e '^$' $SHIP_FILE | grep -n 'SHIP_CODE_TIME' |
 
 # Log error if curl fails and exit
 if [[ -z $SHIP_CODE_TIME_LINE_NR ]]; then
-    echo -e "[ERROR] [$(date '+%D-%T')]" >> $SHIP_LOG_FILE
+    echo -e "[ERROR] [$(date '+%D-%T')]:" >> $SHIP_LOG_FILE
     echo "CURL ==> $CUSTOM_CURL" >> $SHIP_LOG_FILE
     cat $SHIP_FILE >> $SHIP_LOG_FILE
     rm $SHIP_FILE

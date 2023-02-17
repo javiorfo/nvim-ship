@@ -4,7 +4,8 @@
 -- #######################################################
 
 local core = require'ship.core'
-local Logger = require'ship.util'.logger
+local util = require'ship.util'
+local Logger = util.logger
 local M = {}
 
 function M.send()
@@ -49,6 +50,10 @@ function M.create_env(args)
     vim.fn.system(string.format("echo 'return {}' > %s/test.lua;", folder_name))
     vim.fn.system(string.format("echo 'return {}' > %s/prod.lua;", folder_name))
     Logger:info(folder_name .. " created!")
+end
+
+function M.show_logs()
+    vim.cmd("vsp " .. util.ship_log_file)
 end
 
 return M

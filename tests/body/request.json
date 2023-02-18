@@ -1,5 +1,5 @@
 {
-    "id": 1,
-    "name": "Charkuils",
-    "is_available": true
+    "audience": "https://api.bravenewcoin.com",
+    "client_id": "oCdQoZoI96ERE9HY3sQ7JmbACfBf55RY",
+    "grant_type": "client_credentials"
 }

@@ -1,5 +1,5 @@
 return {
-    host = "https://httpbin.org",
+    host = "httpbin.org",
     some_header = "blabla",
-    token = ""
+    token = "tokenxxxx"
 }

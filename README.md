@@ -30,6 +30,7 @@
 | Response YAML | :x: |  |
 | Show Headers | :heavy_check_mark: | Set by `setup`. None, only response or all |
 | Authorization | :heavy_check_mark: | API Key Auth, Basic Auth, Bearer Token, OAuth 2.0, etc |
+| Request body form a file | :heavy_check_mark: | with tag `ship_body_file` |
 | URL queries | :heavy_check_mark: |  |
 | Path parameters | :heavy_check_mark: |  |
 | Environment variables | :heavy_check_mark: | With a special way to update variables |
@@ -38,6 +39,7 @@
 | Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-nyctovim](https://github.com/charkuils/nvim-nyctovim) |
 | Command to create ship file | :heavy_check_mark: | executing `SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `SHIPCreateEnv` |
+| Command to check LOGS | :heavy_check_mark: | executing `SHIPShowLogs` |
 
  ## Installation
 `Vim Plug`

@@ -111,9 +111,7 @@ local function status_and_time()
         status = string.format("%s <%s>", status, get_status_description(status))
         Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
     else
-        local error_msg = string.format("Internal error. Please check %s for further details.",
-            util.ship_log_file)
-        Logger:error(error_msg)
+        Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
     end
 end
 
@@ -161,6 +159,20 @@ local function build_output_folder_and_file()
     end
 end
 
+local function process_environment(env, base, headers, body)
+    local function process(section, k_env, v_env)
+        for k_sec, v_sec in pairs(section) do
+            section[k_sec] = (string.gsub(v_sec, "{{" .. k_env .. "}}", v_env))
+        end
+    end
+
+    for k_env, v_env in pairs(env) do
+        process(base, k_env, v_env)
+        process(headers, k_env, v_env)
+        process(body, k_env, v_env)
+    end
+end
+
 function M.send()
     if setup.request.autosave then
         vim.cmd("silent w")
@@ -175,18 +187,15 @@ function M.send()
         return
     end
 
-    -- TODO leer propiedades
---     print(dofile(base.env).host)
+    local ok, env = pcall(dofile, base.env)
+    if ok then
+        process_environment(env, base, headers, body)
+    end
 
---     print(vim.inspect(base))
---     print(vim.inspect(headers))
---     print(vim.inspect(body))
     local headers_list = process_headers(headers)
 
     local body_param = process_body(body)
-    if body_param ~= "" then
-        body_param = " -b " .. body_param
-    end
+    if body_param ~= "" then body_param = " -b " .. body_param end
 
     local output_folder, response_file = build_output_folder_and_file()
 

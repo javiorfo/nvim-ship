@@ -14,7 +14,7 @@ M.DEFAULTS = {
     response = {
         show_headers = 'all',
         horizontal = true,
-        size = 20,
+        size = 30,
         redraw = true
     },
     output = {
@@ -22,6 +22,7 @@ M.DEFAULTS = {
         override = true,
         folder = "output",
     },
+
     -- TODO special not implemented yet
     special = {
         {
@@ -113,6 +114,9 @@ function M.setup(opts)
                 Logger:error("Setup Error: output.folder must be a string value.")
             end
         end
+    end
+    if opts.special then
+       Logger:warn("Setup Warn: special is not implemented yet.")
     end
 end
 

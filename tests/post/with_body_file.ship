@@ -1,0 +1,16 @@
+#########################
+# SHIP file             #
+# Author: Mr. Charkuils #
+#########################
+
+~[BASE]~
+url https://bravenewcoin.p.rapidapi.com/oauth/token
+method POST
+
+~[HEADERS]~
+content-type application/json
+X-RapidAPI-Key SIGN-UP-FOR-KEY
+X-RapidAPI-Host bravenewcoin.p.rapidapi.com
+
+~[BODY]~
+ship_body_file /home/javier/.local/share/nvim/site/pack/packer/start/nvim-ship/tests/body/request.json

@@ -5,11 +5,14 @@
 
 local core = require'ship.core'
 local util = require'ship.util'
+local validator = require'ship.validator'
 local Logger = util.logger
 local M = {}
 
 function M.send()
-    core.send()
+    if validator.dependencies_installed() then
+        core.send()
+    end
 end
 
 function M.create(args)

@@ -36,4 +36,24 @@ function M.is_base_valid(base)
     return true
 end
 
+function M.dependencies_installed()
+    if vim.bo.filetype ~= "ship" then
+        Logger:warn('This is not a SHIP filetype.')
+        return false
+    end
+    if vim.fn.executable("curl") == 0 then
+        Logger:warn("curl is required to be installed in order to execute SHIP.")
+        return false
+    end
+    if vim.fn.executable("jq") == 0 then
+        Logger:warn("jq is required to be installed in order to execute SHIP.")
+        return false
+    end
+    if vim.fn.executable("tidy") == 0 then
+        Logger:warn("tidy is required to be installed in order to execute SHIP.")
+        return false
+    end
+    return true
+end
+
 return M

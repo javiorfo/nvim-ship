@@ -9,15 +9,7 @@ end
 
 vim.g.ship = 1
 
-local function ship_command(method)
-    return string.format([[lua if vim.bo.filetype == 'ship' then 
-                                   require('ship.commands').%s
-                               else
-                                   require('ship.util').logger:warn('This is not a SHIP filetype')
-                               end]], method)
-end
-
-vim.api.nvim_create_user_command('SHIP', ship_command("send()"), {})
+vim.api.nvim_create_user_command('SHIP',"lua require'ship.commands'.send()", {})
 vim.api.nvim_create_user_command('SHIPCloseResponse', "lua require('ship.commands').close_shipr()", {})
 
 vim.api.nvim_create_user_command('SHIPCreate', function(opts)

@@ -21,3 +21,4 @@ vim.api.nvim_create_user_command('SHIPCreateEnv', function(opts)
 end, { nargs = "?" })
 
 vim.api.nvim_create_user_command('SHIPShowLogs', "lua require('ship.commands').show_logs()", {})
+vim.api.nvim_create_user_command('SHIPFindResponse', "lua require('ship.commands').find_responses()", {})

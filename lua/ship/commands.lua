@@ -59,4 +59,13 @@ function M.show_logs()
     vim.cmd("vsp " .. util.ship_log_file)
 end
 
+function M.find_responses()
+    local ok, telescope = pcall(require, 'telescope.builtin')
+    if ok then
+        telescope.live_grep{ glob_pattern = "*.shipr" }
+    else
+        Logger:warn("This action require telescope plugin to be installed.")
+    end
+end
+
 return M

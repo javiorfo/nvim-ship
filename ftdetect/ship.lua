@@ -1,6 +1,6 @@
--- #######################################################
--- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-ship #
--- #######################################################
+-- #####################################################
+-- # Maintainer: Javier Orfo                           #
+-- # URL:        https://github.com/javiorfo/nvim-ship #
+-- #####################################################
 
 vim.cmd[[autocmd BufRead,BufNewFile *.ship set filetype=ship]]

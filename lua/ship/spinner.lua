@@ -1,7 +1,7 @@
--- #######################################################
--- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-ship #
--- #######################################################
+-- #####################################################
+-- # Maintainer: Javier Orfo                           #
+-- # URL:        https://github.com/javiorfo/nvim-ship #
+-- #####################################################
 
 local logger = require'ship.util'.logger
 local M = {}
@@ -16,7 +16,7 @@ end
 
 function M:start()
     local sleep_ms = 200
-    local starting_msg = "Waiting for response "
+    local starting_msg = "Shipping "
     local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
 
     local index = 1

@@ -1,7 +1,7 @@
-#########################
-# SHIP file             #
-# Author: Mr. Charkuils #
-#########################
+#######################
+# SHIP file           #
+# Author: Javier Orfo #
+#######################
 
 ~[BASE]~
 url https://httpbin.org/response-headers?freeform=myqueryparam

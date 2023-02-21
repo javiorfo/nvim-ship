@@ -1,7 +1,7 @@
--- #######################################################
--- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-ship #
--- #######################################################
+-- #####################################################
+-- # Maintainer: Javier Orfo                           #
+-- # URL:        https://github.com/javiorfo/nvim-ship #
+-- #####################################################
 
 local setup = require'ship'.DEFAULTS
 local util = require'ship.util'
@@ -109,7 +109,7 @@ local function status_and_time()
     end)
     if ok then
         status = string.format("%s <%s>", status, get_status_description(status))
-        Logger:info(string.format("Complete | Status -> %s | Time -> %s", status, time))
+        Logger:info(string.format("Shipped! | Status -> %s | Time -> %s", status, time))
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
     end
@@ -199,8 +199,8 @@ function M.send()
 
     local output_folder, response_file = build_output_folder_and_file()
 
-    local curl = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)", util.script_path,
-        setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
+    local curl = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+        util.script_path, setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
         response_file, setup.output.save, output_folder, body_param, util.ship_log_file, util.ship_log_file)
 
     local ship_spinner = spinner:new(spinner.job_to_run(curl))

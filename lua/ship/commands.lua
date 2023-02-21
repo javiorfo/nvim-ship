@@ -1,7 +1,7 @@
--- #######################################################
--- # Maintainer:  Mr. Charkuils                          #
--- # URL:         https://github.com/charkuils/nvim-ship #
--- #######################################################
+-- #####################################################
+-- # Maintainer: Javier Orfo                           #
+-- # URL:        https://github.com/javiorfo/nvim-ship #
+-- #####################################################
 
 local core = require'ship.core'
 local util = require'ship.util'
@@ -12,6 +12,7 @@ local M = {}
 function M.send()
     if validator.dependencies_installed() then
         core.send()
+        vim.cmd("wincmd w")
     end
 end
 
@@ -47,11 +48,11 @@ function M.close_shipr()
 end
 
 function M.create_env(args)
-    local folder_name = args[1] or "env"
+    local folder_name = args[1] or "environment"
     vim.fn.system("mkdir -p " .. folder_name)
-    vim.fn.system(string.format("echo 'return {}' > %s/dev.lua;", folder_name))
-    vim.fn.system(string.format("echo 'return {}' > %s/test.lua;", folder_name))
-    vim.fn.system(string.format("echo 'return {}' > %s/prod.lua;", folder_name))
+    vim.fn.system(string.format("echo -e 'return {\n \t host = \"host\"\n}' > %s/dev.lua;", folder_name))
+    vim.fn.system(string.format("echo -e 'return {\n \t host = \"host\"\n}' > %s/test.lua;", folder_name))
+    vim.fn.system(string.format("echo -e 'return {\n \t host = \"host\"\n}' > %s/prod.lua;", folder_name))
     Logger:info(folder_name .. " created!")
 end
 
@@ -64,7 +65,7 @@ function M.find_responses()
     if ok then
         telescope.live_grep{ glob_pattern = "*.shipr" }
     else
-        Logger:warn("This action require telescope plugin to be installed.")
+        Logger:warn("This action require telescope.nvim plugin to be installed.")
     end
 end
 

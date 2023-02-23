@@ -12,5 +12,5 @@ content-type application/x-www-form-urlencoded
 accept text/html
 
 ~[BODY]~
-url https://github.com/charkuils
+url https://github.com/javiorfo
 status_code 302

@@ -57,7 +57,7 @@ function M.create_env(args)
 end
 
 function M.show_logs()
-    vim.cmd("vsp " .. util.ship_log_file)
+    vim.cmd(string.format("vsp %s | normal G", util.ship_log_file))
 end
 
 function M.find_responses()

@@ -6,7 +6,6 @@
 local setup = require'ship'.DEFAULTS
 local util = require'ship.util'
 local Logger = util.logger
-local get_status_description = require'ship.status'.get_http_status
 local validator = require'ship.validator'
 local spinner = require'ship.spinner'
 local M = {}
@@ -108,7 +107,7 @@ local function status_and_time()
         return status, time
     end)
     if ok then
-        status = string.format("%s <%s>", status, get_status_description(status))
+        status = string.format("%s <%s>", status, require'ship.status'.get_http_status(status))
         Logger:info(string.format("Shipped! | Status -> %s | Time -> %s", status, time))
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
@@ -187,9 +186,14 @@ function M.send()
         return
     end
 
-    local ok, env = pcall(dofile, base.env)
-    if ok then
-        process_environment(env, base, headers, body)
+    if base.env then
+        local ok, result = pcall(dofile, base.env)
+        if ok then
+            process_environment(result, base, headers, body)
+        else
+           Logger:error(result)
+           return
+        end
     end
 
     local headers_list = process_headers(headers)

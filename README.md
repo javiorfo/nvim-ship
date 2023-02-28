@@ -33,7 +33,7 @@
 | Request body form a file | :heavy_check_mark: | with tag `ship_body_file` |
 | URL queries | :heavy_check_mark: |  |
 | Path parameters | :heavy_check_mark: |  |
-| Environment variables | :heavy_check_mark: | |
+| Environment variables | :heavy_check_mark: | by Lua files |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
 | Output files Integrated with Telescope | :heavy_check_mark: | executing `SHIPFindResponse` |
 | Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-nyctovim](https://github.com/javiorfo/nvim-nyctovim) |

@@ -14,7 +14,7 @@ M.DEFAULTS = {
     response = {
         show_headers = 'all',
         horizontal = true,
-        size = 30,
+        size = 20,
         redraw = true
     },
     output = {
@@ -38,7 +38,6 @@ M.DEFAULTS = {
         }
     }
 }
-
 
 function M.setup(opts)
     if opts.request then

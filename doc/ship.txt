@@ -1,35 +1,89 @@
 *ship.txt* nvim-ship
-Neovim plugin for calling APIs (REST, GraphQL, etc)
+Neovim plugin for calling APIs with REST and GraphQL
  ____  _   _ ___ ____  ~
 / ___|| | | |_ _|  _ \ ~
 \___ \| |_| || || |_) |~
  ___) |  _  || ||  __/ ~
 |____/|_| |_|___|_|    ~
 
+SHIP stands for 'Send Handwritten Inquisitive Petitions'.
+
 REFERENCE MANUAL
 ================================================================================
 CONTENTS                                                             *nvim-ship*
 
-    0. Introduction ............. |ship-introduction|
-    1. Usage .................... |ship-usage|
-     1.1 Default Implementation . |ship-default|
+    1. Introduction ............. |ship-introduction|
+    2. Quickstart ............... |ship-quickstart|
+    3. Setup/Configuration ...... |ship-setup-configuration|
+    4. Commands ................. |ship-commands|
+    5. Usage .................... |ship-usage|
+     5.1 Default Implementation . |ship-usage-|
 
 ================================================================================
-INTRODUCTION                                                 *ship-introduction*
+1. INTRODUCTION                                              *ship-introduction*
 
-nvim-ship is a Neovim plugin for calling APIs (REST, GraphQL, etc). Highly
+nvim-ship is a Neovim plugin for calling APIs with REST and GraphQL. Highly
 configurable with many options to set, like request and response views,
 environment variables, output files and a 'special' way to update a file with
 variables.
 
+Some Features
+
+    - Rest and GraphQL calls
+    - Own `ship` syntax file
+    - Headers configuration
+    - Authorization support
+    - Body requests by file
+    - Environment variables
+    - Telescope integration
+
 ================================================================================
-1. USAGE                                                         *ship-commands*
+2. QUICK START                                                 *ship-quickstart*
 
 The following are examples of different implementations of nvim-ship
 
+Explain syntax
+
 --------------------------------------------------------------------------------
-1.1 SIMPLE IMPLEMENTATION                                         *ship-default*
+3. SETUP AND CONFIGURATION                                          *ship-setup*
 
+This is the initial implicit setup from SHIP: >
 
+    require'ship'.setup {
+        request = {
+            -- Timeout in seconds for request
+            timeout = 30, 
+            
+            -- No need to press ':w' every time a ship file is edited
+            autosave = true  
+        },
+        response = {
+            -- Options 'all', 'res', 'none'
+            show_headers = 'all',
+
+            -- Orientation of the buffer for response
+            -- If set to false then the orientation will be vertical
+            horizontal = true,
+
+            -- Size of the buffer for response
+            size = 20,
+            
+            -- If true the buffer for response will be redraw
+            -- If false It will add another window for response
+            redraw = true
+        },
+        output = {
+            -- If the response files will be saved in a folder or not
+            save = false,
+
+            -- If the response files will be override 
+            override = true,
+
+            -- If the above 'save' field is true, then specify the output folder
+            folder = "output",
+        },
+    }
+
+<
 --------------------------------------------------------------------------------
 

@@ -12,7 +12,7 @@ local M = {}
 function M.send()
     if validator.dependencies_installed() then
         core.send()
-        vim.cmd("wincmd w")
+        vim.cmd("wincmd p")
     end
 end
 

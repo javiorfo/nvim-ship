@@ -5,6 +5,9 @@
 
 local M = {}
 
+M.ship_log_file = vim.fn.stdpath('log') .. "/ship.log"
+local debug_header = string.format("[DEBUG][%s]:", os.date("%m/%d/%Y %H:%M:%S"))
+
 local function logger(plugin_name, msg)
     return function(level)
         if plugin_name then
@@ -32,6 +35,16 @@ end
 
 function M:info(msg)
     logger(self.plugin_name, msg)(vim.log.levels.INFO)
+end
+
+function M:debug(msg)
+    if require'ship'.DEFAULTS.internal.log_debug then
+        local file = io.open(M.ship_log_file, "a")
+        if file then
+            file:write(string.format("%s %s\n", debug_header, msg))
+            file:close()
+        end
+    end
 end
 
 return M

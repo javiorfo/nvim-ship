@@ -33,7 +33,7 @@ function M.create(args)
     vim.fn.setline(12, "# ship_body_file /path/to/body.json")
     vim.fn.setline(13, "{}")
     vim.cmd("redraw")
-    Logger:info(filename .. " created!")
+    Logger:info(filename .. " created.")
 end
 
 function M.close_shipr()
@@ -53,11 +53,16 @@ function M.create_env(args)
     vim.fn.system(string.format("echo -e 'return {\n \t host = \"host\"\n}' > %s/dev.lua;", folder_name))
     vim.fn.system(string.format("echo -e 'return {\n \t host = \"host\"\n}' > %s/test.lua;", folder_name))
     vim.fn.system(string.format("echo -e 'return {\n \t host = \"host\"\n}' > %s/prod.lua;", folder_name))
-    Logger:info(folder_name .. " created!")
+    Logger:info(folder_name .. " created.")
 end
 
 function M.show_logs()
-    vim.cmd(string.format("vsp %s | normal G", util.ship_log_file))
+    vim.cmd(string.format("vsp %s | normal G", Logger.ship_log_file))
+end
+
+function M.delete_logs()
+    os.remove(Logger.ship_log_file)
+    Logger:info("Log file deleted.")
 end
 
 function M.find_responses()
@@ -67,6 +72,10 @@ function M.find_responses()
     else
         Logger:warn("This action require telescope.nvim plugin to be installed.")
     end
+end
+
+function M.execute_special(args)
+    print(args[1])
 end
 
 return M

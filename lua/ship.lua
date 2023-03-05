@@ -36,6 +36,9 @@ M.DEFAULTS = {
                 lua_field = "some_field"
             }
         }
+    },
+    internal = {
+        log_debug = false
     }
 }
 
@@ -114,6 +117,18 @@ function M.setup(opts)
             end
         end
     end
+
+    if opts.internal then
+        local r = opts.internal
+        if r.log_debug then
+            if type(r.log_debug) == "boolean" then
+                M.DEFAULTS.internal.log_debug = r.log_debug
+            else
+                Logger:error("Setup Error: internal.log_debug must be a boolean value.")
+            end
+        end
+    end
+
     if opts.special then
        Logger:warn("Setup Warn: special is not implemented yet.")
     end

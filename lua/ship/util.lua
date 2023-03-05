@@ -14,7 +14,6 @@ M.sections = {
 M.status_time_tmp_file = "/tmp/ship_code_time_tmp"
 M.ship_response_extension = "shipr"
 M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/ship", "") .. "bin/ship.sh"
-M.ship_log_file = vim.fn.stdpath('log') .. "/ship.log"
 
 local logger = require 'ship.logger':new("SHIP")
 M.logger = logger

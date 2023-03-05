@@ -178,9 +178,16 @@ function M.send()
     end
 
     local file = vim.fn.expand("%:p")
+    Logger:debug("File: " .. file)
+
     local base = read_section(file, util.sections.BASE)
+    Logger:debug("Base section: " .. vim.inspect(base))
+
     local headers = read_section(file, util.sections.HEADERS)
+    Logger:debug("Headers section: " .. vim.inspect(base))
+
     local body = read_body(file)
+    Logger:debug("Body section: " .. vim.inspect(base))
 
     if not validator.is_base_valid(base) then
         return
@@ -197,17 +204,23 @@ function M.send()
     end
 
     local headers_list = process_headers(headers)
+    Logger:debug("List of headers: " .. headers_list)
 
     local body_param = process_body(body)
     if body_param ~= "" then body_param = " -b " .. body_param end
+    Logger:debug("Body param: " .. body_param)
 
     local output_folder, response_file = build_output_folder_and_file()
+    Logger:debug("Output folder: " .. output_folder)
+    Logger:debug("Response file: " .. response_file)
 
-    local curl = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
         util.script_path, setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
-        response_file, setup.output.save, output_folder, body_param, util.ship_log_file, util.ship_log_file)
+        response_file, setup.output.save, output_folder, body_param, Logger.ship_log_file, Logger.ship_log_file)
 
-    local ship_spinner = spinner:new(spinner.job_to_run(curl))
+    Logger:debug("Call to ship.sh: " .. call_to_ship_sh)
+
+    local ship_spinner = spinner:new(spinner.job_to_run(call_to_ship_sh))
     local is_interrupted = ship_spinner:start()
 
     if not is_interrupted then

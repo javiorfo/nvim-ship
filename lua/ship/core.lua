@@ -7,7 +7,7 @@ local setup = require'ship'.DEFAULTS
 local util = require'ship.util'
 local Logger = util.logger
 local validator = require'ship.validator'
-local spinner = require'ship.spinner'
+local spinetta = require'spinetta'
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -220,8 +220,8 @@ function M.send()
 
     Logger:debug("Call to ship.sh: " .. call_to_ship_sh)
 
-    local ship_spinner = spinner:new(spinner.job_to_run(call_to_ship_sh))
-    local is_interrupted = ship_spinner:start()
+    local ship_spinner = spinetta:new{ main_msg = "Shipping " }
+    local is_interrupted = ship_spinner:start(spinetta.job_to_run(call_to_ship_sh))
 
     if not is_interrupted then
         open_buffer(response_file)

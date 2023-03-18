@@ -45,10 +45,14 @@
 `Vim Plug`
 ```vim
 Plug 'javiorfo/nvim-ship'
+Plug 'javiorfo/nvim-spinetta'
 ```
 `Packer`
 ```lua
-use 'javiorfo/nvim-ship'
+use {
+    'javiorfo/nvim-ship',
+    requires = 'javiorfo/nvim-spinetta'
+}
 ```
 
 ## Usage

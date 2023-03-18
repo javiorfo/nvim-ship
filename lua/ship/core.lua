@@ -220,17 +220,121 @@ function M.send()
 
     Logger:debug("Call to ship.sh: " .. call_to_ship_sh)
 
-    local ship_spinner = spinetta:new{ main_msg = "Shipping " }
-    local is_interrupted = ship_spinner:start(spinetta.job_to_run(call_to_ship_sh))
+    local ship_spinner = spinetta:new {
+        main_msg = "[SHIP] => Shipping ",
+        on_success = function()
+            open_buffer(response_file)
+            status_and_time()
+            clean(response_file)
+        end,
+        on_interrupted = function()
+            vim.cmd("redraw")
+            local msg = "Call interrupted!"
+            Logger:info(msg)
+            Logger:debug(msg)
+        end
+    }
 
-    if not is_interrupted then
-        open_buffer(response_file)
-        status_and_time()
-        clean(response_file)
-    else
-        vim.cmd("redraw")
-        Logger:info("Call interrupted!")
+    ship_spinner:start(spinetta.job_to_run(call_to_ship_sh))
+end
+
+local function update_lua_file(value, update)
+    local updated_table = {}
+    for line in io.lines(update.lua_file) do
+       local init, final = string.find(line, update.lua_field .. "(%s*)=(%s*)")
+       if init then
+            Logger:debug("Special update_lua_file, line: " .. line)
+            line = string.gsub(line, (tostring(line):sub(final, #line)), " \"" .. value .. "\",")
+            Logger:debug("Special update_lua_file, line updated: " .. line)
+       end
+       table.insert(updated_table, line)
     end
+
+    local filewrite = io.open(update.lua_file, "w")
+    for _, v in pairs(updated_table) do
+        if filewrite then
+            filewrite:write(v .. '\n')
+        end
+    end
+    if filewrite then
+        filewrite:close()
+    end
+end
+
+function M.execute_special(name)
+    local special = util.get_table_by_key_and_value(setup.special, "name", name)
+    if not special then
+        Logger:error(name .. " is not configured as special!")
+        return
+    end
+    local ship_file = special.take.ship_file
+
+    Logger:debug("Special File: " .. ship_file)
+
+    local base = read_section(ship_file, util.sections.BASE)
+    Logger:debug("Special Base section: " .. vim.inspect(base))
+
+    local headers = read_section(ship_file, util.sections.HEADERS)
+    Logger:debug("Special Headers section: " .. vim.inspect(base))
+
+    local body = read_body(ship_file)
+    Logger:debug("Special Body section: " .. vim.inspect(base))
+
+    if not validator.is_base_valid(base) then
+        return
+    end
+
+    if base.env then
+        local ok, result = pcall(dofile, base.env)
+        if ok then
+            process_environment(result, base, headers, body)
+        else
+           Logger:error(result)
+           return
+        end
+    end
+
+    local headers_list = process_headers(headers)
+    Logger:debug("Special List of headers: " .. headers_list)
+
+    local body_param = process_body(body)
+    if body_param ~= "" then body_param = " -b " .. body_param end
+    Logger:debug("Special Body param: " .. body_param)
+
+--     local response_file = string.format("/tmp/%s.%s", name, util.ship_response_extension)
+    local response_file = string.format("/tmp/%s.%s", name, "json")
+    Logger:debug("Special Response file: " .. response_file)
+
+    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+        util.script_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false, "", body_param, Logger.ship_log_file, Logger.ship_log_file)
+
+    Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
+
+    local ship_spinner = spinetta:new {
+        main_msg = string.format("[SHIP] => Shipping Special %s ", name),
+        on_success = function()
+--             local ok, result = pcall(vim.fn.system, string.format("cat %s | jq '.%s'", response_file, special.take.ship_field))
+            local ship_field = special.take.ship_field
+            local update = special.update
+            local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s | tr -d '\n'", ship_field, response_file))
+            if ok then
+                update_lua_file(result, update)
+            else
+                Logger:error(result)
+            end
+            clean(response_file)
+            vim.cmd("redraw")
+            Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
+        end,
+        on_interrupted = function()
+            vim.cmd("redraw")
+            local msg = "Call interrupted!"
+            Logger:info(msg)
+            Logger:debug(msg)
+        end
+    }
+
+    ship_spinner:start(spinetta.job_to_run(call_to_ship_sh))
 end
 
 return M

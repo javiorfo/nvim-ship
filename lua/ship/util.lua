@@ -38,4 +38,12 @@ function M.table_value_from_readline(line)
     return line:match("^(%S+)(.+)")
 end
 
+function M.get_table_by_key_and_value(table, key, value)
+    for _, v in pairs(table) do
+        if v[key] == value then
+            return v
+        end
+    end
+end
+
 return M

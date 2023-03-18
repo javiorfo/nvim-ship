@@ -11,6 +11,7 @@ local M = {}
 
 function M.send()
     if validator.dependencies_installed() then
+        Logger:debug("Executing SHIP command...")
         core.send()
         vim.cmd("wincmd p")
     end
@@ -74,8 +75,9 @@ function M.find_responses()
     end
 end
 
-function M.execute_special(args)
-    print(args[1])
+function M.special(args)
+    Logger:debug("Executing SHIPSpecial command...")
+    core.special(args[1])
 end
 
 return M

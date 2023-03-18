@@ -22,18 +22,17 @@ M.DEFAULTS = {
         override = true,
         folder = "output",
     },
-
-    -- TODO special not implemented yet
+    -- TODO validate
     special = {
         {
-            name = "special_name", -- validate unique
+            name = "testing", -- validate unique
             take = {
-                ship_file = "filename.ship",
-                ship_field = "some_field"
+                ship_file = "/home/javier/.local/share/nvim/site/pack/packer/start/nvim-ship/tests/get/auth.ship",
+                ship_field = "token"
             },
             update = {
-                lua_file = "filename.lua",
-                lua_field = "some_field"
+                lua_file = "/home/javier/.local/share/nvim/site/pack/packer/start/nvim-ship/tests/env/test.lua",
+                lua_field = "some_header"
             }
         }
     },

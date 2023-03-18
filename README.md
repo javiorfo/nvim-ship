@@ -34,12 +34,13 @@
 | URL queries | :heavy_check_mark: |  |
 | Path parameters | :heavy_check_mark: |  |
 | Environment variables | :heavy_check_mark: | by Lua files |
+| Special ENV variables update | :heavy_check_mark: | executing `:SHIPSpecial` (JSON only) |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
-| Output files Integrated with Telescope | :heavy_check_mark: | executing `SHIPFindResponse` |
+| Output files Integrated with Telescope | :heavy_check_mark: | executing `:SHIPFindResponse` |
 | Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-nyctovim](https://github.com/javiorfo/nvim-nyctovim) |
-| Command to create ship file | :heavy_check_mark: | executing `SHIPCreate` |
-| Command to create env archetype | :heavy_check_mark: | executing `SHIPCreateEnv` |
-| Command to check LOGS | :heavy_check_mark: | executing `SHIPShowLogs` |
+| Command to create ship file | :heavy_check_mark: | executing `:SHIPCreate` |
+| Command to create env archetype | :heavy_check_mark: | executing `:SHIPCreateEnv` |
+| Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |
 
  ## Installation
 `Vim Plug`

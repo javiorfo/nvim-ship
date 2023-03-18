@@ -4,6 +4,7 @@
 -- #####################################################
 
 local Logger = require'ship.util'.logger
+local validator = require'ship.validator'
 local M = {}
 
 M.DEFAULTS = {
@@ -21,20 +22,6 @@ M.DEFAULTS = {
         save = false,
         override = true,
         folder = "output",
-    },
-    -- TODO validate
-    special = {
-        {
-            name = "testing", -- validate unique
-            take = {
-                ship_file = "/home/javier/.local/share/nvim/site/pack/packer/start/nvim-ship/tests/get/auth.ship",
-                ship_field = "token"
-            },
-            update = {
-                lua_file = "/home/javier/.local/share/nvim/site/pack/packer/start/nvim-ship/tests/env/test.lua",
-                lua_field = "some_header"
-            }
-        }
     },
     internal = {
         log_debug = false
@@ -129,7 +116,7 @@ function M.setup(opts)
     end
 
     if opts.special then
-       Logger:warn("Setup Warn: special is not implemented yet.")
+       validator.validate_special(opts.special)
     end
 end
 

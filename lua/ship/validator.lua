@@ -56,4 +56,33 @@ function M.dependencies_installed()
     return true
 end
 
+function M.validate_special(special)
+    for _, item in pairs(special) do
+       if item.name and type(item.name) == "string" and item.name ~= "" then
+            if item.take and type(item.take) == "table" then
+                if not item.take.ship_file or type(item.take.ship_file) ~= "string" or item.take.ship_file == "" then
+                    Logger:error("Setup Error: take.ship_file in special is required, not empty and must be a string value pointing to a ship filetype.")
+                end
+                if not item.take.ship_field or type(item.take.ship_field) ~= "string" or item.take.ship_field == "" then
+                    Logger:error("Setup Error: take.ship_field in special is required, not empty and must be a string value.")
+                end
+            else
+                Logger:error("Setup Error: take in special is required and must be a table value.")
+            end
+            if item.update and type(item.update) == "table" then
+                if not item.update.lua_file or type(item.update.lua_file) ~= "string"  or item.update.lua_file == "" then
+                    Logger:error("Setup Error: update.lua_file in special is required, not empty and must be a string value pointing to a lua filetype..")
+                end
+                if not item.update.lua_field or type(item.update.lua_field) ~= "string"  or item.update.lua_field == "" then
+                    Logger:error("Setup Error: update.lua_field in special is required, not empty and must be a string value.")
+                end
+            else
+                Logger:error("Setup Error: update in special is required and must be a table value.")
+            end
+        else
+            Logger:error("Setup Error: name in special is required, not empty and must be a string value.")
+       end
+    end
+end
+
 return M

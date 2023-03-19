@@ -1,8 +1,8 @@
 ##!/usr/bin/env bash
 # Author: Javier Orfo
 
-SHIP=$HOME/.local/share/nvim/site/pack/packer/start/nvim-ship/bin/ship.sh
-LOG_FILE=$HOME/.local/state/nvim/ship.log
+SHIP=~/.local/share/nvim/site/pack/packer/start/nvim-ship/bin/ship.sh
+LOG_FILE=~/.local/state/nvim/ship.log
 DEST=/tmp/testing.shipr
 
 # $SHIP -t 30 -m POS -u https://countries.trevorblades.com/ -s false -h none -c '-H "Content-Type: application/json"' -b '{"query": "{ continents { code name } }"}' -f $DEST -f $LOG_FILE; cat $DEST; rm $DEST 

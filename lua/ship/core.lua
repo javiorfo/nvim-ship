@@ -172,12 +172,7 @@ local function process_environment(env, base, headers, body)
     end
 end
 
-function M.send()
-    if setup.request.autosave then
-        vim.cmd("silent w")
-    end
-
-    local file = vim.fn.expand("%:p")
+local function get_base_headers_body(file)
     Logger:debug("File: " .. file)
 
     local base = read_section(file, util.sections.BASE)
@@ -188,6 +183,23 @@ function M.send()
 
     local body = read_body(file)
     Logger:debug("Body section: " .. vim.inspect(base))
+
+    return {
+        base = base,
+        headers = headers,
+        body = body
+    }
+end
+
+function M.send()
+    if setup.request.autosave then
+        vim.cmd("silent w")
+    end
+
+    local table_ship_values = get_base_headers_body(vim.fn.expand("%:p"))
+    local base = table_ship_values.base
+    local headers = table_ship_values.headers
+    local body = table_ship_values.body
 
     if not validator.is_base_valid(base) then
         return
@@ -267,18 +279,11 @@ function M.execute_special(name)
         Logger:error(name .. " is not configured as special!")
         return
     end
-    local ship_file = special.take.ship_file
 
-    Logger:debug("Special File: " .. ship_file)
-
-    local base = read_section(ship_file, util.sections.BASE)
-    Logger:debug("Special Base section: " .. vim.inspect(base))
-
-    local headers = read_section(ship_file, util.sections.HEADERS)
-    Logger:debug("Special Headers section: " .. vim.inspect(base))
-
-    local body = read_body(ship_file)
-    Logger:debug("Special Body section: " .. vim.inspect(base))
+    local table_ship_values = get_base_headers_body(special.take.ship_file)
+    local base = table_ship_values.base
+    local headers = table_ship_values.headers
+    local body = table_ship_values.body
 
     if not validator.is_base_valid(base) then
         return

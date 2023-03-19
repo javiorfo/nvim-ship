@@ -38,14 +38,12 @@ function M.create(args)
 end
 
 function M.close_shipr()
-    pcall(function()
-        for _, nr in ipairs(vim.api.nvim_list_bufs()) do
-            local buf_name = vim.api.nvim_buf_get_name(nr)
-            if buf_name:find(".shipr$") then
-               vim.cmd("bd! " .. buf_name)
-            end
+    for _, nr in ipairs(vim.api.nvim_list_bufs()) do
+        local buf_name = vim.api.nvim_buf_get_name(nr)
+        if vim.api.nvim_buf_is_loaded(nr) and buf_name:find(".shipr$") then
+            vim.cmd("bd! " .. buf_name)
         end
-    end)
+    end
 end
 
 function M.create_env(args)

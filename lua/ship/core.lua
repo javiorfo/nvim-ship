@@ -311,7 +311,7 @@ function M.special(name)
     Logger:debug("Special Response file: " .. response_file)
 
     local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
-        util.script_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false, "", body_param, Logger.ship_log_file, Logger.ship_log_file)
+        util.script_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false, setup.output.folder, body_param, Logger.ship_log_file, Logger.ship_log_file)
 
     Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
 
@@ -321,7 +321,7 @@ function M.special(name)
 --             local ok, result = pcall(vim.fn.system, string.format("cat %s | jq '.%s'", response_file, special.take.ship_field))
             local ship_field = special.take.ship_field
             local update = special.update
-            local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s | tr -d '\n'", ship_field, response_file))
+            local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s", ship_field, response_file))
             if ok then
                 update_lua_file(result, update)
             else

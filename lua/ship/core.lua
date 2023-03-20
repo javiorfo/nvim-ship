@@ -316,20 +316,22 @@ function M.special(name)
     Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
 
     local ship_spinner = spinetta:new {
-        main_msg = string.format("[SHIP] => Shipping Special %s ", name),
+        main_msg = string.format("[SHIP] => Shipping Special <%s> ", name),
         on_success = function()
 --             local ok, result = pcall(vim.fn.system, string.format("cat %s | jq '.%s'", response_file, special.take.ship_field))
+            Logger:debug("Special Response: " .. vim.fn.system("cat " .. response_file))
+
             local ship_field = special.take.ship_field
             local update = special.update
             local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s", ship_field, response_file))
             if ok then
-                update_lua_file(result, update)
+                update_lua_file(util.trim(result), update)
+                clean(response_file)
+                vim.cmd("redraw")
+                Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
             else
                 Logger:error(result)
             end
-            clean(response_file)
-            vim.cmd("redraw")
-            Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
         end,
         on_interrupted = function()
             vim.cmd("redraw")

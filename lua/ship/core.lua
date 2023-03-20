@@ -273,7 +273,7 @@ local function update_lua_file(value, update)
     end
 end
 
-function M.execute_special(name)
+function M.special(name)
     local special = util.get_table_by_key_and_value(setup.special, "name", name)
     if not special then
         Logger:error(name .. " is not configured as special!")

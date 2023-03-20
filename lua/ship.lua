@@ -116,7 +116,9 @@ function M.setup(opts)
     end
 
     if opts.special then
-       validator.validate_special(opts.special)
+       if validator.validate_special(opts.special) then
+           M.DEFAULTS.special = opts.special
+       end
     end
 end
 

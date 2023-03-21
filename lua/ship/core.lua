@@ -252,25 +252,33 @@ end
 
 local function update_lua_file(value, update)
     local updated_table = {}
+    local found = false
     for line in io.lines(update.lua_file) do
        local init, final = string.find(line, update.lua_field .. "(%s*)=(%s*)")
        if init then
             Logger:debug("Special update_lua_file, line: " .. line)
-            line = string.gsub(line, (tostring(line):sub(final, #line)), " \"" .. value .. "\",")
+            line = (tostring(line):sub(0, final - 1)) .. " \"" .. value .. "\","
             Logger:debug("Special update_lua_file, line updated: " .. line)
+            found = true
        end
        table.insert(updated_table, line)
     end
 
-    local filewrite = io.open(update.lua_file, "w")
-    for _, v in pairs(updated_table) do
-        if filewrite then
-            filewrite:write(v .. '\n')
+    if found then
+        local filewrite = io.open(update.lua_file, "w")
+        for _, v in pairs(updated_table) do
+            if filewrite then
+                filewrite:write(v .. '\n')
+            end
         end
+        if filewrite then
+            filewrite:close()
+        end
+    else
+        vim.cmd("redraw")
+        Logger:warn(string.format("The Special operation failed. Field '%s' not found in response.", update.lua_field))
     end
-    if filewrite then
-        filewrite:close()
-    end
+    return found
 end
 
 function M.special(name)
@@ -325,10 +333,11 @@ function M.special(name)
             local update = special.update
             local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s", ship_field, response_file))
             if ok then
-                update_lua_file(util.trim(result), update)
-                clean(response_file)
-                vim.cmd("redraw")
-                Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
+                if update_lua_file(util.trim(result), update) then
+                    clean(response_file)
+                    vim.cmd("redraw")
+                    Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
+                end
             else
                 Logger:error(result)
             end

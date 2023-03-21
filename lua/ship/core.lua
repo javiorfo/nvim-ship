@@ -8,6 +8,7 @@ local util = require'ship.util'
 local Logger = util.logger
 local validator = require'ship.validator'
 local spinetta = require'spinetta'
+local get_http_status = require'ship.status'.get_http_status
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -107,7 +108,7 @@ local function status_and_time()
         return status, time
     end)
     if ok then
-        status = string.format("%s <%s>", status, require'ship.status'.get_http_status(status))
+        status = string.format("%s <%s>", status, get_http_status(status))
         Logger:info(string.format("Shipped! | Status -> %s | Time -> %s", status, time))
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
@@ -281,6 +282,18 @@ local function update_lua_file(value, update)
     return found
 end
 
+local function get_special_http_status()
+    local ok, status = pcall(function()
+        local line = io.lines(util.status_time_tmp_file)()
+        return line:match("([^,]+)")
+    end)
+    if ok then
+        return status
+    else
+        return "Unknown"
+    end
+end
+
 function M.special(name)
     local special = util.get_table_by_key_and_value(setup.special, "name", name)
     if not special then
@@ -314,7 +327,6 @@ function M.special(name)
     if body_param ~= "" then body_param = " -b " .. body_param end
     Logger:debug("Special Body param: " .. body_param)
 
---     local response_file = string.format("/tmp/%s.%s", name, util.ship_response_extension)
     local response_file = string.format("/tmp/%s.%s", name, "json")
     Logger:debug("Special Response file: " .. response_file)
 
@@ -326,20 +338,24 @@ function M.special(name)
     local ship_spinner = spinetta:new {
         main_msg = string.format("[SHIP] => Shipping Special <%s> ", name),
         on_success = function()
---             local ok, result = pcall(vim.fn.system, string.format("cat %s | jq '.%s'", response_file, special.take.ship_field))
             Logger:debug("Special Response: " .. vim.fn.system("cat " .. response_file))
 
-            local ship_field = special.take.ship_field
-            local update = special.update
-            local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s", ship_field, response_file))
-            if ok then
-                if update_lua_file(util.trim(result), update) then
-                    clean(response_file)
-                    vim.cmd("redraw")
-                    Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
+            local http_status = get_special_http_status()
+            if tonumber(http_status) > 199 and tonumber(http_status) < 400 then
+                local ship_field = special.take.ship_field
+                local update = special.update
+                local ok, result = pcall(vim.fn.system, string.format("jq -r '.%s' %s", ship_field, response_file))
+                if ok then
+                    if update_lua_file(util.trim(result), update) then
+                        clean(response_file)
+                        vim.cmd("redraw")
+                        Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
+                    end
+                else
+                    Logger:error(result)
                 end
             else
-                Logger:error(result)
+                Logger:error(string.format("Special '%s' call to %s returned status %s <%s>", name, base.url, http_status, get_http_status(http_status)))
             end
         end,
         on_interrupted = function()

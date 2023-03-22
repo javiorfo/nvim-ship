@@ -14,10 +14,16 @@ CONTENTS                                                             *nvim-ship*
 
     1. Introduction ............. |ship-introduction|
     2. Quickstart ............... |ship-quickstart|
-    3. Setup/Configuration ...... |ship-setup-configuration|
-    4. Commands ................. |ship-commands|
-    5. Usage .................... |ship-usage|
-     5.1 Default Implementation . |ship-usage-|
+     2.1 Ship Files ............. |ship-quickstart-files|
+     2.2 Simple Usage ........... |ship-quickstart-usage|
+    3. Setup .................... |ship-setup|
+     3.1 Syntax Highlighting .... |ship-setup-syntax|
+    4. Environment .............. |ship-environment|
+     4.1 Lua Files .............. |ship-environment-lua|
+     4.2 Special ................ |ship-environment-special|
+    5. Commands ................. |ship-commands|
+    6. Logs ..................... |ship-logs|
+    7. Integrations ............. |ship-integrations|
 
 ================================================================================
 1. INTRODUCTION                                              *ship-introduction*
@@ -36,18 +42,59 @@ Some Features
     - Body requests by file
     - Environment variables
     - Telescope integration
+    - Many more...
 
 ================================================================================
 2. QUICK START                                                 *ship-quickstart*
 
-The following are examples of different implementations of nvim-ship
-
-Explain syntax
+The following are quickstart guides of nvim-ship
 
 --------------------------------------------------------------------------------
-3. SETUP AND CONFIGURATION                                          *ship-setup*
+2.1 SHIP FILES                                           *ship-quickstart-files*
 
-This is the initial implicit setup from SHIP: >
+The 'ship' files are those with .ship extension (Ex: some_file.ship). These
+files must contain the following syntax: >
+    # This is a comment
+
+    # Required BASE section
+    # This section will contain 'url' (required), 'method' (required) 
+    # and 'env' (optional) tags 
+    ~[BASE]~
+    url https://domain.com/path
+    method GET
+    env /path/to/env_variables.lua
+
+    # Required HEADERS section
+    # This section will contain the headers required by the user 
+    ~[HEADERS]~
+    content-type application/json
+    
+    # Optional BODY section
+    # This section will contain the body required by the user 
+    # It could be a JSON object, XML or file (this one using the tag
+    # 'ship_body_file')
+    ~[BODY]~
+    {
+        "id": 1000,
+        "desc": "something"
+    }
+<
+--------------------------------------------------------------------------------
+2.2 SIMPLE USAGE                                         *ship-quickstart-usage*
+
+Most common first usage is to create a ship file and send a simple REST or
+GraphQL request.
+Recommendations are to use the built-in command ':ShipCreate' which is going to
+generate a basic ship file and edit url, method, headers, etc; to request a
+service. This is by executing the command ':Ship'
+This will show a buffer with the response (including headers, status code and
+time).
+
+================================================================================
+3. SETUP                                                            *ship-setup*
+
+This is the initial implicit setup from SHIP. Override some of these if you
+want: >
 
     require'ship'.setup {
         request = {
@@ -82,8 +129,149 @@ This is the initial implicit setup from SHIP: >
             -- If the above 'save' field is true, then specify the output folder
             folder = "output",
         },
+        internal = {
+            -- This enables the debug phase of the logger. Which is recorded in
+            -- The same log file for errors. Default disable.
+            log_debug = false,
+        }
     }
 
 <
 --------------------------------------------------------------------------------
+3.1 SYNTAX HIGHLIGHTING                                      *ship-setup-syntax*
 
+Recommendation for syntax highlighting in a ship file is to install the Neovim
+colorscheme 'https://github.com/javiorfo/nvim-nyctovim' which contains the right
+syntax for ship files. As well as 'https://github.com/javiorfo/nvim-hemingway'
+for commenting ship files lines (among others).
+
+But if none of these propositions satisfies yourself, you can link keywords of
+your own colorschemes by setup configuration: >
+    require'ship'.setup {
+        -- Obviously feel free to change the values to link
+        syntax = {
+            shipComment     = "Comment",
+            shipBoolean     = "Boolean",
+            shipBrackets    = "shipBoolean",
+            shipSection     = "shipBoolean",
+            shipBase        = "shipSection",
+            shipHeaders     = "shipSection",
+            shipBody        = "shipSection",
+            shipString      = "String",
+            shipMethod      = "Type",
+            shipJson        = "shipMethod",
+            shipVariable    = "Define",
+            shipEnvVar      = "Tag",
+            shipInfo        = "shipMethod",
+            shipHtmlTag     = "shipMethod",
+            shipHtmlEndTag  = "shipMethod",
+            shipError       = "Error"    
+        }
+    }
+<
+
+================================================================================
+4. ENVIRONMENT                                                *ship-environment*
+
+This section will cover different ways to setup useful environment variables.
+
+--------------------------------------------------------------------------------
+4.1 LUA FILES                                             *ship-environment-lua*
+
+The way of configure environment variables for a ship file is by Lua files.
+This feature gives the flexibility of using Lua files for variables, imports
+and even functions harnessing all the Lua power for this purpose.
+
+Recommendation is to use the command ':ShipCreateEnv'. This command will create
+three files: dev.lua, test.lua and prod.lua with the following format: >
+    
+    return {
+        host = "https://somedomain.com",
+        other_var = "some_value"
+    }
+<
+
+Those are posible variables to use. Variables must be ONLY STRING VALUES.
+
+An example of using the above variables in a ship file will be: >
+    
+    ~[BASE]~
+    url {{host}}/some_path
+    method GET
+    env /my/absolute/path/to/env/dev.lua
+
+    ~[HEADERS]~
+    accept application/xml
+<
+
+The 'env' tag must point to the absolute path of a Lua file which contains the
+environment variables.
+
+--------------------------------------------------------------------------------
+4.2 SPECIAL                                           *ship-environment-special*
+
+The 'SPECIAL FEATURE' is something useful for updating environment variables.
+A good example will be an api key or token which expires in seconds. It's really
+a hassle to call a service to obtain a token, paste the token in an enviroment
+variables file and call again the corresponding service.
+For this, nvim-ship has a special feature that allows to update a specific
+enviroment variable in a file by calling another service.
+
+This feature can be set by setup configuration: >
+    
+    require'ship'.setup {
+        special = {
+            {
+                -- Give a name to the special feature
+                name = "token_service",
+                take = {
+                    -- Call request to get a token response
+                    ship_file = "/absolute/path/to/request_token.ship",
+                    -- Get the value from JSON response
+                    ship_field = "access_token"
+                },
+                update = {
+                    -- Set the Lua enviroment variables file to update
+                    lua_file = "/absolute/path/to/environment.lua",
+                    -- Set the variable from 'lua_file' to update
+                    lua_field = "token"
+                }
+            }
+        }
+    }
+<
+
+Once this is set it up, to call it execute the command 
+':ShipSpecial token_service' and enviroment.lua will be updated and ready to use
+
+NOTE: It works ONLY WITH JSON
+
+================================================================================
+5. COMMANDS                                                      *ship-commands*
+
+These are the list of commands in nvim-ship:
+    - :Ship -> This will send the request of a ship file
+    - :ShipCloseResponse -> This will close all the responses opened
+    - :ShipCreate -> This will create a basic ship file
+    - :ShipCreateEnv -> This will create a basic structure for env variables
+    - :ShipDeleteLogs -> This will delete the log file
+    - :ShipFindResponse -> This will open telescope (if installed) to find shipr
+    files
+    - :ShipShowLogs -> This will show the log file
+    - :ShipSpecial -> This will execute the 'special' section configured by the
+    setup function
+
+================================================================================
+6. LOGS                                                              *ship-logs*
+
+To check the logs execute the command ':ShipShowLogs'
+To delete all logs execute the command ':ShipDeleteLogs'
+
+================================================================================
+7. INTEGRATIONS                                              *ship-integrations*
+
+nvim-ship could be integrated with nvim-telescope to see shipr files (responses
+saved) if 'ouput = { save = true }' is set it by configuration.
+Open telescope by executing the command ':ShipFindResponse'
+
+================================================================================

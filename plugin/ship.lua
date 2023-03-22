@@ -11,18 +11,18 @@ vim.g.ship = 1
 
 local special = require'ship'.DEFAULTS.special
 
-vim.api.nvim_create_user_command('SHIP',"lua require'ship.commands'.send()", {})
-vim.api.nvim_create_user_command('SHIPCloseResponse', "lua require('ship.commands').close_shipr()", {})
+vim.api.nvim_create_user_command('Ship',"lua require'ship.commands'.send()", {})
+vim.api.nvim_create_user_command('ShipCloseResponse', "lua require('ship.commands').close_shipr()", {})
 
-vim.api.nvim_create_user_command('SHIPCreate', function(opts)
+vim.api.nvim_create_user_command('ShipCreate', function(opts)
     require 'ship.commands'.create(opts.fargs)
 end, { nargs = "?" })
 
-vim.api.nvim_create_user_command('SHIPCreateEnv', function(opts)
+vim.api.nvim_create_user_command('ShipCreateEnv', function(opts)
     require 'ship.commands'.create_env(opts.fargs)
 end, { nargs = "?" })
 
-vim.api.nvim_create_user_command('SHIPSpecial', function(opts)
+vim.api.nvim_create_user_command('ShipSpecial', function(opts)
     require 'ship.commands'.special(opts.fargs)
 end, {
     nargs = 1,
@@ -37,6 +37,6 @@ end, {
     end
 })
 
-vim.api.nvim_create_user_command('SHIPShowLogs', "lua require('ship.commands').show_logs()", {})
-vim.api.nvim_create_user_command('SHIPDeleteLogs', "lua require('ship.commands').delete_logs()", {})
-vim.api.nvim_create_user_command('SHIPFindResponse', "lua require('ship.commands').find_responses()", {})
+vim.api.nvim_create_user_command('ShipShowLogs', "lua require('ship.commands').show_logs()", {})
+vim.api.nvim_create_user_command('ShipDeleteLogs', "lua require('ship.commands').delete_logs()", {})
+vim.api.nvim_create_user_command('ShipFindResponse', "lua require('ship.commands').find_responses()", {})

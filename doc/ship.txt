@@ -93,7 +93,7 @@ time).
 ================================================================================
 3. SETUP                                                            *ship-setup*
 
-This is the initial implicit setup from SHIP. Override some of these if you
+This is the initial implicit setup from nvim-ship. Override some of these if you
 want: >
 
     require'ship'.setup {
@@ -135,8 +135,8 @@ want: >
             log_debug = false,
         }
     }
-
 <
+
 --------------------------------------------------------------------------------
 3.1 SYNTAX HIGHLIGHTING                                      *ship-setup-syntax*
 
@@ -147,6 +147,7 @@ for commenting ship files lines (among others).
 
 But if none of these propositions satisfies yourself, you can link keywords of
 your own colorschemes by setup configuration: >
+
     require'ship'.setup {
         -- Obviously feel free to change the values to link
         syntax = {
@@ -267,10 +268,19 @@ These are the list of commands in nvim-ship:
 To check the logs execute the command ':ShipShowLogs'
 To delete all logs execute the command ':ShipDeleteLogs'
 
+For debug level log, enable this: >
+
+    require'ship'.setup {
+        internal = {
+            log_debug = false,
+        }
+    }
+<
+
 ================================================================================
 7. INTEGRATIONS                                              *ship-integrations*
 
-nvim-ship could be integrated with nvim-telescope to see shipr files (responses
+nvim-ship could be integrated with telescope.nvim to see shipr files (responses
 saved) if 'ouput = { save = true }' is set it by configuration.
 Open telescope by executing the command ':ShipFindResponse'
 

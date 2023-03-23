@@ -18,9 +18,9 @@ function M.send()
 end
 
 function M.create(args)
-    local filename = (args[1] or "unamed") .. ".ship"
+    local filename = (args[1] or "std_ship_file") .. ".ship"
     vim.cmd("e " .. filename)
-    vim.fn.setline(1, "# Created by NVIM-SHIP")
+    vim.fn.setline(1, "# Created by nvim-ship")
     vim.fn.setline(2, "")
     vim.fn.setline(3, "~[BASE]~")
     vim.fn.setline(4, "url https://host.com/path")
@@ -32,7 +32,7 @@ function M.create(args)
     vim.fn.setline(10, "")
     vim.fn.setline(11, "~[BODY]~")
     vim.fn.setline(12, "# ship_body_file /path/to/body.json")
-    vim.fn.setline(13, "{}")
+    vim.fn.setline(13, "# { \"some_property\": \"some value\" }")
     vim.cmd("redraw")
     Logger:info(filename .. " created.")
 end

@@ -38,7 +38,7 @@ function M.setup(opts)
                 Logger:error("Setup Error: request.timeout must be a number value.")
             end
         end
-        if r.autosave then
+        if r.autosave ~= nil then
             if type(r.autosave) == "boolean" then
                 M.DEFAULTS.request.autosave = r.autosave
             else
@@ -56,7 +56,7 @@ function M.setup(opts)
                 Logger:error("Setup Error: the value for response.show_headers must be 'all', 'res' or 'none'.")
             end
         end
-        if r.horizontal then
+        if r.horizontal ~= nil then
             if type(r.horizontal) == "boolean" then
                 M.DEFAULTS.response.horizontal = r.horizontal
             else
@@ -70,7 +70,7 @@ function M.setup(opts)
                 Logger:error("Setup Error: response.size must be a number value.")
             end
         end
-        if r.redraw then
+        if r.redraw ~= nil then
             if type(r.redraw) == "boolean" then
                 M.DEFAULTS.response.redraw = r.redraw
             else
@@ -80,15 +80,15 @@ function M.setup(opts)
     end
 
     if opts.output then
-        local r = opts.save
-        if r.save then
+        local r = opts.output
+        if r.save ~= nil then
             if type(r.save) == "boolean" then
                 M.DEFAULTS.output.save = r.save
             else
                 Logger:error("Setup Error: output.save must be a boolean value.")
             end
         end
-        if r.override then
+        if r.override ~= nil then
             if type(r.override) == "boolean" then
                 M.DEFAULTS.output.override = r.override
             else
@@ -106,7 +106,7 @@ function M.setup(opts)
 
     if opts.internal then
         local r = opts.internal
-        if r.log_debug then
+        if r.log_debug ~= nil then
             if type(r.log_debug) == "boolean" then
                 M.DEFAULTS.internal.log_debug = r.log_debug
             else
@@ -120,6 +120,8 @@ function M.setup(opts)
            M.DEFAULTS.special = opts.special
        end
     end
+
+    Logger:debug("Initial configuration: " .. vim.inspect(M.DEFAULTS))
 end
 
 return M

@@ -62,6 +62,8 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:500px;"/>
 
+Check [Wiki](https://github.com/javiorfo/nvim-ship/wiki/Shipping#ship) for further information
+
 ## Usage
 - Most common first usage is to create a **ship file** and send a simple REST or GraphQL request.
 - Recommendations are to use the built-in command `:ShipCreate` which is going to generate a basic ship file. Edit url, method, headers, etc; to request a service.

@@ -60,7 +60,7 @@ use {
 ## Ship Files
 The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:700px;"/>
+<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:500px;"/>
 
 ## Usage
 - Most common first usage is to create a **ship file** and send a simple REST or GraphQL request.

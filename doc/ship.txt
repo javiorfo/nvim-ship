@@ -141,9 +141,10 @@ want: >
 3.1 SYNTAX HIGHLIGHTING                                      *ship-setup-syntax*
 
 Recommendation for syntax highlighting in a ship file is to install the Neovim
-colorscheme 'https://github.com/javiorfo/nvim-nyctovim' which contains the right
-syntax for ship files. As well as 'https://github.com/javiorfo/nvim-hemingway'
-for commenting ship files lines (among others).
+colorscheme 'https://github.com/systemmalt/nvim-nyctovim' which contains the 
+right syntax for ship files. As well as 
+'https://github.com/systemmalt/nvim-hemingway' for commenting ship files lines 
+(among others).
 
 But if none of these propositions satisfies yourself, you can link keywords of
 your own colorschemes by setup configuration: >

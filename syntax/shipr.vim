@@ -1,7 +1,7 @@
-" #####################################################
-" # Maintainer: Javier Orfo                           #
-" # URL:        https://github.com/javiorfo/nvim-ship #
-" #####################################################
+" #######################################################
+" # Maintainer: System Malt                             #
+" # URL:        https://github.com/systemmalt/nvim-ship #
+" #######################################################
 
 lua << EOF
 local syntax_values = require'ship'.DEFAULTS.syntax

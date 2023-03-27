@@ -1,5 +1,5 @@
 # nvim-ship
-### :anchor: S.H.I.P. (Send Handwritten Inquisitive Petitions)
+### S.H.I.P. (Send Handwritten Inquisitive Petitions)
 *nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL) written in Lua.*
 
 ## Caveats

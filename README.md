@@ -37,7 +37,7 @@
 | Special ENV variables update | :heavy_check_mark: | executing `:SHIPSpecial` (JSON only) |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
 | Output files Integrated with Telescope | :heavy_check_mark: | executing `:SHIPFindResponse` |
-| Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-nyctovim](https://github.com/javiorfo/nvim-nyctovim) |
+| Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-whisky](https://github.com/javiorfo/nvim-whisky) |
 | Command to create ship file | :heavy_check_mark: | executing `:SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `:SHIPCreateEnv` |
 | Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |
@@ -86,4 +86,4 @@ The **SPECIAL FEATURE** is something useful for updating environment variables. 
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" style="width:1000px;"/>
 
-**NOTE:** The colorscheme **silentium** from [nvim-nyctovim](https://github.com/javiorfo/nvim-nyctovim) is used in all images and gifs
+**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in all images and gifs

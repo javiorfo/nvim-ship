@@ -12,7 +12,7 @@ vim.g.ship = 1
 local special = require'ship'.DEFAULTS.special
 
 vim.api.nvim_create_user_command('Ship',"lua require'ship.commands'.send()", {})
-vim.api.nvim_create_user_command('ShipCloseResponse', "lua require('ship.commands').close_shipr()", {})
+vim.api.nvim_create_user_command('ShipCloseResponse', "lua require('ship.commands').close_shipo()", {})
 
 vim.api.nvim_create_user_command('ShipCreate', function(opts)
     require 'ship.commands'.create(opts.fargs)

@@ -17,7 +17,6 @@ CONTENTS                                                             *nvim-ship*
      2.1 Ship Files ............. |ship-quickstart-files|
      2.2 Simple Usage ........... |ship-quickstart-usage|
     3. Setup .................... |ship-setup|
-     3.1 Syntax Highlighting .... |ship-setup-syntax|
     4. Environment .............. |ship-environment|
      4.1 Lua Files .............. |ship-environment-lua|
      4.2 Special ................ |ship-environment-special|
@@ -137,41 +136,6 @@ want: >
     }
 <
 
---------------------------------------------------------------------------------
-3.1 SYNTAX HIGHLIGHTING                                      *ship-setup-syntax*
-
-Recommendation for syntax highlighting in a ship file is to install the Neovim
-colorscheme 'https://github.com/javiorfo/nvim-nyctovim' which contains the 
-right syntax for ship files. As well as 
-'https://github.com/javiorfo/nvim-hemingway' for commenting ship files lines 
-(among others).
-
-But if none of these propositions satisfies yourself, you can link keywords of
-your own colorschemes by setup configuration: >
-
-    require'ship'.setup {
-        -- Obviously feel free to change the values to link
-        syntax = {
-            shipComment     = "Comment",
-            shipBoolean     = "Boolean",
-            shipBrackets    = "shipBoolean",
-            shipSection     = "shipBoolean",
-            shipBase        = "shipSection",
-            shipHeaders     = "shipSection",
-            shipBody        = "shipSection",
-            shipString      = "String",
-            shipMethod      = "Type",
-            shipJson        = "shipMethod",
-            shipVariable    = "Define",
-            shipEnvVar      = "Tag",
-            shipInfo        = "shipMethod",
-            shipHtmlTag     = "shipMethod",
-            shipHtmlEndTag  = "shipMethod",
-            shipError       = "Error"    
-        }
-    }
-<
-
 ================================================================================
 4. ENVIRONMENT                                                *ship-environment*
 
@@ -257,7 +221,7 @@ These are the list of commands in nvim-ship:
     - :ShipCreate -> This will create a basic ship file
     - :ShipCreateEnv -> This will create a basic structure for env variables
     - :ShipDeleteLogs -> This will delete the log file
-    - :ShipFindResponse -> This will open telescope (if installed) to find shipr
+    - :ShipFindResponse -> This will open telescope (if installed) to find shipo
     files
     - :ShipShowLogs -> This will show the log file
     - :ShipSpecial -> This will execute the 'special' section configured by the
@@ -281,7 +245,7 @@ For debug level log, enable this: >
 ================================================================================
 7. INTEGRATIONS                                              *ship-integrations*
 
-nvim-ship could be integrated with telescope.nvim to see shipr files (responses
+nvim-ship could be integrated with telescope.nvim to see shipo files (responses
 saved) if 'ouput = { save = true }' is set it by configuration.
 Open telescope by executing the command ':ShipFindResponse'
 

@@ -37,7 +37,7 @@
 | Special ENV variables update | :heavy_check_mark: | executing `:SHIPSpecial` (JSON only) |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
 | Output files Integrated with Telescope | :heavy_check_mark: | executing `:SHIPFindResponse` |
-| Syntax highlighting | :heavy_check_mark: | Set by `setup` or using [nvim-whisky](https://github.com/javiorfo/nvim-whisky) |
+| Syntax highlighting | :heavy_check_mark: | Included |
 | Command to create ship file | :heavy_check_mark: | executing `:SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `:SHIPCreateEnv` |
 | Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |

@@ -3,4 +3,4 @@
 -- # URL:        https://github.com/javiorfo/nvim-ship #
 -- #####################################################
 
-vim.cmd[[autocmd BufRead,BufNewFile *.shipr set filetype=ship]]
+vim.cmd[[autocmd BufRead,BufNewFile *.shipo set filetype=ship]]

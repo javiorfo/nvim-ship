@@ -37,10 +37,10 @@ function M.create(args)
     Logger:info(filename .. " created.")
 end
 
-function M.close_shipr()
+function M.close_shipo()
     for _, nr in ipairs(vim.api.nvim_list_bufs()) do
         local buf_name = vim.api.nvim_buf_get_name(nr)
-        if vim.api.nvim_buf_is_loaded(nr) and buf_name:find(".shipr$") then
+        if vim.api.nvim_buf_is_loaded(nr) and buf_name:find(".shipo$") then
             vim.cmd("bd! " .. buf_name)
         end
     end
@@ -67,7 +67,7 @@ end
 function M.find_responses()
     local ok, telescope = pcall(require, 'telescope.builtin')
     if ok then
-        telescope.live_grep{ glob_pattern = "*.shipr" }
+        telescope.live_grep{ glob_pattern = "*.shipo" }
     else
         Logger:warn("This action require telescope.nvim plugin to be installed.")
     end

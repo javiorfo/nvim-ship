@@ -7,7 +7,7 @@ if exists('b:current_syntax')
     finish
 endif
 
-let b:current_syntax = 'ship'
+let b:current_syntax = 'shipo'
     
 syn keyword shipSection BASE
 syn keyword shipSection HEADERS

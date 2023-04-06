@@ -1,7 +1,7 @@
--- #####################################################
--- # Maintainer: Javier Orfo                           #
--- # URL:        https://github.com/javiorfo/nvim-ship #
--- #####################################################
+-- ######################################################
+-- # Maintainer: Javier Orfo                            #
+-- # URL:        https://github.com/whiskoder/nvim-ship #
+-- ######################################################
 
 local core = require'ship.core'
 local util = require'ship.util'

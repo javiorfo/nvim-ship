@@ -1,7 +1,7 @@
--- #####################################################
--- # Maintainer: Javier Orfo                           #
--- # URL:        https://github.com/javiorfo/nvim-ship #
--- #####################################################
+-- ######################################################
+-- # Maintainer: Javier Orfo                            #
+-- # URL:        https://github.com/whiskoder/nvim-ship #
+-- ######################################################
 
 return {
     get_http_status = function(code)

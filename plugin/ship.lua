@@ -1,6 +1,6 @@
 -- ######################################################
--- # Maintainer: Javier Orfo                            #
--- # URL:        https://github.com/whiskoder/nvim-ship #
+-- # Maintainer: Mr. Charkuils                          #
+-- # URL:        https://github.com/charkuils/nvim-ship #
 -- ######################################################
 
 if vim.g.ship then

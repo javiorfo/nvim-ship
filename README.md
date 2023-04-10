@@ -228,7 +228,7 @@ require'ship'.setup {
 
 **NOTE:** The colorscheme **matl** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
 
-## [Tricks](#tricks)
+## Tricks
 
 As mentioned, Lua files as enviroment gives you a lot of flexibility so here are some tricks you can implement to make your configurations less repetitive and helpful
 
@@ -269,7 +269,7 @@ local localhost = dofile("/absolute/path/to/localhost.lua")
 
 ## Commands
 
-### [Ship](#ship)
+### Ship
 - This will send the request of a ship file
 - It's convenient to mapping this
 ```lua
@@ -277,7 +277,7 @@ local localhost = dofile("/absolute/path/to/localhost.lua")
 vim.api.nvim_set_keymap('n', '<leader>sh', '<cmd>Ship<CR>', { noremap = true, silent = true })
 ```
 
-### [ShipCloseResponse](#shipclosereponse)
+### ShipCloseResponse
 - This will close all the open responses
 - It's convenient to mapping this
 ```lua
@@ -285,34 +285,36 @@ vim.api.nvim_set_keymap('n', '<leader>sh', '<cmd>Ship<CR>', { noremap = true, si
 vim.api.nvim_set_keymap('n', '<leader>sc', '<cmd>ShipCloseResponse<CR>', { noremap = true, silent = true })
 ```
 
-### [ShipCreate](#shipcreate)
+### ShipCreate
 - This will create a basic ship file
 - Executing `:ShipCreate` will create a file called **std_ship_file.ship**
 - Executing `:ShipCreate filenamehere` will create a file called **filenamehere.ship**
 
-### [ShipCreateEnv](#shipcreateenv)
+### ShipCreateEnv
 - This will create a basic structure for env variables
 - Executing `:ShipCreateEnv` will create a folder called **environment** with three Lua files inside: dev.lua, test.lua and prod.lua
 - Executing `:ShipCreateEnv foldernamehere` will create a folder called **foldernamehere** with the same Lua files
 
-### [ShipDeleteLogs](#shipdeletelogs)
+### ShipDeleteLogs
 - This will delete the log file
 - Usually placed in **~/.local/state/nvim/ship.log**
 
-### [ShipFindResponse](#shipfindresponse)
+### ShipFindResponse
 - This will open telescope (if installed) to do a **live_grep** on `shipo files`
 
-### [ShipShowLogs](#shipshowlogs)
+### ShipShowLogs
 - This will show the ship.log file on a split buffer
 - Usually placed in **~/.local/state/nvim/ship.log**
 
-### [ShipSpecial](#shipspecial)
+### ShipSpecial
 - This will execute the 'special' section configured by the setup function
-- Go to this [section](#environment-variables#special) for further information
+
+### help nvim-ship
+- It opens nvim-ship documentation
 
 ---
 
-## [Logs](#logs)
+## Logs
 Logs are saved generally in this path: **/home/user/.local/state/nvim/ship.log**
 
 - To check the logs execute the command `:ShipShowLogs`
@@ -327,7 +329,7 @@ require'ship'.setup {
 }
 ```
 
-## [Integrations](#integrations)
+## Integrations
 **nvim-ship** could be integrated with [telescope.vim](https://github.com/nvim-telescope/telescope.nvim) to see `shipo` files (responses
 saved) 
 
@@ -342,5 +344,5 @@ require'ship'.setup {
 
 - Then you can open telescope by executing the command `:ShipFindResponse`
 
-## [Issues](#issues)
+## Issues
 - If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/charkuils/nvim-ship/issues)

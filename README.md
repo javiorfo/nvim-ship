@@ -46,7 +46,7 @@
 ## Table of Contents
 - [Installation](#installation)
 - [Shipping Services](#shipping-services)
-- [Custom Setup & Configuration](#custom-setup/configuration)
+- [Custom Setup & Configuration](#custom-setup-configuration)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
 - [Others](#others)

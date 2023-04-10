@@ -41,7 +41,6 @@
 | Command to create ship file | :heavy_check_mark: | executing `:SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `:SHIPCreateEnv` |
 | Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |
-| Wiki | :heavy_check_mark: | [nvim-ship wiki](https://github.com/charkuils/nvim-ship/wiki) |
 
 ## Table of Contents
 - [Installation](#installation)
@@ -95,7 +94,6 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 ### Caveats
 - Comments on a ship file are made by `# my comment`
-- If you are wondering about the **syntax highlighting** go to this [section](https://github.com/charkuils/nvim-ship/wiki/Setup#syntax)
 - Don't use double quotes as values. 
     - :heavy_check_mark: **url** http://localhost:8080/path
     - :x: **url** "http://localhost:8080/path"

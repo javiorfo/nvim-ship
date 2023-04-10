@@ -46,7 +46,7 @@
 ## Table of Contents
 - [Installation](#installation)
 - [Shipping Services](#shipping-services)
-- [Custom Setup & Configuration](#custom-setup-&-configuration)
+- [Custom Setup & Configuration](#custom-setup/configuration)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
 - [Others](#others)
@@ -109,7 +109,7 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 </br>
 
-## Custom Setup & Configuration
+## Custom Setup/Configuration
 
 This is the initial implicit setup of **nvim-ship**
 

@@ -44,7 +44,7 @@
 | Wiki | :heavy_check_mark: | [nvim-ship wiki](https://github.com/charkuils/nvim-ship/wiki) |
 
 ## Table of Contents
-- [Installation](https://github.com/javiorfo/nvim-ship/Installation)
+- [Installation](#Installation)
 - [Shipping](https://github.com/javiorfo/nvim-ship/wiki/Shipping)
 - [Setup](https://github.com/javiorfo/nvim-ship/wiki/Setup)
 - [Environment Variables](https://github.com/javiorfo/nvim-ship/wiki/Environment)

@@ -43,6 +43,14 @@
 | Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |
 | Wiki | :heavy_check_mark: | [nvim-ship wiki](https://github.com/charkuils/nvim-ship/wiki) |
 
+## Table of Contents
+- [Installation](https://github.com/javiorfo/nvim-ship/Installation)
+- [Shipping](https://github.com/javiorfo/nvim-ship/wiki/Shipping)
+- [Setup](https://github.com/javiorfo/nvim-ship/wiki/Setup)
+- [Environment Variables](https://github.com/javiorfo/nvim-ship/wiki/Environment)
+- [Commands](https://github.com/javiorfo/nvim-ship/wiki/Commands)
+- [Others](https://github.com/javiorfo/nvim-ship/wiki/Others)
+
  ## Installation
 `Vim Plug`
 ```vim
@@ -56,6 +64,8 @@ use {
     requires = 'charkuils/nvim-spinetta'
 }
 ```
+
+**NOTE:** In order to use the command `ShipFindResponse`, [telescope-nvim](https://github.com/nvim-telescope/telescope.nvim) is required to be installed
 
 ## Ship Files
 The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:

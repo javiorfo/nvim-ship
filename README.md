@@ -330,6 +330,8 @@ require'ship'.setup {
 }
 ```
 
+---
+
 ## Integrations
 **nvim-ship** could be integrated with [telescope.vim](https://github.com/nvim-telescope/telescope.nvim) to see `shipo` files (responses
 saved) 
@@ -345,8 +347,12 @@ require'ship'.setup {
 
 - Then you can open telescope by executing the command `:ShipFindResponse`
 
+---
+
 ## Issues
 - If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/charkuils/nvim-ship/issues)
+
+---
 
 ## TODO
 - [ ] Integration with [nvim-popcorn](https://github.com/charkuils/nvim-popcorn)

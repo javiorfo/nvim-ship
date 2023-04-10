@@ -46,7 +46,7 @@
 ## Table of Contents
 - [Installation](#installation)
 - [Shipping Services](#shipping-services)
-- [Custom Setup & Configuration](#setup)
+- [Custom Setup & Configuration](#custom-setup-&-configuration)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
 - [Others](#others)
@@ -66,6 +66,8 @@ use {
 ```
 
 **NOTE:** In order to use the command `ShipFindResponse`, [telescope-nvim](https://github.com/nvim-telescope/telescope.nvim) is required to be installed
+
+</br>
 
 ## Shipping Services
 
@@ -95,7 +97,7 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
     - :heavy_check_mark: **url** http://localhost:8080/path
     - :x: **url** "http://localhost:8080/path"
 
-## [Usage](#usage)
+### Usage
 
 - Most common first usage is to create a **ship file** and send a simple REST or GraphQL request.
 - Recommendations are to use the built-in command `:ShipCreate` which is going to generate a basic ship file. Edit url, method, headers, etc; to request a service.
@@ -105,7 +107,54 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 **NOTE:** These test examples are placed in this [folder](https://github.com/charkuils/nvim-ship/tree/master/tests/ships)
 
+</br>
 
+## Custom Setup & Configuration
+
+This is the initial implicit setup of **nvim-ship**
+
+If you don't want to change any of this values, there is no need to paste this snippet on _init.lua_ or _init.vim_, these are the values by default
+
+```lua
+require'ship'.setup {
+    request = {
+        timeout = 30, 
+        autosave = true  
+    },
+    response = {
+        show_headers = 'all',
+        horizontal = true,
+        size = 20,
+        redraw = true
+    },
+    output = {
+        save = false,
+        override = true,
+        folder = "output",
+    },
+    internal = {
+        log_debug = false,
+    }
+}
+```
+
+### Detailed explanation
+- `request`
+    - **timeout** (number) set the corresponding timeout when you send a request to a service. If a response takes longer than the value set, the process will end. **DEFAULT: 30**
+    - **autosave** (boolean) is a way to save the ship file before you execute `:Ship` command, not having to press the write command `:w` every time you edit a ship file before run it. **DEFAULT: true**
+- `response`
+    - **show_headers** (string) set how to show headers on response (_shipo_). Three values are allowed: 'all' (shows request and response headers), 'res' (shows only response headers) and 'none' (does not show any response). **DEFAULT: 'all'**
+    - **horizontal** (boolean) set the orientation of the response buffer (_shipo_). If true, It will open a buffer with horizontal orientation, if false, with vertical orientation. **DEFAULT: true**
+    - **size** (number) corresponds to the response buffer size (_shipo_). You can increment or decrement the buffer size according to your convenience. **DEFAULT: *20*
+    - **redraw** (boolean) set if you want to redraw the response buffer or you want to accumulate response buffers to compare their results on the window. Note that disable this requires you to close all buffer responses manually. **DEFAULT: true**
+- `output`
+    - **save** (boolean) set if you want to save the responses (_shipo files_). Maybe to check results every day or something. **DEFAULT: false**
+    - **override** (boolean) comes in hand with the above **save** option. If **save** is true and **override** is true, then it will only keep one copy of the _shipo_ file in your machine. Contrary if **override** is set to false then you will have copies for every response with the following format: _%Y%m%d-%H%M%S-filename.shipo_. **DEFAULT: true**
+    - **folder** (string) comes in hand with **save** option. This set the path where the _shipo_ files will be stored. Absolute and relative paths are allowed. **DEFAULT: 'output'**
+- `internal`
+    - **log_debug** (boolean) enables if a debug phase will be considered to be write in **ship.log**
+
+</br>
 
 
 ## Ship Files

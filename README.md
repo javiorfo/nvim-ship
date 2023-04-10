@@ -44,12 +44,12 @@
 | Wiki | :heavy_check_mark: | [nvim-ship wiki](https://github.com/charkuils/nvim-ship/wiki) |
 
 ## Table of Contents
-- [Installation](#Installation)
-- [Shipping](https://github.com/javiorfo/nvim-ship/wiki/Shipping)
-- [Setup](https://github.com/javiorfo/nvim-ship/wiki/Setup)
-- [Environment Variables](https://github.com/javiorfo/nvim-ship/wiki/Environment)
-- [Commands](https://github.com/javiorfo/nvim-ship/wiki/Commands)
-- [Others](https://github.com/javiorfo/nvim-ship/wiki/Others)
+- [Installation](#installation)
+- [Shipping Services](#shipping-services)
+- [Custom Setup & Configuration](#setup)
+- [Environment Variables](#environment-variables)
+- [Commands](#commands)
+- [Others](#others)
 
  ## Installation
 `Vim Plug`
@@ -66,6 +66,47 @@ use {
 ```
 
 **NOTE:** In order to use the command `ShipFindResponse`, [telescope-nvim](https://github.com/nvim-telescope/telescope.nvim) is required to be installed
+
+## Shipping Services
+
+The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:
+
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:600px;"/>
+
+**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
+
+### Sections
+- `~[BASE]~` is required and contains the following tags:
+    - **url** (required)
+    - **method** (required). Examples: GET, POST, PUT, DELETE, etc.
+    - **env** (optional). This contains de absolute path of a Lua file in order to use environment variables
+- `~[HEADERS]~` is required and contains the headers a user could set. Examples: 
+    - **accept** application/json
+    - **Authorization** Bearer xxx...
+    - **custom-header** something
+- `~[BODY]~` is optional. It can contain JSON or XML formats:
+    - Simply paste a JSON object or XML below this section and nvim-ship will take it as body parameter
+    - Another useful option is to set the tag **ship_body_file** /absolute/path/to/filename.json (It works with XML files too)
+
+### Caveats
+- Comments on a ship file are made by `# my comment`
+- If you are wondering about the **syntax highlighting** go to this [section](https://github.com/charkuils/nvim-ship/wiki/Setup#syntax)
+- Don't use double quotes as values. 
+    - :heavy_check_mark: **url** http://localhost:8080/path
+    - :x: **url** "http://localhost:8080/path"
+
+## [Usage](#usage)
+
+- Most common first usage is to create a **ship file** and send a simple REST or GraphQL request.
+- Recommendations are to use the built-in command `:ShipCreate` which is going to generate a basic ship file. Edit url, method, headers, etc; to request a service.
+- Executing the command `:Ship` will show a buffer with the response (including headers, status code and time).
+
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" style="width:600px;"/>
+
+**NOTE:** These test examples are placed in this [folder](https://github.com/charkuils/nvim-ship/tree/master/tests/ships)
+
+
+
 
 ## Ship Files
 The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:

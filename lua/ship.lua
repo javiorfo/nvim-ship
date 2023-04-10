@@ -1,7 +1,7 @@
--- #####################################################
--- # Maintainer: Javier Orfo                           #
--- # URL:        https://github.com/javiorfo/nvim-ship #
--- #####################################################
+-- ######################################################
+-- # Maintainer: Mr. Charkuils                          #
+-- # URL:        https://github.com/charkuils/nvim-ship #
+-- ######################################################
 
 local Logger = require'ship.util'.logger
 local validator = require'ship.validator'

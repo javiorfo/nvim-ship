@@ -49,7 +49,9 @@
 - [Custom Setup & Configuration](#custom-configuration)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
-- [Others](#others)
+- [Logs](#logs)
+- [Integrations](#integrations)
+- [Issues](#issues)
 
  ## Installation
 `Vim Plug`
@@ -67,7 +69,7 @@ use {
 
 **NOTE:** In order to use the command `ShipFindResponse`, [telescope-nvim](https://github.com/nvim-telescope/telescope.nvim) is required to be installed
 
-</br>
+---
 
 ## Shipping Services
 
@@ -107,7 +109,7 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 **NOTE:** These test examples are placed in this [folder](https://github.com/charkuils/nvim-ship/tree/master/tests/ships)
 
-</br>
+---
 
 ## Custom Configuration
 
@@ -154,7 +156,7 @@ require'ship'.setup {
 - `internal`
     - **log_debug** (boolean) enables if a debug phase will be considered to be write in **ship.log**
 
-</br>
+---
 
 This section will cover different ways to setup useful environment variables.
 
@@ -181,8 +183,7 @@ return {
 
 **NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
 
-
-### Special
+## Special
 
 The **SPECIAL FEATURE** is something useful for updating environment variables. A good example will be an API KEY or token which expires in seconds. It's really a hassle to call a service to obtain a token, paste the token in an enviroment variables file and call again the corresponding service. For this, nvim-ship has a special feature that allows to update a specific enviroment variable in a file by calling another service.
 
@@ -266,35 +267,80 @@ local localhost = dofile("/absolute/path/to/localhost.lua")
 
 ---
 
-</br>
+## Commands
 
-## Ship Files
-The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:
+### [Ship](#ship)
+- This will send the request of a ship file
+- It's convenient to mapping this
+```lua
+-- Mapping bound to user init.lua
+vim.api.nvim_set_keymap('n', '<leader>sh', '<cmd>Ship<CR>', { noremap = true, silent = true })
+```
 
-<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:500px;"/>
+### [ShipCloseResponse](#shipclosereponse)
+- This will close all the open responses
+- It's convenient to mapping this
+```lua
+-- Mapping bound to user init.lua
+vim.api.nvim_set_keymap('n', '<leader>sc', '<cmd>ShipCloseResponse<CR>', { noremap = true, silent = true })
+```
 
-Check [Wiki](https://github.com/charkuils/nvim-ship/wiki/Shipping#ship) for further information
+### [ShipCreate](#shipcreate)
+- This will create a basic ship file
+- Executing `:ShipCreate` will create a file called **std_ship_file.ship**
+- Executing `:ShipCreate filenamehere` will create a file called **filenamehere.ship**
 
-## Usage
-- Most common first usage is to create a **ship file** and send a simple REST or GraphQL request.
-- Recommendations are to use the built-in command `:ShipCreate` which is going to generate a basic ship file. Edit url, method, headers, etc; to request a service.
-- Executing the command `:Ship` will show a buffer with the response (including headers, status code and time).
-- Check [Wiki](https://github.com/charkuils/nvim-ship/wiki/Shipping) for further information
+### [ShipCreateEnv](#shipcreateenv)
+- This will create a basic structure for env variables
+- Executing `:ShipCreateEnv` will create a folder called **environment** with three Lua files inside: dev.lua, test.lua and prod.lua
+- Executing `:ShipCreateEnv foldernamehere` will create a folder called **foldernamehere** with the same Lua files
 
-<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" style="width:1000px;"/>
+### [ShipDeleteLogs](#shipdeletelogs)
+- This will delete the log file
+- Usually placed in **~/.local/state/nvim/ship.log**
 
-**NOTE:** These test examples are placed in this [folder](https://github.com/charkuils/nvim-ship/tree/master/tests/ships)
+### [ShipFindResponse](#shipfindresponse)
+- This will open telescope (if installed) to do a **live_grep** on `shipo files`
 
-## Environment Variables
-The way of configure environment variables for a **ship file** is by Lua files. This feature gives the flexibility of using Lua files for variables, imports and even functions harnessing all the Lua power for this purpose. Check [Wiki](https://github.com/charkuils/nvim-ship/wiki/Environment#setup) for further information
+### [ShipShowLogs](#shipshowlogs)
+- This will show the ship.log file on a split buffer
+- Usually placed in **~/.local/state/nvim/ship.log**
 
-#### Simple Example
+### [ShipSpecial](#shipspecial)
+- This will execute the 'special' section configured by the setup function
+- Go to this [section](#environment-variables#special) for further information
 
-<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" style="width:1000px;"/>
+---
 
-## Special Feature
-The **SPECIAL FEATURE** is something useful for updating environment variables. A good example will be an API KEY or token which expires in seconds. It's really a hassle to call a service to obtain a token, paste the token in an enviroment variables file and call again the corresponding service. For this, nvim-ship has a special feature that allows to update a specific enviroment variable in a file by calling another service. Check [Wiki](https://github.com/charkuils/nvim-ship/wiki/Environment#special) for further information
+## [Logs](#logs)
+Logs are saved generally in this path: **/home/user/.local/state/nvim/ship.log**
 
-<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" style="width:1000px;"/>
+- To check the logs execute the command `:ShipShowLogs`
+- To delete all logs execute the command `:ShipDeleteLogs`
 
-**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in all images and gifs
+**NOTE**: Only error logs are saved. If you want to enable debug phase, enable this on setup configuration:
+```lua
+require'ship'.setup {
+    internal = {
+       log_debug = true 
+   }
+}
+```
+
+## [Integrations](#integrations)
+**nvim-ship** could be integrated with [telescope.vim](https://github.com/nvim-telescope/telescope.nvim) to see `shipo` files (responses
+saved) 
+
+- First, you have to enable save on setup configuration:
+```lua
+require'ship'.setup {
+    ouput = { 
+        save = true 
+    }
+}
+```
+
+- Then you can open telescope by executing the command `:ShipFindResponse`
+
+## [Issues](#issues)
+- If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/charkuils/nvim-ship/issues)

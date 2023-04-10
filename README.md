@@ -145,7 +145,7 @@ require'ship'.setup {
 - `response`
     - **show_headers** (string) set how to show headers on response (_shipo_). Three values are allowed: 'all' (shows request and response headers), 'res' (shows only response headers) and 'none' (does not show any response). **DEFAULT: 'all'**
     - **horizontal** (boolean) set the orientation of the response buffer (_shipo_). If true, It will open a buffer with horizontal orientation, if false, with vertical orientation. **DEFAULT: true**
-    - **size** (number) corresponds to the response buffer size (_shipo_). You can increment or decrement the buffer size according to your convenience. **DEFAULT: *20*
+    - **size** (number) corresponds to the response buffer size (_shipo_). You can increment or decrement the buffer size according to your convenience. **DEFAULT: 20**
     - **redraw** (boolean) set if you want to redraw the response buffer or you want to accumulate response buffers to compare their results on the window. Note that disable this requires you to close all buffer responses manually. **DEFAULT: true**
 - `output`
     - **save** (boolean) set if you want to save the responses (_shipo files_). Maybe to check results every day or something. **DEFAULT: false**
@@ -156,6 +156,117 @@ require'ship'.setup {
 
 </br>
 
+This section will cover different ways to setup useful environment variables.
+
+## Environment Variables
+
+The way of configure environment variables for a **ship file** is by Lua files. This feature gives the flexibility of using Lua files for variables, imports and even functions harnessing all the Lua power for this purpose.
+
+Recommendation is to use the command `:ShipCreateEnv`. This command will create three files: dev.lua, test.lua and prod.lua with the following format:
+```lua
+return {
+    host = "https://somedomain.com",
+    other_var = "some_value"
+}
+```
+**IMPORTANT:** Variables in Lua file must be **ONLY STRING VALUES**
+
+### Usage
+- The **ship file** must contain the tag **env** in `~[BASE]~` section pointing to the absolute path of the environment variables Lua file.
+- Use the variables only in values (using as tags is not allowed) like this: **{{my_variable}}**
+
+#### Simple Example
+
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" style="width:600px;"/>
+
+**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
+
+
+### Special
+
+The **SPECIAL FEATURE** is something useful for updating environment variables. A good example will be an API KEY or token which expires in seconds. It's really a hassle to call a service to obtain a token, paste the token in an enviroment variables file and call again the corresponding service. For this, nvim-ship has a special feature that allows to update a specific enviroment variable in a file by calling another service.
+
+### Example of a special configuration
+```lua
+require'ship'.setup {
+    special = {
+        {
+            -- Give a name to the special feature
+            name = "token_service",
+            take = {
+                -- Call request to get a token response
+                ship_file = "/absolute/path/to/request_token.ship",
+                -- Get the value from JSON response
+                ship_field = "access_token"
+            },
+            update = {
+                -- Set the Lua enviroment variables file to update
+                lua_file = "/absolute/path/to/environment.lua",
+                -- Set the variable from 'lua_file' to update
+                lua_field = "token"
+            }
+        }
+    }
+}
+```
+Once this is set it up, to call it execute the command `:ShipSpecial token_service` and enviroment.lua will be updated and ready to use
+
+### Caveats
+- It works ONLY WITH JSON
+- In setup, **special** is a table which contains tables. You can set whatever the number of "specials" you want. The command `:ShipSpecial` will do a fuzzy search by name.
+
+#### Special Example
+- In this example there is a **special.lua** file configured and the way to set it on **init.lua* is like this:
+```lua
+require'ship'.setup {
+    special = dofile("/absolute/path/to/special.lua")
+}
+```
+
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" style="width:600px;"/>
+
+**NOTE:** The colorscheme **matl** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
+
+## [Tricks](#tricks)
+
+As mentioned, Lua files as enviroment gives you a lot of flexibility so here are some tricks you can implement to make your configurations less repetitive and helpful
+
+### Example
+There are cases when some variables are the same in every environment (dev, test, etc). Using Lua you can leverage configurations by imports, functions or any functionality Lua provides
+
+#### localhost.lua
+```lua
+return {
+    host = "localhost:8080",
+    auth_server = "https://authserver.com/auth",
+    trace = "MY_TRACE_FROM " .. host
+}
+```
+
+#### dev.lua
+```lua
+local localhost = require'localhost' -- here using require to get the table from localhost.lua
+
+return {
+    host = "dev.domain",
+    auth_server = localhost.auth_server, -- A change auth_server in localhost.lua will update both Lua files
+    trace = (string.gsub(localhost.trace, localhost.host, host)) -- This replace localhost:8080 by dev.domain (a dummy example but you get the point)
+}
+```
+
+### Caveats
+The examples above are very useful if you do not change environment variables very often. A downside of this could be that **require** keyword load a Lua module one time. So updating localhost.lua will require a Neovim restart to update dev.lua.
+A more optimized way to get modules updated is using `dofile` keyword instead of `require`
+
+#### dev.lua
+```lua
+local localhost = dofile("/absolute/path/to/localhost.lua")
+...
+```
+
+---
+
+</br>
 
 ## Ship Files
 The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:

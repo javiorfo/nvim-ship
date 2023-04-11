@@ -1,7 +1,4 @@
-#########################
-# SHIP file             #
-# Author: Mr. Charkuils #
-#########################
+# SHIP file 
 
 ~[BASE]~
 url https://bravenewcoin.p.rapidapi.com/oauth/token

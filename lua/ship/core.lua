@@ -1,8 +1,3 @@
--- ######################################################
--- # Maintainer: Mr. Charkuils                          #
--- # URL:        https://github.com/charkuils/nvim-ship #
--- ######################################################
-
 local setup = require'ship'.DEFAULTS
 local util = require'ship.util'
 local Logger = util.logger

@@ -1,5 +1,5 @@
 ##!/usr/bin/env bash
-# Author: Mr. Charkuils
+# Author: Javier Orfo
 
 SHIP=~/.local/share/nvim/site/pack/packer/start/nvim-ship/bin/ship.sh
 LOG_FILE=~/.local/state/nvim/ship.log

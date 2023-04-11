@@ -1,6 +1,4 @@
-#############
-# SHIP file #
-#############
+# SHIP file 
 
 ~[BASE]~
 url https://{{host}}/bearer

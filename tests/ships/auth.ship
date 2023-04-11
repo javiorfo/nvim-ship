@@ -1,7 +1,6 @@
-#########################
-# SHIP file             #
-# Author: Mr. Charkuils #
-#########################
+#############
+# SHIP file #
+#############
 
 ~[BASE]~
 url https://{{host}}/bearer

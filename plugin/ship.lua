@@ -1,8 +1,3 @@
--- ######################################################
--- # Maintainer: Mr. Charkuils                          #
--- # URL:        https://github.com/charkuils/nvim-ship #
--- ######################################################
-
 if vim.g.ship then
     return
 end

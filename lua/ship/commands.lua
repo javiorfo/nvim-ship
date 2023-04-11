@@ -1,8 +1,3 @@
--- ######################################################
--- # Maintainer: Mr. Charkuils                          #
--- # URL:        https://github.com/charkuils/nvim-ship #
--- ######################################################
-
 local core = require'ship.core'
 local util = require'ship.util'
 local validator = require'ship.validator'

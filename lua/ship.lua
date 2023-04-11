@@ -1,8 +1,3 @@
--- ######################################################
--- # Maintainer: Mr. Charkuils                          #
--- # URL:        https://github.com/charkuils/nvim-ship #
--- ######################################################
-
 local Logger = require'ship.util'.logger
 local validator = require'ship.validator'
 local M = {}

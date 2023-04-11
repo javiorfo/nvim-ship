@@ -1,6 +1,4 @@
-#############
-# SHIP file #
-#############
+# SHIP file 
 
 ~[BASE]~
 url https://httpbin.org/base64/SFRUUEJJTiBpcyBhd2Vzb21l

@@ -287,7 +287,9 @@ vim.api.nvim_set_keymap('n', '<leader>sc', '<cmd>ShipCloseResponse<CR>', { norem
 ### ShipCreate
 - This will create a basic ship file
 - Executing `:ShipCreate` will create a file called **std_ship_file.ship**
-- Executing `:ShipCreate filenamehere` will create a file called **filenamehere.ship**
+- Executing `:ShipCreate my_filename` will create a file called **my_filename.ship**
+- Executing `:ShipCreate path/to/my_filename` will create a file (and the relative path) called **path/to/my_filename.ship**
+- Executing `:ShipCreate /ab/path/to/my_filename` will create a file (and the absolute path) called **/ab/path/to/my_filename.ship**
 
 ### ShipCreateEnv
 - This will create a basic structure for env variables
@@ -354,5 +356,3 @@ require'ship'.setup {
 
 ## TODO
 - [ ] Integration with [nvim-popcorn](https://github.com/javiorfo/nvim-popcorn)
-- [ ] Command ShipCreate with path
-- [ ] gRPC 

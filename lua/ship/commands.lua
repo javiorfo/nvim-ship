@@ -14,7 +14,13 @@ end
 
 function M.create(args)
     local filename = (args[1] or "std_ship_file") .. ".ship"
+    if filename:find("/") then
+        local path, _ = filename:match("(.-)([^\\/]-%.?)$")
+        os.execute("mkdir -p " .. path)
+    end
+    os.execute("touch " .. filename)
     vim.cmd("e " .. filename)
+
     vim.fn.setline(1, "# Created by nvim-ship")
     vim.fn.setline(2, "")
     vim.fn.setline(3, "~[BASE]~")
@@ -28,7 +34,7 @@ function M.create(args)
     vim.fn.setline(11, "~[BODY]~")
     vim.fn.setline(12, "# ship_body_file /path/to/body.json")
     vim.fn.setline(13, "# { \"some_property\": \"some value\" }")
-    vim.cmd("redraw")
+    vim.cmd("w | redraw")
     Logger:info(filename .. " created.")
 end
 

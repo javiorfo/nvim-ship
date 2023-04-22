@@ -56,14 +56,14 @@
  ## Installation
 `Vim Plug`
 ```vim
-Plug 'javiorfo/nvim-ship'
-Plug 'javiorfo/nvim-spinetta'
+Plug 'charkuils/nvim-ship'
+Plug 'charkuils/nvim-spinetta'
 ```
 `Packer`
 ```lua
 use {
-    'javiorfo/nvim-ship',
-    requires = 'javiorfo/nvim-spinetta'
+    'charkuils/nvim-ship',
+    requires = 'charkuils/nvim-spinetta'
 }
 ```
 
@@ -75,9 +75,9 @@ use {
 
 The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:450px;"/>
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:450px;"/>
 
-**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in this image
+**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
 
 ### Sections
 - `~[BASE]~` is required and contains the following tags:
@@ -104,9 +104,9 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 - Recommendations are to use the built-in command `:ShipCreate` which is going to generate a basic ship file. Edit url, method, headers, etc; to request a service.
 - Executing the command `:Ship` will show a buffer with the response (including headers, status code and time).
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" style="width:800px;"/>
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" style="width:800px;"/>
 
-**NOTE:** These test examples are placed in this [folder](https://github.com/javiorfo/nvim-ship/tree/master/tests/ships)
+**NOTE:** These test examples are placed in this [folder](https://github.com/charkuils/nvim-ship/tree/master/tests/ships)
 
 ---
 
@@ -178,9 +178,9 @@ return {
 
 #### Simple Example
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" style="width:800px;"/>
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" style="width:800px;"/>
 
-**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in this image
+**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
 
 ## Special
 
@@ -223,9 +223,9 @@ require'ship'.setup {
 }
 ```
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" style="width:800px;"/>
+<img src="https://github.com/charkuils/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" style="width:800px;"/>
 
-**NOTE:** The colorscheme **matl** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in this image
+**NOTE:** The colorscheme **matl** from [nvim-whisky](https://github.com/charkuils/nvim-whisky) is used in this image
 
 ## Tricks
 
@@ -350,9 +350,9 @@ require'ship'.setup {
 ---
 
 ## Issues
-- If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/javiorfo/nvim-ship/issues)
+- If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/charkuils/nvim-ship/issues)
 
 ---
 
 ## TODO
-- [ ] Integration with [nvim-popcorn](https://github.com/javiorfo/nvim-popcorn)
+- [ ] Integration with [nvim-popcorn](https://github.com/charkuils/nvim-popcorn)

@@ -54,16 +54,18 @@
 - [TODO](#todo)
 
  ## Installation
-`Vim Plug`
-```vim
-Plug 'charkuils/nvim-ship'
-Plug 'charkuils/nvim-spinetta'
-```
 `Packer`
 ```lua
 use {
     'charkuils/nvim-ship',
     requires = 'charkuils/nvim-spinetta'
+}
+```
+`Lazy`
+```lua
+{
+    'charkuils/nvim-ship',
+    dependencies = { 'charkuils/nvim-spinetta' }
 }
 ```
 

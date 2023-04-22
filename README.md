@@ -64,7 +64,7 @@ use {
 `Lazy`
 ```lua
 {
-    'charkuils/nvim-ship',
+    'charkuils/nvim-ship', lazy = true,
     dependencies = { 'charkuils/nvim-spinetta' }
 }
 ```

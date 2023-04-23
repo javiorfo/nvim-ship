@@ -356,5 +356,6 @@ require'ship'.setup {
 
 ---
 
-## TODO
-- [ ] Integration with [nvim-popcorn](https://github.com/charkuils/nvim-popcorn)
+## Support Charkuils' Work
+
+<img src="https://github.com/charkuils/img/blob/master/binance/BinancePayQR.png?raw=true" alt="binance" style="width:300px;"/>

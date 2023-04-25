@@ -58,14 +58,19 @@
 ```lua
 use {
     'javiorfo/nvim-ship',
-    requires = 'javiorfo/nvim-spinetta'
+    requires = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn' }
 }
 ```
 `Lazy`
 ```lua
 {
-    'javiorfo/nvim-ship', lazy = true,
-    dependencies = { 'javiorfo/nvim-spinetta' }
+    'javiorfo/nvim-ship',
+    lazy = true,
+    ft = 'ship'
+    dependencies = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn' },
+    config = function()
+        -- Not necessary. Only if you want to change the setup calling require'ship'.setup{...}
+    end
 }
 ```
 

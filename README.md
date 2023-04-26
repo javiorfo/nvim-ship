@@ -113,6 +113,9 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" style="width:800px;"/>
 
+#### With response in popup
+<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_popup.gif" alt="ship popup" style="width:800px;"/>
+
 **NOTE:** These test examples are placed in this [folder](https://github.com/javiorfo/nvim-ship/tree/master/tests/ships)
 
 ---

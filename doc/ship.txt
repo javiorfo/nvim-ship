@@ -107,15 +107,18 @@ want: >
             -- Options 'all', 'res', 'none'
             show_headers = 'all',
 
-            -- Orientation of the buffer for response
-            -- If set to false then the orientation will be vertical
-            horizontal = true,
+            -- Window type of the buffer for response
+            -- If set 'v' then It will open a buffer in vertical orientation
+            -- If set 'h' then It will open a buffer in horizontal orientation
+            -- If set 'p' then It will open a popup
+            window_type = 'h',
 
-            -- Size of the buffer for response
+            -- Size of the buffer or popup for response
             size = 20,
             
             -- If true the buffer for response will be redraw
             -- If false It will add another window for response
+            -- Does not apply for popup response
             redraw = true
         },
         output = {

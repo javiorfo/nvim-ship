@@ -1,7 +1,7 @@
 ##!/usr/bin/env bash
 # Author: Javier Orfo
 
-SHIP=~/.local/share/nvim/site/pack/packer/start/nvim-ship/bin/ship.sh
+SHIP=~/.local/share/nvim/lazy/nvim-ship/bin/ship.sh
 LOG_FILE=~/.local/state/nvim/ship.log
 DEST=/tmp/testing.shipo
 

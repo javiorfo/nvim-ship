@@ -8,7 +8,7 @@ function M.send()
     if validator.dependencies_installed() then
         Logger:debug("Executing SHIP command...")
         core.send()
-        vim.cmd("wincmd p")
+--         vim.cmd("wincmd p")
     end
 end
 

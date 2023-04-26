@@ -131,7 +131,7 @@ require'ship'.setup {
     },
     response = {
         show_headers = 'all',
-        horizontal = true,
+        window_type = 'h',
         size = 20,
         redraw = true
     },
@@ -152,9 +152,9 @@ require'ship'.setup {
     - **autosave** (boolean) is a way to save the ship file before you execute `:Ship` command, not having to press the write command `:w` every time you edit a ship file before run it. **DEFAULT: true**
 - `response`
     - **show_headers** (string) set how to show headers on response (_shipo_). Three values are allowed: 'all' (shows request and response headers), 'res' (shows only response headers) and 'none' (does not show any response). **DEFAULT: 'all'**
-    - **horizontal** (boolean) set the orientation of the response buffer (_shipo_). If true, It will open a buffer with horizontal orientation, if false, with vertical orientation. **DEFAULT: true**
-    - **size** (number) corresponds to the response buffer size (_shipo_). You can increment or decrement the buffer size according to your convenience. **DEFAULT: 20**
-    - **redraw** (boolean) set if you want to redraw the response buffer or you want to accumulate response buffers to compare their results on the window. Note that disable this requires you to close all buffer responses manually. **DEFAULT: true**
+    - **window_type** (string) set how to show the response (_shipo_). If 'h', It will open a buffer with horizontal orientation, if 'v', with vertical orientation. If 'p' It will open a popup with the response **DEFAULT: 'h'**
+    - **size** (number) corresponds to the response buffer size or popup (_shipo_). You can increment or decrement the buffer size or popup according to your convenience. **DEFAULT: 20**
+    - **redraw** (boolean) set if you want to redraw the response buffer or you want to accumulate response buffers to compare their results on the window. Notice that disable this requires you to close all buffer responses manually (This does not apply for popup response). **DEFAULT: true**
 - `output`
     - **save** (boolean) set if you want to save the responses (_shipo files_). Maybe to check results every day or something. **DEFAULT: false**
     - **override** (boolean) comes in hand with the above **save** option. If **save** is true and **override** is true, then it will only keep one copy of the _shipo_ file in your machine. Contrary if **override** is set to false then you will have copies for every response with the following format: _%Y%m%d-%H%M%S-filename.shipo_. **DEFAULT: true**

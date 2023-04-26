@@ -4,6 +4,8 @@ local Logger = util.logger
 local validator = require'ship.validator'
 local spinetta = require'spinetta'
 local get_http_status = require'ship.status'.get_http_status
+local popcorn = require'popcorn'
+local borders = require'popcorn.borders'
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -104,7 +106,7 @@ local function status_and_time()
     end)
     if ok then
         status = string.format("%s <%s>", status, get_http_status(status))
-        Logger:info(string.format("Shipped! | Status -> %s | Time -> %s", status, time))
+        return string.format("Shipped! | Status  %s | Time  %s", status, time)
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
     end
@@ -123,8 +125,22 @@ local function open_buffer(response_file)
     end
 
     if vim.fn.filereadable(response_file) == 1 then
-        local orientation = setup.response.horizontal and "sp" or "vsp"
-        vim.cmd(string.format("%d%s %s", setup.response.size, orientation, response_file))
+        if setup.response.window_type == "p" then
+            Logger:info("Shipped!")
+            local footer = status_and_time()
+            popcorn:new({
+                width = setup.response.size * 4,
+                height = setup.response.size,
+                border = borders.double_border,
+                title = { "SHIP", "Boolean" },
+                footer = { footer, "String" },
+                content = response_file
+            }):pop()
+        else
+            local orientation = setup.response.window_type == "h" and "sp" or "vsp"
+            vim.cmd(string.format("%d%s %s", setup.response.size, orientation, response_file))
+            Logger:info(status_and_time())
+        end
     end
 end
 
@@ -232,7 +248,6 @@ function M.send()
         main_msg = "[SHIP] => Shipping ",
         on_success = function()
             open_buffer(response_file)
-            status_and_time()
             clean(response_file)
         end,
         on_interrupted = function()

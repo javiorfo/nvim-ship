@@ -10,4 +10,4 @@ X-RapidAPI-Key SIGN-UP-FOR-KEY
 X-RapidAPI-Host bravenewcoin.p.rapidapi.com
 
 ~[BODY]~
-ship_body_file /home/javier/.local/share/nvim/site/pack/packer/start/nvim-ship/tests/body/request.json
+ship_body_file /home/javier/.local/share/nvim/lazy/nvim-ship/tests/body/request.json

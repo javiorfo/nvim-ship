@@ -9,7 +9,7 @@ M.DEFAULTS = {
     },
     response = {
         show_headers = 'all',
-        horizontal = true,
+        window_type = 'h',
         size = 20,
         redraw = true
     },
@@ -51,11 +51,11 @@ function M.setup(opts)
                 Logger:error("Setup Error: the value for response.show_headers must be 'all', 'res' or 'none'.")
             end
         end
-        if r.horizontal ~= nil then
-            if type(r.horizontal) == "boolean" then
-                M.DEFAULTS.response.horizontal = r.horizontal
+        if r.window_type then
+            if type(r.window_type) == "string" and r.window_type == "p" or r.window_type == "v" or r.window_type == "h" then
+                M.DEFAULTS.response.window_type = r.window_type
             else
-                Logger:error("Setup Error: response.horizontal must be a boolean value.")
+                Logger:error("Setup Error: response.window_type must be 'p', 'v' or 'h'.")
             end
         end
         if r.size then

@@ -6,7 +6,7 @@ local debug_header = string.format("[DEBUG][%s]:", os.date("%m/%d/%Y %H:%M:%S"))
 local function logger(plugin_name, msg)
     return function(level)
         if plugin_name then
-            msg = string.format("[%s] => %s", plugin_name, msg)
+            msg = string.format("󰠳 %s   %s", plugin_name, msg)
         end
         vim.notify(msg, level)
     end

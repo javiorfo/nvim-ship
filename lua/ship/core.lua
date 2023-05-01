@@ -105,8 +105,13 @@ local function status_and_time()
         return status, time
     end)
     if ok then
-        status = string.format("%s <%s>", status, get_http_status(status))
-        return string.format("Shipped! | Status  %s | Time  %s", status, time)
+        local status_icon = "󰗡 "
+        if tonumber(status) < 200 or tonumber(status) > 399 then
+            status_icon = " "
+        end
+        status = string.format("%s %s", status, get_http_status(status))
+--         return string.format("%s Status   %s | 󰁫 Time   %s", status_icon, status, time)
+        return string.format("%s %s - 󰁫  %s", status_icon, status, time)
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
     end
@@ -132,7 +137,7 @@ local function open_buffer(response_file)
                 width = setup.response.size * 4,
                 height = setup.response.size,
                 border = borders.double_border,
-                title = { "SHIP", "Boolean" },
+                title = { "󰠳 SHIP", "Boolean" },
                 footer = { footer, "String" },
                 content = response_file
             }):pop()
@@ -245,7 +250,7 @@ function M.send()
     Logger:debug("Call to ship.sh: " .. call_to_ship_sh)
 
     local ship_spinner = spinetta:new {
-        main_msg = "[SHIP] => Shipping ",
+        main_msg = "󰠳 SHIP   Shipping ",
         on_success = function()
             open_buffer(response_file)
             clean(response_file)
@@ -346,7 +351,7 @@ function M.special(name)
     Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
 
     local ship_spinner = spinetta:new {
-        main_msg = string.format("[SHIP] => Shipping Special <%s> ", name),
+        main_msg = string.format("󰠳 SHIP   Shipping Special <%s> ", name),
         on_success = function()
             Logger:debug("Special Response: " .. vim.fn.system("cat " .. response_file))
 

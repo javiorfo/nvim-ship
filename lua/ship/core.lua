@@ -137,7 +137,7 @@ local function open_buffer(response_file)
                 width = setup.response.size * 4,
                 height = setup.response.size,
                 border = borders.double_border,
-                title = { "󰠳 SHIP", "Boolean" },
+                title = { "󰀱 SHIP", "Boolean" },
                 footer = { footer, "String" },
                 content = response_file
             }):pop()
@@ -250,7 +250,7 @@ function M.send()
     Logger:debug("Call to ship.sh: " .. call_to_ship_sh)
 
     local ship_spinner = spinetta:new {
-        main_msg = "󰠳 SHIP   Shipping ",
+        main_msg = "󰀱 SHIP   Shipping ",
         on_success = function()
             open_buffer(response_file)
             clean(response_file)
@@ -351,7 +351,7 @@ function M.special(name)
     Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
 
     local ship_spinner = spinetta:new {
-        main_msg = string.format("󰠳 SHIP   Shipping Special <%s> ", name),
+        main_msg = string.format("󰀱 SHIP   Shipping Special <%s> ", name),
         on_success = function()
             Logger:debug("Special Response: " .. vim.fn.system("cat " .. response_file))
 

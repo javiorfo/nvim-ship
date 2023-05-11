@@ -84,7 +84,7 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_file.png" alt="ship file" style="width:450px;"/>
 
-**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in this image
+**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/javiorfo/nvim-nyctophilia) is used in this image
 
 ### Sections
 - `~[BASE]~` is required and contains the following tags:
@@ -190,7 +190,7 @@ return {
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" style="width:800px;"/>
 
-**NOTE:** The colorscheme **malt** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in this image
+**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/javiorfo/nvim-nyctophilia) is used in this image
 
 ## Special
 
@@ -235,7 +235,7 @@ require'ship'.setup {
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" style="width:800px;"/>
 
-**NOTE:** The colorscheme **matl** from [nvim-whisky](https://github.com/javiorfo/nvim-whisky) is used in this image
+**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/javiorfo/nvim-nyctophilia) is used in this image
 
 ## Tricks
 

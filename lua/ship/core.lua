@@ -111,7 +111,7 @@ local function status_and_time()
         end
         status = string.format("%s %s", status, get_http_status(status))
 --         return string.format("%s Status   %s | 󰁫 Time   %s", status_icon, status, time)
-        return string.format("%s %s - 󰁫  %s", status_icon, status, time)
+        return string.format("%s %s - 󰁫  %ss", status_icon, status, time)
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
     end

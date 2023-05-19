@@ -361,3 +361,8 @@ require'ship'.setup {
 
 ## Issues
 - If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/javiorfo/nvim-ship/issues)
+
+---
+
+## Support
+- Binance: **Pay ID 546639204**

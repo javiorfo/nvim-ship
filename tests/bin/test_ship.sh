@@ -1,5 +1,5 @@
 ##!/usr/bin/env bash
-# Author: Javier Orfo
+# Author: CaoSystema
 
 SHIP=~/.local/share/nvim/lazy/nvim-ship/bin/ship.sh
 LOG_FILE=~/.local/state/nvim/ship.log

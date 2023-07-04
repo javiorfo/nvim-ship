@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Author: Javier Orfo
+# Author: CaoSystema
 
 while getopts "t:m:u:f:h:c:s:d:b:l:" ARG; do
   case $ARG in

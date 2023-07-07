@@ -66,7 +66,8 @@ use {
 {
     'javiorfo/nvim-ship',
     lazy = true,
-    ft = 'ship'
+    ft = 'ship',
+    cmd = { "ShipCreate", "ShipCreateEnv" },
     dependencies = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn' },
     config = function()
         -- Not necessary. Only if you want to change the setup calling require'ship'.setup{...}

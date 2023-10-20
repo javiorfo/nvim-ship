@@ -1,5 +1,5 @@
 ##!/usr/bin/env bash
-# Author: Orfosys
+# Author: Mr. Charkuils
 
 SHIP=~/.local/share/nvim/lazy/nvim-ship/bin/ship.sh
 LOG_FILE=~/.local/state/nvim/ship.log

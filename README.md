@@ -6,6 +6,8 @@
 - **nvim-ship** needs [curl](https://github.com/curl/curl), [jq](https://github.com/stedolan/jq) and [tidy](https://github.com/htacg/tidy-html5) to be installed. Otherwise it will throw a warning message.
 - This plugin has been developed on and for Linux following open source philosophy.
 
+<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />
+
 | Feature | nvim-ship | NOTE |
 | ------- | ------------- | ---- |
 | REST | :heavy_check_mark: | Supports all http methods (GET, POST, etc) |

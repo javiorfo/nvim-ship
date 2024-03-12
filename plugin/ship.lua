@@ -4,8 +4,6 @@ end
 
 vim.g.ship = 1
 
-local special = require'ship'.DEFAULTS.special
-
 vim.api.nvim_create_user_command('Ship',"lua require'ship.commands'.send()", {})
 vim.api.nvim_create_user_command('ShipCloseResponse', "lua require('ship.commands').close_shipo()", {})
 
@@ -22,9 +20,10 @@ vim.api.nvim_create_user_command('ShipSpecial', function(opts)
 end, {
     nargs = 1,
     complete = function(_, _)
+        local specials = require'ship'.DEFAULTS.special
         local names = {}
-        if special then
-           for _, v in pairs(special) do
+        if specials then
+           for _, v in pairs(specials) do
                 table.insert(names, v.name)
            end
         end

@@ -75,7 +75,7 @@ function M.find_responses()
 end
 
 function M.special(args)
-    Logger:debug("Executing SHIPSpecial command...")
+    Logger:debug("Executing ShipSpecial command...")
     core.special(args[1])
 end
 

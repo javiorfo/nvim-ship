@@ -41,6 +41,7 @@
 | Command to create ship file | :heavy_check_mark: | executing `:SHIPCreate` |
 | Command to create env archetype | :heavy_check_mark: | executing `:SHIPCreateEnv` |
 | Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |
+| Autocomplete | :heavy_check_mark: | with `nvim-cmp` |
 
 ## Table of Contents
 - [Installation](#installation)
@@ -58,7 +59,7 @@
 ```lua
 use {
     'javiorfo/nvim-ship',
-    requires = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn' }
+    requires = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn', 'hrsh7th/nvim-cmp' } -- nvim-cmp is optional
 }
 ```
 `Lazy`
@@ -68,7 +69,7 @@ use {
     lazy = true,
     ft = 'ship',
     cmd = { "ShipCreate", "ShipCreateEnv" },
-    dependencies = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn' },
+    dependencies = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn', 'hrsh7th/nvim-cmp' }, -- nvim-cmp is optional
     config = function()
         -- Not necessary. Only if you want to change the setup calling require'ship'.setup{...}
     end

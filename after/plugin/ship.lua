@@ -1,0 +1,1 @@
+require'ship.autocomplete'.new()

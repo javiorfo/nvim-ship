@@ -6,7 +6,7 @@
 - **nvim-ship** needs [curl](https://github.com/curl/curl), [jq](https://github.com/stedolan/jq) and [tidy](https://github.com/htacg/tidy-html5) to be installed. Otherwise it will throw a warning message.
 - This plugin has been developed on and for Linux following open source philosophy.
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />
+<img src="https://github.com/orfosys/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />
 
 | Feature | nvim-ship | NOTE |
 | ------- | ------------- | ---- |
@@ -60,18 +60,18 @@
 `Packer`
 ```lua
 use {
-    'javiorfo/nvim-ship',
-    requires = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn', 'hrsh7th/nvim-cmp' } -- nvim-cmp is optional
+    'orfosys/nvim-ship',
+    requires = { 'orfosys/nvim-spinetta', 'orfosys/nvim-popcorn', 'hrsh7th/nvim-cmp' } -- nvim-cmp is optional
 }
 ```
 `Lazy`
 ```lua
 {
-    'javiorfo/nvim-ship',
+    'orfosys/nvim-ship',
     lazy = true,
     ft = 'ship',
     cmd = { "ShipCreate", "ShipCreateEnv" },
-    dependencies = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn', 'hrsh7th/nvim-cmp' }, -- nvim-cmp is optional
+    dependencies = { 'orfosys/nvim-spinetta', 'orfosys/nvim-popcorn', 'hrsh7th/nvim-cmp' }, -- nvim-cmp is optional
     config = function()
         -- Not necessary. Only if you want to change the setup calling require'ship'.setup{...}
     end
@@ -86,9 +86,9 @@ use {
 
 The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). These files must contain the following syntax:
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_file.png" alt="ship file" />
+<img src="https://github.com/orfosys/img/blob/master/nvim-ship/ship_file.png" alt="ship file" />
 
-**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/javiorfo/nvim-nyctophilia) is used in this image
+**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/orfosys/nvim-nyctophilia) is used in this image
 
 ### Sections
 - `~[BASE]~` is required and contains the following tags:
@@ -115,12 +115,12 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
 - Recommendations are to use the built-in command `:ShipCreate` which is going to generate a basic ship file. Edit url, method, headers, etc; to request a service.
 - Executing the command `:Ship` will show a buffer with the response (including headers, status code and time).
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" />
+<img src="https://github.com/orfosys/img/blob/master/nvim-ship/ship_simple.gif" alt="ship simple" />
 
 #### With response in popup
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_popup.gif" alt="ship popup" />
+<img src="https://github.com/orfosys/img/blob/master/nvim-ship/ship_popup.gif" alt="ship popup" />
 
-**NOTE:** These test examples are placed in this [folder](https://github.com/javiorfo/nvim-ship/tree/master/tests/ships)
+**NOTE:** These test examples are placed in this [folder](https://github.com/orfosys/nvim-ship/tree/master/tests/ships)
 
 ---
 
@@ -192,9 +192,9 @@ return {
 
 #### Simple Example
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" />
+<img src="https://github.com/orfosys/img/blob/master/nvim-ship/ship_environment.gif" alt="ship file" />
 
-**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/javiorfo/nvim-nyctophilia) is used in this image
+**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/orfosys/nvim-nyctophilia) is used in this image
 
 ## Special
 
@@ -237,9 +237,9 @@ require'ship'.setup {
 }
 ```
 
-<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" />
+<img src="https://github.com/orfosys/img/blob/master/nvim-ship/ship_special.gif" alt="ship special" />
 
-**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/javiorfo/nvim-nyctophilia) is used in this image
+**NOTE:** The colorscheme **umbra** from [nvim-nyctophilia](https://github.com/orfosys/nvim-nyctophilia) is used in this image
 
 ## Tricks
 
@@ -364,10 +364,10 @@ require'ship'.setup {
 ---
 
 ## Issues
-- If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/javiorfo/nvim-ship/issues)
+- If you have any issue or you find a bug, please let me know about it reporting an issue [here](https://github.com/orfosys/nvim-ship/issues)
 
 ---
 
 ### Donate
-- **Bitcoin** [(QR)](https://raw.githubusercontent.com/javiorfo/img/master/crypto/bitcoin.png)  `1GqdJ63RDPE4eJKujHi166FAyigvHu5R7v`
+- **Bitcoin** [(QR)](https://raw.githubusercontent.com/orfosys/img/master/crypto/bitcoin.png)  `1GqdJ63RDPE4eJKujHi166FAyigvHu5R7v`
 - [Paypal](https://www.paypal.com/donate/?hosted_button_id=FA7SGLSCT2H8G)

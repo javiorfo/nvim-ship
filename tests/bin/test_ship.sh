@@ -1,6 +1,6 @@
 ##!/bin/bash
 
-SHIP=~/.local/share/nvim/lazy/nvim-ship/bin/ship.sh
+SHIP=~/.local/share/nvim/lazy/nvim-ship/script/ship.sh
 LOG_FILE=~/.local/state/nvim/ship.log
 DEST=/tmp/testing.shipo
 

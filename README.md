@@ -71,7 +71,11 @@ use {
     lazy = true,
     ft = 'ship',
     cmd = { "ShipCreate", "ShipCreateEnv" },
-    dependencies = { 'javiorfo/nvim-spinetta', 'javiorfo/nvim-popcorn', 'hrsh7th/nvim-cmp' }, -- nvim-cmp is optional
+    dependencies = {
+         'javiorfo/nvim-spinetta',
+         'javiorfo/nvim-popcorn',
+         'hrsh7th/nvim-cmp' -- nvim-cmp is optional
+    },
     opts = {
         -- Not necessary. Only if you want to change the setup.
         -- The following are the default values

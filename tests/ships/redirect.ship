@@ -7,7 +7,5 @@ method POST
 ~[HEADERS]~
 content-type application/x-www-form-urlencoded
 accept text/html
-
-~[BODY]~
-url https://github.com/orfosys
+url https://github.com/chaosystema
 status_code 302

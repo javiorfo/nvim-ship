@@ -3,9 +3,13 @@ local validator = require'ship.validator'
 local M = {}
 
 M.DEFAULTS = {
+    view = {
+        autocomplete = false
+    },
     request = {
         timeout = 30,
-        autosave = true
+        autosave = true,
+        insecure = false
     },
     response = {
         show_headers = 'all',
@@ -24,6 +28,16 @@ M.DEFAULTS = {
 }
 
 function M.setup(opts)
+    if opts.view then
+        local v = opts.view
+        if v.autocomplete ~= nil then
+            if type(v.autocomplete) == "boolean" then
+                M.DEFAULTS.request.autocomplete = v.autocomplete
+            else
+                Logger:error("Setup Error: view.autocomplete must be a boolean value.")
+            end
+        end
+    end
     if opts.request then
         local r = opts.request
         if r.timeout then
@@ -38,6 +52,13 @@ function M.setup(opts)
                 M.DEFAULTS.request.autosave = r.autosave
             else
                 Logger:error("Setup Error: request.autosave must be a boolean value.")
+            end
+        end
+        if r.insecure ~= nil then
+            if type(r.insecure) == "boolean" then
+                M.DEFAULTS.request.insecure = r.insecure
+            else
+                Logger:error("Setup Error: request.insecure must be a boolean value.")
             end
         end
     end

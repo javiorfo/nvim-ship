@@ -243,9 +243,9 @@ function M.send()
     Logger:debug("Output folder: " .. output_folder)
     Logger:debug("Response file: " .. response_file)
 
-    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s -i %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
         util.script_path, setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
-        response_file, setup.output.save, output_folder, body_param, Logger.ship_log_file, Logger.ship_log_file)
+        response_file, setup.output.save, output_folder, body_param, Logger.ship_log_file, setup.request.insecure, Logger.ship_log_file)
 
     Logger:debug("Call to ship.sh: " .. call_to_ship_sh)
 
@@ -345,8 +345,8 @@ function M.special(name)
     local response_file = string.format("/tmp/%s.%s", name, "json")
     Logger:debug("Special Response file: " .. response_file)
 
-    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
-        util.script_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false, setup.output.folder, body_param, Logger.ship_log_file, Logger.ship_log_file)
+    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -l %s -i %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+        util.script_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false, setup.output.folder, body_param, Logger.ship_log_file, setup.request.insecure, Logger.ship_log_file)
 
     Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
 

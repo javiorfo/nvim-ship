@@ -97,12 +97,19 @@ This is the initial implicit setup from nvim-ship. Override some of these if you
 want: >
 
     require'ship'.setup {
+        view = {
+            -- Enable autocompletion
+            autocomplete = true
+        },
         request = {
             -- Timeout in seconds for request
             timeout = 30, 
             
             -- No need to press ':w' every time a ship file is edited
-            autosave = true  
+            autosave = true,
+
+            -- Validates SSL certificate
+            insecure = true  
         },
         response = {
             -- Options 'all', 'res', 'none'

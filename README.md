@@ -79,10 +79,13 @@ use {
     opts = {
         -- Not necessary. Only if you want to change the setup.
         -- The following are the default values
-
+        view = {
+            autocomplete = true
+        },
         request = {
             timeout = 30, 
-            autosave = true  
+            autosave = true,
+            insecure = false  
         },
         response = {
             show_headers = 'all',
@@ -156,9 +159,13 @@ If you don't want to change any of this values, there is no need to paste this s
 
 ```lua
 require'ship'.setup {
+    view = {
+        autocomplete = true
+    },
     request = {
         timeout = 30, 
-        autosave = true  
+        autosave = true,
+        insecure = false  
     },
     response = {
         show_headers = 'all',
@@ -178,9 +185,12 @@ require'ship'.setup {
 ```
 
 ### Detailed explanation
+- `view`
+    - **autocomplete** (boolean) enables or disables autocompletion. **DEFAULT: true**
 - `request`
     - **timeout** (number) set the corresponding timeout when you send a request to a service. If a response takes longer than the value set, the process will end. **DEFAULT: 30**
     - **autosave** (boolean) is a way to save the ship file before you execute `:Ship` command, not having to press the write command `:w` every time you edit a ship file before run it. **DEFAULT: true**
+    - **insecure** (boolean) does not check SSL certificate. **DEFAULT: false**
 - `response`
     - **show_headers** (string) set how to show headers on response (_shipo_). Three values are allowed: 'all' (shows request and response headers), 'res' (shows only response headers) and 'none' (does not show any response). **DEFAULT: 'all'**
     - **window_type** (string) set how to show the response (_shipo_). If 'h', It will open a buffer with horizontal orientation, if 'v', with vertical orientation. If 'p' It will open a popup with the response **DEFAULT: 'h'**

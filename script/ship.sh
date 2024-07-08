@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts "t:m:u:f:h:c:s:d:b:l:" ARG; do
+while getopts "t:m:u:f:h:c:s:d:b:l:i:" ARG; do
   case $ARG in
     t)
       SHIP_TIMEOUT=$OPTARG
@@ -32,12 +32,21 @@ while getopts "t:m:u:f:h:c:s:d:b:l:" ARG; do
     l)
       SHIP_LOG_FILE=$OPTARG
       ;;
+    i)
+      INSECURE=$OPTARG
+      ;;
   esac
 done
 
 if [ $SHIP_SAVE = "true" ]; then
     # If output folder does not exist, then create it
     [[ -d $SHIP_OUTPUT_FOLDER ]] || mkdir -p $SHIP_OUTPUT_FOLDER
+fi
+
+if [ $INSECURE = "true" ]; then
+    INSECURE=" --insecure "
+else
+    INSECURE=""
 fi
 
 # Check if body is included
@@ -54,7 +63,7 @@ fi
 FILTER_TR="| tr '\015' '\t'"
 
 # Custom cUrl
-CUSTOM_CURL="curl -s $SHOW_RES_HEAD --connect-timeout $SHIP_TIMEOUT $SHIP_HEADERS $SHIP_BODY \
+CUSTOM_CURL="curl $INSECURE -s $SHOW_RES_HEAD --connect-timeout $SHIP_TIMEOUT $SHIP_HEADERS $SHIP_BODY \
 -w '\nSHIP_CODE_TIME=%{http_code},%{time_total}\n%{onerror}ERROR %{errormsg}' \
 -X $SHIP_METHOD '$SHIP_URL' 2>&1 $FILTER_SED $FILTER_TR > $SHIP_FILE"
 

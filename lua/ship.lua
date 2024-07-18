@@ -4,7 +4,7 @@ local M = {}
 
 M.DEFAULTS = {
     view = {
-        autocomplete = false
+        autocomplete = true
     },
     request = {
         timeout = 30,
@@ -32,7 +32,7 @@ function M.setup(opts)
         local v = opts.view
         if v.autocomplete ~= nil then
             if type(v.autocomplete) == "boolean" then
-                M.DEFAULTS.request.autocomplete = v.autocomplete
+                M.DEFAULTS.view.autocomplete = v.autocomplete
             else
                 Logger:error("Setup Error: view.autocomplete must be a boolean value.")
             end

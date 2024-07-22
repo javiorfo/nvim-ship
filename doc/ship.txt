@@ -121,6 +121,10 @@ want: >
             -- If set 'p' then It will open a popup
             window_type = 'h',
 
+            -- Popup border style
+            -- Only applied for 'p' window_type
+            border_type = require'popcorn.borders'.double_border, 
+
             -- Size of the buffer or popup for response
             size = 20,
             

@@ -5,7 +5,6 @@ local validator = require'ship.validator'
 local spinetta = require'spinetta'
 local get_http_status = require'ship.status'.get_http_status
 local popcorn = require'popcorn'
-local borders = require'popcorn.borders'
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -136,7 +135,7 @@ local function open_buffer(response_file)
             popcorn:new({
                 width = setup.response.size * 4,
                 height = setup.response.size,
-                border = borders.double_border,
+                border = setup.response.border_type,
                 title = { "󰀱 SHIP", "Boolean" },
                 footer = { footer, "String" },
                 content = response_file

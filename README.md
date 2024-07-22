@@ -90,6 +90,7 @@ use {
         response = {
             show_headers = 'all',
             window_type = 'h',
+            border_type = require'popcorn.borders'.double_border, -- Only applied for 'p' window_type
             size = 20,
             redraw = true
         },
@@ -170,6 +171,7 @@ require'ship'.setup {
     response = {
         show_headers = 'all',
         window_type = 'h',
+        border_type = require'popcorn.borders'.double_border, -- Only applied for 'p' window_type
         size = 20,
         redraw = true
     },
@@ -194,6 +196,7 @@ require'ship'.setup {
 - `response`
     - **show_headers** (string) set how to show headers on response (_shipo_). Three values are allowed: 'all' (shows request and response headers), 'res' (shows only response headers) and 'none' (does not show any response). **DEFAULT: 'all'**
     - **window_type** (string) set how to show the response (_shipo_). If 'h', It will open a buffer with horizontal orientation, if 'v', with vertical orientation. If 'p' It will open a popup with the response **DEFAULT: 'h'**
+    - **border_type** (table) set the popup border style. These are the some of the posible selection: [nvim-popcorn borders](https://github.com/javiorfo/nvim-popcorn/blob/master/lua/popcorn/borders.lua) **DEFAULT: double_border**
     - **size** (number) corresponds to the response buffer size or popup (_shipo_). You can increment or decrement the buffer size or popup according to your convenience. **DEFAULT: 20**
     - **redraw** (boolean) set if you want to redraw the response buffer or you want to accumulate response buffers to compare their results on the window. Notice that disable this requires you to close all buffer responses manually (This does not apply for popup response). **DEFAULT: true**
 - `output`

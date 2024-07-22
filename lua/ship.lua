@@ -14,6 +14,7 @@ M.DEFAULTS = {
     response = {
         show_headers = 'all',
         window_type = 'h',
+        border_type = require'popcorn.borders'.double_border,
         size = 20,
         redraw = true
     },
@@ -23,7 +24,8 @@ M.DEFAULTS = {
         folder = "output",
     },
     internal = {
-        log_debug = false
+--         log_debug = false
+        log_debug = true
     }
 }
 
@@ -77,6 +79,13 @@ function M.setup(opts)
                 M.DEFAULTS.response.window_type = r.window_type
             else
                 Logger:error("Setup Error: response.window_type must be 'p', 'v' or 'h'.")
+            end
+        end
+        if r.border_type then
+            if type(r.border_type) == "table" then
+                M.DEFAULTS.response.border_type = r.border_type
+            else
+                Logger:error("Setup Error: response.border_type must be a table.")
             end
         end
         if r.size then

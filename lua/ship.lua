@@ -24,8 +24,7 @@ M.DEFAULTS = {
         folder = "output",
     },
     internal = {
---         log_debug = false
-        log_debug = true
+        log_debug = false
     }
 }
 

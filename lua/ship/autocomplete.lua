@@ -37,8 +37,8 @@ local header_labels = {
     'cookie',
     'date',
     'authorization',
-    'authorization: Basic',
-    'authorization: Bearer',
+    'authorization Basic',
+    'authorization Bearer',
 }
 
 local header_values = {

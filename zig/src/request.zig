@@ -2,6 +2,11 @@ const curl = @import("curl");
 const std = @import("std");
 const prettizy = @import("prettizy");
 const jwt = @import("jwt.zig");
+const Arguments = @import("arguments.zig").Arguments;
+pub const c = @cImport({
+    @cInclude("curl/curl.h");
+    @cInclude("stdio.h");
+});
 
 fn get() []const u8 {
     return 
@@ -9,68 +14,36 @@ fn get() []const u8 {
     ;
 }
 
-pub const ArgumentsBuilder = struct {
-    arguments: Arguments = .{},
+pub fn fileWriteCallback(ptr: [*c]c_char, size: c_uint, nmemb: c_uint, user_file: *anyopaque) callconv(.C) c_uint {
+    const real_size = size * nmemb;
+    var file: *std.fs.File = @alignCast(@ptrCast(user_file));
+    var typed_data: [*]u8 = @ptrCast(ptr);
+    _ = file.write(typed_data[0..real_size]) catch return 0;
+    return real_size;
+}
 
-    pub fn init(arg_it: *std.process.ArgIterator) !Arguments {
-        var arguments: Arguments = .{};
-        _ = arg_it.next();
-        while (arg_it.next()) |arg| {
-            std.debug.print("arg {s}\n", .{arg});
-            if (std.mem.eql(u8, arg, "-t")) {
-                const value = try std.fmt.parseInt(usize, arg_it.next().?, 10);
-                arguments.timeout = value * 1_000;
-            } else if (std.mem.eql(u8, arg, "-m")) {
-                arguments.method = Arguments.methodFromString(arg_it.next().?);
-            } else if (std.mem.eql(u8, arg, "-u")) {
-                arguments.url = arg_it.next().?;
-            } else {
-                break;
-            }
+fn editFile(file_path: []const u8) !void {
+    var file = try std.fs.openFileAbsolute(file_path, .{ .mode = .read_write });
+    defer file.close();
+
+    var buffer = std.ArrayList(u8).init(std.heap.page_allocator);
+    defer buffer.deinit();
+
+    const reader = file.reader();
+    var buffer_reader: [1024]u8 = undefined;
+    while (try reader.readUntilDelimiterOrEof(&buffer_reader, '\n')) |line| {
+        if (std.mem.startsWith(u8, line, "< ") or std.mem.startsWith(u8, line, "> ") or std.mem.startsWith(u8, line, "* ")) {
+            try buffer.appendSlice(line[2..]);
+        } else {
+            try buffer.appendSlice(line);
         }
-        return arguments;
+        try buffer.append('\n');
     }
 
-    pub fn timeout(self: *ArgumentsBuilder, time: usize) ArgumentsBuilder {
-        self.arguments.timeout = time * 1_000;
-        return self.*;
-    }
-
-    pub fn url(self: *ArgumentsBuilder, url_param: []const u8) ArgumentsBuilder {
-        self.arguments.url = url_param;
-        return self.*;
-    }
-
-    pub fn build(self: ArgumentsBuilder) Arguments {
-        return self.arguments;
-    }
-};
-
-pub const Arguments = struct {
-    timeout: usize = 30_000,
-    url: []const u8 = undefined,
-    method: curl.Easy.Method = .GET,
-    body: ?[]const u8 = null,
-
-    pub fn methodFromString(str: []const u8) curl.Easy.Method {
-        if (std.mem.eql(u8, str, "GET")) {
-            return .GET;
-        }
-        if (std.mem.eql(u8, str, "POST")) {
-            return .POST;
-        }
-        if (std.mem.eql(u8, str, "PUT")) {
-            return .PUT;
-        }
-        if (std.mem.eql(u8, str, "DELETE")) {
-            return .DELETE;
-        }
-        if (std.mem.eql(u8, str, "HEAD")) {
-            return .HEAD;
-        }
-        return .PATCH;
-    }
-};
+    try file.seekTo(0);
+    try file.writeAll(buffer.items);
+    try file.setEndPos(buffer.items.len);
+}
 
 pub fn call(allocator: std.mem.Allocator, arguments: Arguments) !void {
     const easy = try curl.Easy.init(allocator, .{ .default_timeout_ms = arguments.timeout });
@@ -85,28 +58,53 @@ pub fn call(allocator: std.mem.Allocator, arguments: Arguments) !void {
     };
     defer headers.deinit();
 
+    var output_file = try std.fs.createFileAbsolute(arguments.ship_file, .{});
+    defer output_file.close();
+    const err_file = try std.fmt.allocPrintZ(allocator, "{s}.err", .{arguments.ship_file});
+    const fil: *c.FILE = c.fopen(err_file, "wb");
+    errdefer _ = c.fclose(fil);
+    _ = c.curl_easy_setopt(easy.handle, c.CURLOPT_STDERR, fil);
+
+    const param: c_long = @intCast(@intFromBool(true));
+    _ = c.curl_easy_setopt(easy.handle, c.CURLOPT_SSL_VERIFYPEER, param);
+    _ = c.curl_easy_setopt(easy.handle, c.CURLOPT_SSL_VERIFYHOST, param);
+
     try easy.setUrl(try std.fmt.allocPrintZ(allocator, "{s}", .{arguments.url}));
     try easy.setPostFields(get());
+    try easy.setVerbose(true);
     try easy.setMethod(arguments.method);
     try easy.setHeaders(headers);
     var buf = curl.Buffer.init(allocator);
-    try easy.setWritedata(&buf);
     try easy.setWritefunction(curl.bufferWriteCallback);
+    try easy.setWritedata(&buf);
+    //     try easy.setWritedata(&output_file);
 
-    var resp = try easy.perform();
+    var resp = easy.perform() catch |err| {
+        _ = try output_file.write(try std.fmt.allocPrint(allocator, "ERROR {any}", .{err}));
+        return;
+    };
     resp.body = buf;
     defer resp.deinit();
 
-    std.debug.print("{s}\nfomatted {any}\n", .{
-        try prettizy.json.prettify(allocator, resp.body.?.items, .{}),
-        prettizy.json.isFormatted(resp.body.?.items),
-    });
+    _ = c.fclose(fil);
+    try editFile(err_file);
 
-    std.debug.print("Iterating all headers...\n", .{});
-    {
-        var iter = try resp.iterateHeaders(.{});
-        while (try iter.next()) |header| {
-            std.debug.print("{s}: {s}\n", .{ header.name, header.get() });
+    if (resp.body) |r| {
+        if (prettizy.json.isFormatted(r.items)) {
+            _ = try output_file.write(r.items);
+        } else {
+            _ = try output_file.write(try prettizy.json.prettify(allocator, r.items, .{}));
         }
     }
+
+    //     std.debug.print("{s}\nfomatted {any}\n", .{
+    //         try prettizy.json.prettify(allocator, resp.body.?.items, .{}),
+    //         prettizy.json.isFormatted(resp.body.?.items),
+    //     });
+    //
+    //     std.debug.print("Iterating all headers...\n", .{});
+    //     var iter = try resp.iterateHeaders(.{});
+    //     while (try iter.next()) |header| {
+    //         std.debug.print("{s}: {s}\n", .{ header.name, header.get() });
+    //     }
 }

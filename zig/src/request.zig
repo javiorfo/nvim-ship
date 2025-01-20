@@ -7,104 +7,157 @@ pub const c = @cImport({
     @cInclude("curl/curl.h");
     @cInclude("stdio.h");
 });
+// {"name": "Apple MacBook Pro 16","data": {"year": 2019,"price": 1849.99,"CPU model": "Intel Core i9","Hard disk size": "1 TB"}}
+pub const Shipper = struct {
+    allocator: std.mem.Allocator,
+    arguments: Arguments,
+    easy: curl.Easy,
 
-fn get() []const u8 {
-    return 
-    \\ {"name": "Apple MacBook Pro 16","data": {"year": 2019,"price": 1849.99,"CPU model": "Intel Core i9","Hard disk size": "1 TB"}}
-    ;
-}
+    const PerformResult = struct {
+        response: curl.Easy.Response = undefined,
+        error_msg: ?[]const u8 = null,
+    };
 
-pub fn fileWriteCallback(ptr: [*c]c_char, size: c_uint, nmemb: c_uint, user_file: *anyopaque) callconv(.C) c_uint {
-    const real_size = size * nmemb;
-    var file: *std.fs.File = @alignCast(@ptrCast(user_file));
-    var typed_data: [*]u8 = @ptrCast(ptr);
-    _ = file.write(typed_data[0..real_size]) catch return 0;
-    return real_size;
-}
-
-fn editFile(file_path: []const u8) !void {
-    var file = try std.fs.openFileAbsolute(file_path, .{ .mode = .read_write });
-    defer file.close();
-
-    var buffer = std.ArrayList(u8).init(std.heap.page_allocator);
-    defer buffer.deinit();
-
-    const reader = file.reader();
-    var buffer_reader: [1024]u8 = undefined;
-    while (try reader.readUntilDelimiterOrEof(&buffer_reader, '\n')) |line| {
-        if (std.mem.startsWith(u8, line, "< ") or std.mem.startsWith(u8, line, "> ") or std.mem.startsWith(u8, line, "* ")) {
-            try buffer.appendSlice(line[2..]);
-        } else {
-            try buffer.appendSlice(line);
-        }
-        try buffer.append('\n');
+    pub fn init(allocator: std.mem.Allocator, arguments: Arguments) !Shipper {
+        const easy = try curl.Easy.init(allocator, .{ .default_timeout_ms = arguments.timeout });
+        return .{
+            .allocator = allocator,
+            .arguments = arguments,
+            .easy = easy,
+        };
     }
 
-    try file.seekTo(0);
-    try file.writeAll(buffer.items);
-    try file.setEndPos(buffer.items.len);
-}
+    pub fn deinit(self: Shipper) void {
+        self.easy.deinit();
+    }
 
-pub fn call(allocator: std.mem.Allocator, arguments: Arguments) !void {
-    const easy = try curl.Easy.init(allocator, .{ .default_timeout_ms = arguments.timeout });
-    defer easy.deinit();
+    fn perform(self: Shipper) !PerformResult {
+        try self.easy.setCommonOpts();
+        var perform_result = PerformResult{};
 
-    const headers = blk: {
-        var h = try easy.createHeaders();
-        errdefer h.deinit();
-        try h.add("content-type", "application/json");
-        try h.add("my-head", "charkuils");
-        break :blk h;
-    };
-    defer headers.deinit();
+        const code_perform = c.curl_easy_perform(self.easy.handle);
+        if (code_perform != c.CURLE_OK) {
+            perform_result.error_msg = try std.fmt.allocPrint(self.allocator, "ERROR: {s}", .{c.curl_easy_strerror(code_perform)});
+        }
 
-    var output_file = try std.fs.createFileAbsolute(arguments.ship_file, .{});
-    defer output_file.close();
-    const err_file = try std.fmt.allocPrintZ(allocator, "{s}.err", .{arguments.ship_file});
-    const fil: *c.FILE = c.fopen(err_file, "wb");
-    errdefer _ = c.fclose(fil);
-    _ = c.curl_easy_setopt(easy.handle, c.CURLOPT_STDERR, fil);
+        var status_code: c_long = 0;
+        const code_info = c.curl_easy_getinfo(self.easy.handle, c.CURLINFO_RESPONSE_CODE, &status_code);
+        if (code_info != c.CURLE_OK) {
+            perform_result.error_msg = try std.fmt.allocPrint(self.allocator, "ERROR: {s}", .{c.curl_easy_strerror(code_info)});
+        }
 
-    const param: c_long = @intCast(@intFromBool(true));
-    _ = c.curl_easy_setopt(easy.handle, c.CURLOPT_SSL_VERIFYPEER, param);
-    _ = c.curl_easy_setopt(easy.handle, c.CURLOPT_SSL_VERIFYHOST, param);
+        perform_result.response = .{
+            .status_code = @intCast(status_code),
+            .handle = self.easy.handle,
+            .body = null,
+            .allocator = self.easy.allocator,
+        };
+        return perform_result;
+    }
 
-    try easy.setUrl(try std.fmt.allocPrintZ(allocator, "{s}", .{arguments.url}));
-    try easy.setPostFields(get());
-    try easy.setVerbose(true);
-    try easy.setMethod(arguments.method);
-    try easy.setHeaders(headers);
-    var buf = curl.Buffer.init(allocator);
-    try easy.setWritefunction(curl.bufferWriteCallback);
-    try easy.setWritedata(&buf);
-    //     try easy.setWritedata(&output_file);
+    pub fn call(self: Shipper) !void {
+        if (self.arguments.save) {
+            if (std.fs.cwd().makeDir(self.arguments.ship_output_folder)) |_| {
+                std.log.debug("Directory created", .{});
+            } else |err| {
+                switch (err) {
+                    error.PathAlreadyExists => {
+                        std.log.info("Directory already exists", .{});
+                    },
+                    else => |e| {
+                        return e;
+                    },
+                }
+            }
+        }
 
-    var resp = easy.perform() catch |err| {
-        _ = try output_file.write(try std.fmt.allocPrint(allocator, "ERROR {any}", .{err}));
-        return;
-    };
-    resp.body = buf;
-    defer resp.deinit();
+        var headers = try self.easy.createHeaders();
+        defer headers.deinit();
+        while (self.arguments.headers.next()) |h| {
+            try headers.add(h, self.arguments.headers.next().?);
+        }
 
-    _ = c.fclose(fil);
-    try editFile(err_file);
+        const err_file_path = try std.fmt.allocPrintZ(self.allocator, "{s}.err", .{self.arguments.ship_file});
+        const err_file: *c.FILE = c.fopen(err_file_path, "wb");
+        errdefer _ = c.fclose(err_file);
+        _ = c.curl_easy_setopt(self.easy.handle, c.CURLOPT_STDERR, err_file);
 
-    if (resp.body) |r| {
-        if (prettizy.json.isFormatted(r.items)) {
-            _ = try output_file.write(r.items);
-        } else {
-            _ = try output_file.write(try prettizy.json.prettify(allocator, r.items, .{}));
+        try self.easy.setUrl(try std.fmt.allocPrintZ(self.allocator, "{s}", .{self.arguments.url}));
+
+        if (self.arguments.body) |body| {
+            const result = if (std.mem.startsWith(u8, body, "@")) getBodyFromFile(body) else body;
+            try self.easy.setPostFields(result);
+        }
+
+        if (self.arguments.show_headers == .all) try self.easy.setVerbose(true);
+        try self.easy.setInsecure(self.arguments.insecure);
+        try self.easy.setMethod(self.arguments.method);
+        try self.easy.setHeaders(headers);
+        var buf = curl.Buffer.init(self.allocator);
+        try self.easy.setWritefunction(curl.bufferWriteCallback);
+        try self.easy.setWritedata(&buf);
+
+        var perform_result = try self.perform();
+        perform_result.response.body = buf;
+        defer perform_result.response.deinit();
+
+        _ = c.fclose(err_file);
+
+        try self.writeToShipFile(err_file_path, perform_result);
+    }
+
+    fn writeToShipFile(self: Shipper, err_file_path: []const u8, perform_result: PerformResult) !void {
+        var file = try std.fs.openFileAbsolute(err_file_path, .{ .mode = .read_only });
+        defer file.close();
+
+        var buffer = std.ArrayList(u8).init(self.allocator);
+        defer buffer.deinit();
+
+        const reader = file.reader();
+        var buffer_reader: [1024]u8 = undefined;
+        while (try reader.readUntilDelimiterOrEof(&buffer_reader, '\n')) |line| {
+            if (std.mem.startsWith(u8, line, "< ") or std.mem.startsWith(u8, line, "> ") or std.mem.startsWith(u8, line, "* ")) {
+                try buffer.appendSlice(line[2..]);
+            } else {
+                try buffer.appendSlice(line);
+            }
+            try buffer.append('\n');
+        }
+        if (buffer.items.len > 0) try buffer.append('\n');
+
+        if (self.arguments.show_headers == .res) {
+            var iter = try perform_result.response.iterateHeaders(.{});
+            while (try iter.next()) |header| {
+                const line = try std.mem.concat(self.allocator, u8, &.{ header.name, " ", header.get(), "\n" });
+                try buffer.appendSlice(line);
+            }
+            try buffer.append('\n');
+        }
+
+        var output_file = try std.fs.createFileAbsolute(self.arguments.ship_file, .{});
+        defer output_file.close();
+
+        try output_file.seekTo(0);
+        try output_file.writeAll(buffer.items);
+
+        if (perform_result.error_msg) |err| {
+            _ = try output_file.write(err);
+            return;
+        }
+
+        // TODO xml or json
+        if (perform_result.response.body) |r| {
+            const result = if (prettizy.json.isFormatted(r.items)) r.items else try prettizy.json.prettify(self.allocator, r.items, .{});
+            _ = try output_file.write(result);
         }
     }
 
-    //     std.debug.print("{s}\nfomatted {any}\n", .{
-    //         try prettizy.json.prettify(allocator, resp.body.?.items, .{}),
-    //         prettizy.json.isFormatted(resp.body.?.items),
-    //     });
-    //
-    //     std.debug.print("Iterating all headers...\n", .{});
-    //     var iter = try resp.iterateHeaders(.{});
-    //     while (try iter.next()) |header| {
-    //         std.debug.print("{s}: {s}\n", .{ header.name, header.get() });
-    //     }
-}
+    fn getBodyFromFile(path: []const u8) ![]const u8 {
+        var file = try std.fs.openFileAbsolute(path[1..], .{});
+        defer file.close();
+        const file_size = (try file.stat()).size;
+        var buffer = try std.heap.page_allocator.alloc(u8, file_size);
+        _ = try file.reader().readAll(buffer[0..]);
+        return buffer;
+    }
+};

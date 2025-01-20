@@ -9,8 +9,13 @@ pub const Arguments = struct {
     body: ?[]const u8 = null,
     ship_file: []const u8 = undefined,
     show_headers: ShowHeaders = .none,
+    headers: *std.mem.SplitIterator(u8, .sequence) = undefined,
+    save: bool = false,
+    ship_output_folder: []const u8 = undefined,
+    insecure: bool = false,
 
     const ShowHeaders = enum(u3) { all, res, none };
+    const headers_split_char = ";";
 
     pub fn new(arg_it: *std.process.ArgIterator) !Arguments {
         var arguments: Arguments = .{};
@@ -28,6 +33,17 @@ pub const Arguments = struct {
                 arguments.ship_file = arg_it.next().?;
             } else if (std.mem.eql(u8, arg, "-h")) {
                 arguments.setShowHeaders(arg_it.next().?);
+            } else if (std.mem.eql(u8, arg, "-c")) {
+                var heads = std.mem.splitSequence(u8, arg_it.next().?, headers_split_char);
+                arguments.headers = &heads;
+            } else if (std.mem.eql(u8, arg, "-s")) {
+                arguments.save = if (std.mem.eql(u8, arg_it.next().?, "true")) true else false;
+            } else if (std.mem.eql(u8, arg, "-d")) {
+                arguments.ship_output_folder = arg_it.next().?;
+            } else if (std.mem.eql(u8, arg, "-b")) {
+                arguments.body = arg_it.next().?;
+            } else if (std.mem.eql(u8, arg, "-i")) {
+                arguments.insecure = if (std.mem.eql(u8, arg_it.next().?, "true")) true else false;
             } else {
                 break;
             }

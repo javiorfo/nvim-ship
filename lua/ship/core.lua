@@ -67,10 +67,13 @@ local function read_body(file)
 end
 
 local function process_headers(headers)
-    local result = ""
+    local result = "'"
     for k, v in pairs(headers) do
-        result = result .. string.format("' -H \"%s: %s\"'", k, v)
+        local string_format = ";%s;%s"
+        if #result == 1 then string_format = "%s;%s" end
+        result = result .. string.format(string_format, k, v)
     end
+    result = result .. "'"
     return result
 end
 

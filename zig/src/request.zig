@@ -7,7 +7,7 @@ pub const c = @cImport({
     @cInclude("curl/curl.h");
     @cInclude("stdio.h");
 });
-// {"name": "Apple MacBook Pro 16","data": {"year": 2019,"price": 1849.99,"CPU model": "Intel Core i9","Hard disk size": "1 TB"}}
+//
 pub const Shipper = struct {
     allocator: std.mem.Allocator,
     arguments: Arguments,
@@ -73,8 +73,12 @@ pub const Shipper = struct {
 
         var headers = try self.easy.createHeaders();
         defer headers.deinit();
-        while (self.arguments.headers.next()) |h| {
-            try headers.add(h, self.arguments.headers.next().?);
+        var arg_headers = self.arguments.headers;
+        var is_multipart = false;
+        while (arg_headers.next()) |h| {
+            const value = arg_headers.next().?;
+            try headers.add(h, value);
+            if (std.mem.eql(u8, h, "Content-Type") and std.mem.eql(u8, value, "multipart/form-data")) is_multipart = true;
         }
 
         const err_file_path = try std.fmt.allocPrintZ(self.allocator, "{s}.err", .{self.arguments.ship_file});
@@ -85,8 +89,23 @@ pub const Shipper = struct {
         try self.easy.setUrl(try std.fmt.allocPrintZ(self.allocator, "{s}", .{self.arguments.url}));
 
         if (self.arguments.body) |body| {
-            const result = if (std.mem.startsWith(u8, body, "@")) getBodyFromFile(body) else body;
-            try self.easy.setPostFields(result);
+            if (!is_multipart) {
+                const result = if (std.mem.startsWith(u8, body, "@")) try getBodyFromFile(body) else body;
+                try self.easy.setPostFields(result);
+            } else {
+                var lines = std.mem.splitSequence(u8, body, "&");
+                const multi_part = try self.easy.createMultiPart();
+                while (lines.next()) |line| {
+                    var field_value = std.mem.splitSequence(u8, line, "=");
+                    const field = try std.fmt.allocPrintZ(self.allocator, "{s}", .{field_value.next().?});
+                    const value = field_value.next().?;
+                    const data_source: curl.Easy.MultiPart.DataSource = if (std.mem.startsWith(u8, value, "@")) .{ .file = try std.fmt.allocPrintZ(self.allocator, "{s}", .{value[1..]}) } else .{ .data = value };
+                    try multi_part.addPart(field, data_source);
+                    try self.easy.setMultiPart(multi_part);
+                }
+                // TODO handle deinit out of function
+                //                 defer multi_part.deinit();
+            }
         }
 
         if (self.arguments.show_headers == .all) try self.easy.setVerbose(true);
@@ -97,16 +116,30 @@ pub const Shipper = struct {
         try self.easy.setWritefunction(curl.bufferWriteCallback);
         try self.easy.setWritedata(&buf);
 
+        const start_time = std.time.milliTimestamp();
+
         var perform_result = try self.perform();
         perform_result.response.body = buf;
         defer perform_result.response.deinit();
 
-        _ = c.fclose(err_file);
+        const end_time = std.time.milliTimestamp();
 
+        try self.writeToCodeAndTimeFile(perform_result.response.status_code, start_time, end_time);
+
+        _ = c.fclose(err_file);
         try self.writeToShipFile(err_file_path, perform_result);
     }
 
+    fn writeToCodeAndTimeFile(self: Shipper, status_code: i32, start_time: i64, end_time: i64) !void {
+        var file = try std.fs.createFileAbsolute("/tmp/ship_code_time_tmp", .{});
+        defer file.close();
+        const elapsed_time = end_time - start_time;
+        const code_time = try std.fmt.allocPrint(self.allocator, "{d},{d:.4}", .{ status_code, @as(f64, @floatFromInt(elapsed_time)) / 1_000.0 });
+        _ = try file.write(code_time);
+    }
+
     fn writeToShipFile(self: Shipper, err_file_path: []const u8, perform_result: PerformResult) !void {
+        const response = perform_result.response;
         var file = try std.fs.openFileAbsolute(err_file_path, .{ .mode = .read_only });
         defer file.close();
 
@@ -126,7 +159,7 @@ pub const Shipper = struct {
         if (buffer.items.len > 0) try buffer.append('\n');
 
         if (self.arguments.show_headers == .res) {
-            var iter = try perform_result.response.iterateHeaders(.{});
+            var iter = try response.iterateHeaders(.{});
             while (try iter.next()) |header| {
                 const line = try std.mem.concat(self.allocator, u8, &.{ header.name, " ", header.get(), "\n" });
                 try buffer.appendSlice(line);
@@ -145,10 +178,17 @@ pub const Shipper = struct {
             return;
         }
 
-        // TODO xml or json
-        if (perform_result.response.body) |r| {
-            const result = if (prettizy.json.isFormatted(r.items)) r.items else try prettizy.json.prettify(self.allocator, r.items, .{});
-            _ = try output_file.write(result);
+        if (response.body) |r| {
+            const header = try response.getHeader("accept");
+            var send: []const u8 = r.items;
+            if (header) |h| {
+                if (std.mem.eql(u8, h.name, "application/json")) {
+                    send = if (prettizy.json.isFormatted(r.items)) r.items else try prettizy.json.prettify(self.allocator, r.items, .{});
+                } else if (std.mem.eql(u8, h.name, "application/xml")) {
+                    send = if (prettizy.xml.isFormatted(r.items)) r.items else try prettizy.xml.prettify(self.allocator, r.items, .{});
+                }
+            }
+            _ = try output_file.write(send);
         }
     }
 

@@ -25,20 +25,20 @@ local methods = {
 }
 
 local header_labels = {
-    'content-type',
-    'accept',
-    'accept-language',
-    'accept-charset',
-    'accept-encoding',
-    'accept-control-request-method',
-    'accept-control-request-headers',
-    'cache-control',
-    'content-length',
-    'cookie',
-    'date',
-    'authorization',
-    'authorization Basic',
-    'authorization Bearer',
+    'Content-Type',
+    'Accept',
+    'Accept-Language',
+    'Accept-Charset',
+    'Accept-Encoding',
+    'Accept-Control-Request-Method',
+    'Accept-Control-Request-Headers',
+    'Cache-Control',
+    'Content-Length',
+    'Cookie',
+    'Date',
+    'Authorization',
+    'Authorization Basic',
+    'Authorization Bearer',
 }
 
 local header_values = {

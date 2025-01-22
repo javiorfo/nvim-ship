@@ -83,6 +83,10 @@ use {
     'javiorfo/nvim-ship',
     lazy = true,
     ft = 'ship',
+    build = function()
+        -- Update the backend in every plugin change
+        require'ship.command'.build()
+    end,
     cmd = { "ShipBuild", "ShipCreate", "ShipCreateEnv" },
     dependencies = {
          'javiorfo/nvim-spinetta',

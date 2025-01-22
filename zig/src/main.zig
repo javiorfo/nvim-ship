@@ -3,10 +3,6 @@ const std = @import("std");
 const request = @import("request.zig");
 const Arguments = @import("arguments.zig").Arguments;
 
-// ADICIONALES
-// jwt decode
-// docs
-
 pub const std_options = .{
     // Debug level to get zig-curl errors
     .log_level = .debug,

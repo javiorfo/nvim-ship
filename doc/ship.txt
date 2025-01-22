@@ -41,6 +41,7 @@ Some Features
     - Body requests by file
     - Environment variables
     - Autocomplete
+    - JWT decoder
     - Telescope integration
     - Many more...
 
@@ -232,9 +233,12 @@ NOTE: It works ONLY WITH JSON
 
 These are the list of commands in nvim-ship:
     - :Ship -> This will send the request of a ship file
+    - :ShipBuild -> This will build zig binaries
     - :ShipCloseResponse -> This will close all the responses opened
     - :ShipCreate -> This will create a basic ship file
     - :ShipCreateEnv -> This will create a basic structure for env variables
+    - :ShipDecodeJWT -> This will search the header 'Authorization' in the ship 
+    file and will decode the JWT value (if valid).
     - :ShipDeleteLogs -> This will delete the log file
     - :ShipFindResponse -> This will open telescope (if installed) to find shipo
     files

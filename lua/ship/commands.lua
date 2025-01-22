@@ -3,7 +3,6 @@ local util = require 'ship.util'
 local validator = require 'ship.validator'
 local Logger = util.logger
 local spinetta = require 'spinetta'
-local popcorn = require 'popcorn'
 
 local M = {}
 
@@ -83,26 +82,8 @@ function M.special(args)
 end
 
 function M.decode_jwt()
-    local handle = io.popen("/home/javier/.local/share/nvim/lazy/nvim-ship/bin/jwt")
-    if handle then
-        local result = handle:read("*a")
-        handle:close()
-        local content = {}
-        for line in string.gmatch(result, "[^\n]+") do
-            if line == "Header:" or line == "Payload:" then
-                table.insert(content, { line, "Boolean" })
-            else
-                table.insert(content, { line })
-            end
-        end
-        popcorn:new({
-            width = #content * 2.5,
-            height = #content * 1.5,
-            title = { "󰀱 SHIP", "Boolean" },
-            footer = { "JWT decoded", "String" },
-            content = content
-        }):pop()
-    end
+    Logger:debug("Executing ShipDecodeJWT command...")
+    core.decode_jwt()
 end
 
 function M.build()

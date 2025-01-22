@@ -1,10 +1,10 @@
-local setup = require'ship'.DEFAULTS
-local util = require'ship.util'
+local setup = require 'ship'.DEFAULTS
+local util = require 'ship.util'
 local Logger = util.logger
-local validator = require'ship.validator'
-local spinetta = require'spinetta'
-local get_http_status = require'ship.status'.get_http_status
-local popcorn = require'popcorn'
+local validator = require 'ship.validator'
+local spinetta = require 'spinetta'
+local get_http_status = require 'ship.status'.get_http_status
+local popcorn = require 'popcorn'
 local M = {}
 
 local function read_section(file, section_to_process)
@@ -112,7 +112,7 @@ local function status_and_time()
             status_icon = " "
         end
         status = string.format("%s %s", status, get_http_status(status))
---         return string.format("%s Status   %s | 󰁫 Time   %s", status_icon, status, time)
+        --         return string.format("%s Status   %s | 󰁫 Time   %s", status_icon, status, time)
         return string.format("%s %s - 󰁫  %ss", status_icon, status, time)
     else
         Logger:error("Internal error. Please check the logs executing :SHIPShowLogs for further details.")
@@ -170,7 +170,8 @@ local function build_output_folder_and_file()
     if output_folder == "." or output_folder == "" then
         local filename = prefix .. vim.fn.expand("%:p:r")
         return output_folder, string.format("%s.%s", filename, util.ship_response_extension)
-    else if output_folder:find("^/") or output_folder:find("^~/") then
+    else
+        if output_folder:find("^/") or output_folder:find("^~/") then
             local filename = prefix .. vim.fn.expand("%:t:r")
             return output_folder, string.format("%s/%s.%s", output_folder, filename, util.ship_response_extension)
         else
@@ -214,6 +215,57 @@ local function get_base_headers_body(file)
     }
 end
 
+function M.decode_jwt()
+    if setup.request.autosave then
+        vim.cmd("silent w")
+    end
+
+    local table_ship_values = get_base_headers_body(vim.fn.expand("%:p"))
+    local base = table_ship_values.base
+    local headers = table_ship_values.headers
+
+    if base.env then
+        local ok, result = pcall(dofile, base.env)
+        if ok then
+            process_environment(result, base, headers, {})
+        else
+            Logger:error(result)
+            return
+        end
+    end
+
+    local jwt_token = headers.Authorization
+    if jwt_token then
+        local cmd = string.format("%s '%s'", util.jwt_path, jwt_token)
+        local handle = io.popen(cmd)
+        if handle then
+            local result = handle:read("*a")
+            handle:close()
+            local content = {}
+            local width = 0
+            for line in string.gmatch(result, "[^\n]+") do
+                if #line > width then
+                    width = #line
+                end
+                if line == "Header:" or line == "Payload:" then
+                    table.insert(content, { line, "Boolean" })
+                else
+                    table.insert(content, { line })
+                end
+            end
+            popcorn:new({
+                width = width + 8,
+                height = #content + 4,
+                title = { "󰀱 SHIP", "Boolean" },
+                footer = { "JWT decoded", "String" },
+                content = content
+            }):pop()
+        end
+    else
+        Logger:info("No Authorization header found!")
+    end
+end
+
 function M.send()
     if setup.request.autosave then
         vim.cmd("silent w")
@@ -233,8 +285,8 @@ function M.send()
         if ok then
             process_environment(result, base, headers, body)
         else
-           Logger:error(result)
-           return
+            Logger:error(result)
+            return
         end
     end
 
@@ -249,7 +301,8 @@ function M.send()
     Logger:debug("Output folder: " .. output_folder)
     Logger:debug("Response file: " .. response_file)
 
-    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -i %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+    local call_to_ship_sh = string.format(
+        "%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -i %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
         util.bin_path, setup.request.timeout, base.method, base.url, setup.response.show_headers, headers_list,
         response_file, setup.output.save, output_folder, body_param, setup.request.insecure, Logger.ship_log_file)
 
@@ -276,14 +329,14 @@ local function update_lua_file(value, update)
     local updated_table = {}
     local found = false
     for line in io.lines(update.lua_file) do
-       local init, final = string.find(line, update.lua_field .. "(%s*)=(%s*)")
-       if init then
+        local init, final = string.find(line, update.lua_field .. "(%s*)=(%s*)")
+        if init then
             Logger:debug("Special update_lua_file, line: " .. line)
             line = (tostring(line):sub(0, final - 1)) .. " \"" .. value .. "\","
             Logger:debug("Special update_lua_file, line updated: " .. line)
             found = true
-       end
-       table.insert(updated_table, line)
+        end
+        table.insert(updated_table, line)
     end
 
     if found then
@@ -336,8 +389,8 @@ function M.special(name)
         if ok then
             process_environment(result, base, headers, body)
         else
-           Logger:error(result)
-           return
+            Logger:error(result)
+            return
         end
     end
 
@@ -351,8 +404,10 @@ function M.special(name)
     local response_file = string.format("/tmp/%s.%s", name, "json")
     Logger:debug("Special Response file: " .. response_file)
 
-    local call_to_ship_sh = string.format("%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -i %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
-        util.bin_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false, setup.output.folder, body_param, setup.request.insecure, Logger.ship_log_file)
+    local call_to_ship_sh = string.format(
+        "%s -t %s -m %s -u '%s' -h %s -c %s -f %s -s %s -d %s %s -i %s 2> >( while read line; do echo \"[ERROR][$(date '+%%D %%T')]: ${line}\"; done >> %s)",
+        util.bin_path, setup.request.timeout, base.method, base.url, 'none', headers_list, response_file, false,
+        setup.output.folder, body_param, setup.request.insecure, Logger.ship_log_file)
 
     Logger:debug("Special Call to ship.sh: " .. call_to_ship_sh)
 
@@ -370,13 +425,15 @@ function M.special(name)
                     if update_lua_file(util.trim(result), update) then
                         clean(response_file)
                         vim.cmd("redraw")
-                        Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!", update.lua_field, update.lua_file))
+                        Logger:info(string.format("Special command finished. Field '%s' from %s has been uptaded!",
+                            update.lua_field, update.lua_file))
                     end
                 else
                     Logger:error(result)
                 end
             else
-                Logger:error(string.format("Special '%s' call to %s returned status %s <%s>", name, base.url, http_status, get_http_status(http_status)))
+                Logger:error(string.format("Special '%s' call to %s returned status %s <%s>", name, base.url, http_status,
+                    get_http_status(http_status)))
             end
         end,
         on_interrupted = function()

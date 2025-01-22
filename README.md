@@ -2,26 +2,21 @@
 ### S.H.I.P. (Send Handwritten Inquisitive Petitions)
 *nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL) written in Lua.*
 
-## ⚠️ Attention
-- This plugin was migrated to `Zig` (in part) for maintainance purposes
-- The old bash script version can be used setting the branch `bash` the the package builder
+## ⚠️ Breaking changes
+- This plugin was rewritten in `Zig` (in part) for maintenance purposes
+- The former bash version can be used setting the branch `bash` in the package builder
 ```lua
 -- Lazy.nvim example
-"javiorfo/nvim-ship",
+{
+    "javiorfo/nvim-ship",
     lazy = true,
-    ft = "ship",
     branch = "bash",
-    cmd = { "ShipBuild", "ShipCreate", "ShipCreateEnv" },
-    dependencies = {
-        "javiorfo/nvim-popcorn",
-        "javiorfo/nvim-spinetta",
-        "hrsh7th/nvim-cmp"
-    },
+    -- ... 
 }
 ```
 
 ## Caveats
-- **nvim-ship** needs `zig >= 0.13.0`, `jq` and `libcurl` to be installed. Otherwise it will throw a warning message.
+- **nvim-ship** needs `[zig](https://github.com/ziglang/zig) >= 0.13.0`, `[jq](https://github.com/stedolan/jq)` and `libcurl` to be installed. Otherwise it will throw a warning message.
 - This plugin has been developed on and for Linux following open source philosophy.
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />
@@ -344,6 +339,7 @@ local localhost = dofile("/absolute/path/to/localhost.lua")
 vim.api.nvim_set_keymap('n', '<leader>sh', '<cmd>Ship<CR>', { noremap = true, silent = true })
 ```
 ### ShipBuild
+- This will build zig binaries (ship and jwt)
 
 ### ShipCloseResponse
 - This will close all the open responses
@@ -366,6 +362,9 @@ vim.api.nvim_set_keymap('n', '<leader>sc', '<cmd>ShipCloseResponse<CR>', { norem
 - Executing `:ShipCreateEnv foldernamehere` will create a folder called **foldernamehere** with the same Lua files
 
 ### ShipDecodeJWT
+- This will search the header **Authorization** in the ship file and will decode the JWT value (if valid).
+
+<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_jwt.png" alt="ship jwt" />
 
 ### ShipDeleteLogs
 - This will delete the log file

@@ -11,6 +11,7 @@ M.ship_response_extension = "shipo"
 M.ship_root_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/ship", "")
 M.script_path = M.ship_root_path .. "script/ship.sh"
 M.bin_path = M.ship_root_path .. "bin/ship"
+M.jwt_path = M.ship_root_path .. "bin/jwt"
 
 local logger = require 'ship.logger':new("Ship")
 M.logger = logger

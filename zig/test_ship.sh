@@ -11,4 +11,3 @@ zig build run -- -t 30 -m POST -u 'https://postman-echo.com/post' -f /tmp/file.s
 # zig build run -- -t 30 -m POST -u 'https://countries.trevorblades.com' -f /tmp/file.shipo -h none -c 'Content-Type;application/json;Accept;application/json' -b '{"query": "{ continents { code name } }"}'
 
 cat /tmp/file.shipo
-

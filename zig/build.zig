@@ -54,10 +54,11 @@ pub fn build(b: *std.Build) void {
     run_step_jwt.dependOn(&run_cmd_jwt.step);
 
     const exe_unit_tests = b.addTest(.{
-        .root_source_file = b.path("src/main.zig"),
+        .root_source_file = b.path("src/jwt.zig"),
         .target = target,
         .optimize = optimize,
     });
+    exe_unit_tests.root_module.addImport("prettizy", dep_prettizy.module("prettizy"));
 
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
 

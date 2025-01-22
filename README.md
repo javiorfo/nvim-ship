@@ -63,6 +63,7 @@
 - [Custom Setup & Configuration](#custom-configuration)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
+- [Ship File Examples](https://github.com/javiorfo/nvim-ship/tree/master/tests/ships)
 - [Logs](#logs)
 - [Integrations](#integrations)
 - [Issues](#issues)

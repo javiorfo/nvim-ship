@@ -2,8 +2,7 @@ local Logger = require'ship.util'.logger
 local M = {}
 
 local function is_http_method_valid(method)
-    local http_methods = { "GET", "POST", "PUT", "DELETE", "PATCH",
-        "CONNECT", "OPTIONS", "TRACE", "HEAD" }
+    local http_methods = { "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD" }
     for _, v in ipairs(http_methods) do
         if v == method then
             return true
@@ -33,19 +32,15 @@ end
 
 function M.dependencies_installed()
     if vim.bo.filetype ~= "ship" then
-        Logger:warn('This is not a SHIP filetype.')
-        return false
-    end
-    if vim.fn.executable("curl") == 0 then
-        Logger:warn("curl is required to be installed in order to execute SHIP.")
+        Logger:warn('This is not a Ship filetype.')
         return false
     end
     if vim.fn.executable("jq") == 0 then
-        Logger:warn("jq is required to be installed in order to execute SHIP.")
+        Logger:warn("jq is required to be installed in order to use nvim-ship.")
         return false
     end
-    if vim.fn.executable("tidy") == 0 then
-        Logger:warn("tidy is required to be installed in order to execute SHIP.")
+    if vim.fn.executable("zig") == 0 then
+        Logger:warn("Zig is required to be installed in order to use nvim-ship.")
         return false
     end
     return true

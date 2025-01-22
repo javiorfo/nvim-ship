@@ -2,15 +2,28 @@
 ### S.H.I.P. (Send Handwritten Inquisitive Petitions)
 *nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL) written in Lua.*
 
+## ⚠️ Breaking changes
+- This plugin was rewritten (in part) in `Zig` for maintenance purposes.
+- The former bash version can still be used setting the branch `bash` in the plugin manager
+```lua
+-- Lazy.nvim example
+{
+    "javiorfo/nvim-ship",
+    lazy = true,
+    branch = "bash",
+    -- ... 
+}
+```
+
 ## Caveats
-- **nvim-ship** needs [curl](https://github.com/curl/curl), [jq](https://github.com/stedolan/jq) and [tidy](https://github.com/htacg/tidy-html5) to be installed. Otherwise it will throw a warning message.
+- **nvim-ship** needs [zig](https://github.com/ziglang/zig) >= 0.13.0, [jq](https://github.com/stedolan/jq) and `libcurl` to be installed. Otherwise it will throw a warning message.
 - This plugin has been developed on and for Linux following open source philosophy.
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />
 
 | Feature | nvim-ship | NOTE |
 | ------- | ------------- | ---- |
-| REST | :heavy_check_mark: | Supports all http methods (GET, POST, etc) |
+| REST | :heavy_check_mark: | Supports all http methods (GET, POST, PUT, DELETE, PATCH and HEAD) |
 | GraphQL | :heavy_check_mark: | GraphQL queries on body |
 | gRPC | :x: |  |
 | WebSocket | :x: |  |
@@ -22,13 +35,11 @@
 | Request GraphQL query body | :heavy_check_mark: |  |
 | Request Multipart Form body | :heavy_check_mark: |  |
 | Request Form Url Encoded body | :heavy_check_mark: |  |
-| Request EDN body | :x: |  |
 | Request YAML body | :x: |  |
 | Response JSON | :heavy_check_mark: |  |
 | Response HTML | :heavy_check_mark: |  |
 | Response XML | :heavy_check_mark: |  |
 | Response Plain Text | :heavy_check_mark: |  |
-| Response EDN | :x: |  |
 | Response YAML | :x: |  |
 | Show Headers | :heavy_check_mark: | Set by `setup`. None, only response or all |
 | Authorization | :heavy_check_mark: | API Key Auth, Basic Auth, Bearer Token, OAuth 2.0, etc |
@@ -36,13 +47,14 @@
 | URL queries | :heavy_check_mark: |  |
 | Path parameters | :heavy_check_mark: |  |
 | Environment variables | :heavy_check_mark: | by Lua files |
-| Special ENV variables update | :heavy_check_mark: | executing `:SHIPSpecial` (JSON only) |
+| Special ENV variables update | :heavy_check_mark: | executing `:ShipSpecial` (JSON only) |
 | Output files | :heavy_check_mark: | Dismiss or save them. Output folder set by `setup` |
-| Output files Integrated with Telescope | :heavy_check_mark: | executing `:SHIPFindResponse` |
+| Output files Integrated with Telescope | :heavy_check_mark: | executing `:ShipFindResponse` |
 | Syntax highlighting | :heavy_check_mark: | Included |
-| Command to create ship file | :heavy_check_mark: | executing `:SHIPCreate` |
-| Command to create env archetype | :heavy_check_mark: | executing `:SHIPCreateEnv` |
-| Command to check LOGS | :heavy_check_mark: | executing `:SHIPShowLogs` |
+| Command to introspect JWT token | :heavy_check_mark: | executing `:ShipDecodeJWT` |
+| Command to create ship file | :heavy_check_mark: | executing `:ShipCreate` |
+| Command to create env archetype | :heavy_check_mark: | executing `:ShipCreateEnv` |
+| Command to check LOGS | :heavy_check_mark: | executing `:ShipShowLogs` |
 | Autocomplete | :heavy_check_mark: | with `nvim-cmp` |
 
 ## Table of Contents
@@ -51,6 +63,7 @@
 - [Custom Setup & Configuration](#custom-configuration)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
+- [Ship File Examples](https://github.com/javiorfo/nvim-ship/tree/master/tests/ships)
 - [Logs](#logs)
 - [Integrations](#integrations)
 - [Issues](#issues)
@@ -70,7 +83,7 @@ use {
     'javiorfo/nvim-ship',
     lazy = true,
     ft = 'ship',
-    cmd = { "ShipCreate", "ShipCreateEnv" },
+    cmd = { "ShipBuild", "ShipCreate", "ShipCreateEnv" },
     dependencies = {
          'javiorfo/nvim-spinetta',
          'javiorfo/nvim-popcorn',
@@ -124,7 +137,7 @@ The `ship files` are those with **.ship** extension (Ex: _some_file.ship_). Thes
     - **method** (required). Examples: GET, POST, PUT, DELETE, etc.
     - **env** (optional). This contains de absolute path of a Lua file in order to use environment variables
 - `~[HEADERS]~` is required and contains the headers a user could set. Examples: 
-    - **accept** application/json
+    - **Accept** application/json
     - **Authorization** Bearer xxx...
     - **custom-header** something
 - `~[BODY]~` is optional. It can contain JSON or XML formats:
@@ -326,6 +339,8 @@ local localhost = dofile("/absolute/path/to/localhost.lua")
 -- Mapping bound to user init.lua
 vim.api.nvim_set_keymap('n', '<leader>sh', '<cmd>Ship<CR>', { noremap = true, silent = true })
 ```
+### ShipBuild
+- This will build zig binaries (ship and jwt)
 
 ### ShipCloseResponse
 - This will close all the open responses
@@ -346,6 +361,11 @@ vim.api.nvim_set_keymap('n', '<leader>sc', '<cmd>ShipCloseResponse<CR>', { norem
 - This will create a basic structure for env variables
 - Executing `:ShipCreateEnv` will create a folder called **environment** with three Lua files inside: dev.lua, test.lua and prod.lua
 - Executing `:ShipCreateEnv foldernamehere` will create a folder called **foldernamehere** with the same Lua files
+
+### ShipDecodeJWT
+- This will search the header **Authorization** in the ship file and will decode the JWT value (if valid).
+
+<img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_jwt.png" alt="ship jwt" />
 
 ### ShipDeleteLogs
 - This will delete the log file

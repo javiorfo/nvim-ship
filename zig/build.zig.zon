@@ -1,0 +1,20 @@
+.{
+    .name = "ship",
+    .version = "0.1.0",
+    .minimum_zig_version = "0.13.0",
+    .dependencies = .{
+        .curl = .{
+            .url = "https://github.com/jiacai2050/zig-curl/archive/refs/heads/master.tar.gz",
+            .hash = "1220052b4170f05b9eabed41b3e56c6adc4c7aa897f41a204f309d3c4c6011502d93",
+        },
+        .prettizy = .{
+            .url = "https://github.com/javiorfo/prettizy/archive/refs/heads/master.tar.gz",
+            .hash = "1220e88e09d66c45b0f7da1224c5fce5e6b3476899433b99fb662049a1389bcbd686",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

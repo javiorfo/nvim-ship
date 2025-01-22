@@ -256,6 +256,7 @@ function M.decode_jwt()
             popcorn:new({
                 width = width + 8,
                 height = #content + 4,
+                border = setup.response.border_type,
                 title = { "󰀱 SHIP", "Boolean" },
                 footer = { "JWT decoded", "String" },
                 content = content

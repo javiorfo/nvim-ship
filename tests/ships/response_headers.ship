@@ -5,4 +5,4 @@ url https://httpbin.org/response-headers?freeform=myqueryparam
 method GET 
 
 ~[HEADERS]~
-accept application/json
+Accept application/json

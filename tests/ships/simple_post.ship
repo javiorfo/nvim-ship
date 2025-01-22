@@ -1,8 +1,0 @@
-# SHIP file 
-
-~[BASE]~
-url https://httpbin.org/post
-method POST
-
-~[HEADERS]~
-content-type application/json

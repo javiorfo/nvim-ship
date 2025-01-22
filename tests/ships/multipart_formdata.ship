@@ -1,0 +1,14 @@
+# SHIP file 
+
+~[BASE]~
+url https://postman-echo.com/post
+method POST
+
+~[HEADERS]~
+Content-Type multipart/form-data
+Accept application/json
+
+~[BODY]~
+field1 value1
+# When a file is sent leading @ is needed, otherwise it will send as a data string
+file @/path/to/some_file.txt 

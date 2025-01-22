@@ -8,9 +8,11 @@ M.sections = {
 
 M.status_time_tmp_file = "/tmp/ship_code_time_tmp"
 M.ship_response_extension = "shipo"
-M.script_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/ship", "") .. "script/ship.sh"
+M.ship_root_path = debug.getinfo(1).source:match("@?(.*/)"):gsub("/lua/ship", "")
+M.script_path = M.ship_root_path .. "script/ship.sh"
+M.bin_path = M.ship_root_path .. "bin/ship"
 
-local logger = require 'ship.logger':new("SHIP")
+local logger = require 'ship.logger':new("Ship")
 M.logger = logger
 
 function M.sections_to_skip(section_to_process)

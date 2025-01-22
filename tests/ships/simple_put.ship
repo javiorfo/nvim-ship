@@ -5,4 +5,4 @@ url https://httpbin.org/put
 method PUT
 
 ~[HEADERS]~
-content-type application/json
+Content-Type application/json

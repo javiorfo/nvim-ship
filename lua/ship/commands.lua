@@ -1,14 +1,17 @@
-local core = require'ship.core'
-local util = require'ship.util'
-local validator = require'ship.validator'
+local core = require 'ship.core'
+local util = require 'ship.util'
+local validator = require 'ship.validator'
 local Logger = util.logger
+local spinetta = require 'spinetta'
+local popcorn = require 'popcorn'
+
 local M = {}
 
 function M.send()
     if validator.dependencies_installed() then
         Logger:debug("Executing SHIP command...")
         core.send()
---         vim.cmd("wincmd p")
+        --         vim.cmd("wincmd p")
     end
 end
 
@@ -68,7 +71,7 @@ end
 function M.find_responses()
     local ok, telescope = pcall(require, 'telescope.builtin')
     if ok then
-        telescope.live_grep{ glob_pattern = "*.shipo" }
+        telescope.live_grep { glob_pattern = "*.shipo" }
     else
         Logger:warn("This action require telescope.nvim plugin to be installed.")
     end
@@ -77,6 +80,51 @@ end
 function M.special(args)
     Logger:debug("Executing ShipSpecial command...")
     core.special(args[1])
+end
+
+function M.decode_jwt()
+    local handle = io.popen("/home/javier/.local/share/nvim/lazy/nvim-ship/bin/jwt")
+    if handle then
+        local result = handle:read("*a")
+        handle:close()
+        local content = {}
+        for line in string.gmatch(result, "[^\n]+") do
+            if line == "Header:" or line == "Payload:" then
+                table.insert(content, { line, "Boolean" })
+            else
+                table.insert(content, { line })
+            end
+        end
+        popcorn:new({
+            width = #content * 2.5,
+            height = #content * 1.5,
+            title = { "󰀱 SHIP", "Boolean" },
+            footer = { "JWT decoded", "String" },
+            content = content
+        }):pop()
+    end
+end
+
+function M.build()
+    if vim.fn.executable("zig") == 0 then
+        Logger:warn("Zig is required. Install it to use this plugin and then execute manually :ShipBuild")
+        return false
+    end
+
+    local root_path = util.ship_root_path
+    local script = string.format(
+        "%sscript/build.sh %s 2> >( while read line; do echo \"[ERROR][$(date '+%%m/%%d/%%Y %%T')]: ${line}\"; done >> %s)",
+        root_path,
+        root_path, require 'ship.logger'.ship_log_file)
+    local spinner = spinetta:new {
+        main_msg = "󰀱  SHIP   Building plugin... ",
+        speed_ms = 100,
+        on_success = function()
+            Logger:info("  nvim-ship is ready to be used!")
+        end
+    }
+
+    spinner:start(spinetta.job_to_run(script))
 end
 
 return M

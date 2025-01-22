@@ -6,6 +6,6 @@ method GET
 env /home/javier/.local/share/nvim/lazy/nvim-ship/tests/env/dev.lua 
 
 ~[HEADERS]~
-accept application/json
+Accept application/json
 my-header {{some_header}}
 Authorization Bearer {{token}}

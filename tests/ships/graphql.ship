@@ -5,7 +5,8 @@ url https://countries.trevorblades.com/
 method POST
 
 ~[HEADERS]~
-content-type application/json
+Content-Type application/json
+Accept application/json
 
 ~[BODY]~
 {

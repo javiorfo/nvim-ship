@@ -4,9 +4,13 @@ const request = @import("request.zig");
 const Arguments = @import("arguments.zig").Arguments;
 
 // ADICIONALES
-// Clean code
 // jwt decode
-// Handle errors (ship_log_file)
+// docs
+
+pub const std_options = .{
+    // Debug level to get zig-curl errors
+    .log_level = .debug,
+};
 
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -15,7 +19,6 @@ pub fn main() !void {
 
     var args = std.process.args();
 
-    // TODO manage this tries
     const arguments = try Arguments.new(&args);
     var shipper = try request.Shipper.init(allocator, arguments);
     defer shipper.deinit();

@@ -7,7 +7,7 @@ pub const c = @cImport({
     @cInclude("curl/curl.h");
     @cInclude("stdio.h");
 });
-//
+
 pub const Shipper = struct {
     allocator: std.mem.Allocator,
     arguments: Arguments,
@@ -31,6 +31,7 @@ pub const Shipper = struct {
         self.easy.deinit();
     }
 
+    /// This is an override of the zig-curl easy.perform() because I wanted to manage stderror
     fn perform(self: Shipper) !PerformResult {
         try self.easy.setCommonOpts();
         var perform_result = PerformResult{};
@@ -62,7 +63,7 @@ pub const Shipper = struct {
             } else |err| {
                 switch (err) {
                     error.PathAlreadyExists => {
-                        std.log.info("Directory already exists", .{});
+                        std.log.debug("Directory already exists", .{});
                     },
                     else => |e| {
                         return e;
@@ -71,6 +72,7 @@ pub const Shipper = struct {
             }
         }
 
+        // Set headers
         var headers = try self.easy.createHeaders();
         defer headers.deinit();
         var arg_headers = self.arguments.headers;
@@ -78,9 +80,11 @@ pub const Shipper = struct {
         while (arg_headers.next()) |h| {
             const value = arg_headers.next().?;
             try headers.add(h, value);
+            // Check if is multipart
             if (std.mem.eql(u8, h, "Content-Type") and std.mem.eql(u8, value, "multipart/form-data")) is_multipart = true;
         }
 
+        // Manage verbose to a stderr file
         const err_file_path = try std.fmt.allocPrintZ(self.allocator, "{s}.err", .{self.arguments.ship_file});
         const err_file: *c.FILE = c.fopen(err_file_path, "wb");
         errdefer _ = c.fclose(err_file);
@@ -88,25 +92,27 @@ pub const Shipper = struct {
 
         try self.easy.setUrl(try std.fmt.allocPrintZ(self.allocator, "{s}", .{self.arguments.url}));
 
+        var multi_part: ?curl.Easy.MultiPart = null;
         if (self.arguments.body) |body| {
             if (!is_multipart) {
+                // Plain body or from file
                 const result = if (std.mem.startsWith(u8, body, "@")) try getBodyFromFile(body) else body;
                 try self.easy.setPostFields(result);
             } else {
+                // Multipart parser
                 var lines = std.mem.splitSequence(u8, body, "&");
-                const multi_part = try self.easy.createMultiPart();
+                multi_part = try self.easy.createMultiPart();
                 while (lines.next()) |line| {
                     var field_value = std.mem.splitSequence(u8, line, "=");
                     const field = try std.fmt.allocPrintZ(self.allocator, "{s}", .{field_value.next().?});
                     const value = field_value.next().?;
                     const data_source: curl.Easy.MultiPart.DataSource = if (std.mem.startsWith(u8, value, "@")) .{ .file = try std.fmt.allocPrintZ(self.allocator, "{s}", .{value[1..]}) } else .{ .data = value };
-                    try multi_part.addPart(field, data_source);
-                    try self.easy.setMultiPart(multi_part);
+                    try multi_part.?.addPart(field, data_source);
+                    try self.easy.setMultiPart(multi_part.?);
                 }
-                // TODO handle deinit out of function
-                //                 defer multi_part.deinit();
             }
         }
+        defer if (multi_part) |m| m.deinit();
 
         if (self.arguments.show_headers == .all) try self.easy.setVerbose(true);
         try self.easy.setInsecure(self.arguments.insecure);
@@ -116,14 +122,17 @@ pub const Shipper = struct {
         try self.easy.setWritefunction(curl.bufferWriteCallback);
         try self.easy.setWritedata(&buf);
 
+        // Start time to perform
         const start_time = std.time.milliTimestamp();
 
         var perform_result = try self.perform();
         perform_result.response.body = buf;
         defer perform_result.response.deinit();
 
+        // End time to perform
         const end_time = std.time.milliTimestamp();
 
+        // Ship status_code,time to a file
         try self.writeToCodeAndTimeFile(perform_result.response.status_code, start_time, end_time);
 
         _ = c.fclose(err_file);
@@ -140,12 +149,14 @@ pub const Shipper = struct {
 
     fn writeToShipFile(self: Shipper, err_file_path: []const u8, perform_result: PerformResult) !void {
         const response = perform_result.response;
+        // Err file read only
         var file = try std.fs.openFileAbsolute(err_file_path, .{ .mode = .read_only });
         defer file.close();
 
         var buffer = std.ArrayList(u8).init(self.allocator);
         defer buffer.deinit();
 
+        // Get verbose or errors from stderr
         const reader = file.reader();
         var buffer_reader: [1024]u8 = undefined;
         while (try reader.readUntilDelimiterOrEof(&buffer_reader, '\n')) |line| {
@@ -158,6 +169,7 @@ pub const Shipper = struct {
         }
         if (buffer.items.len > 0) try buffer.append('\n');
 
+        // Headers if show option es 'res'
         if (self.arguments.show_headers == .res) {
             var iter = try response.iterateHeaders(.{});
             while (try iter.next()) |header| {
@@ -173,20 +185,19 @@ pub const Shipper = struct {
         try output_file.seekTo(0);
         try output_file.writeAll(buffer.items);
 
+        // If error
         if (perform_result.error_msg) |err| {
             _ = try output_file.write(err);
             return;
         }
 
+        // If response is good
         if (response.body) |r| {
-            const header = try response.getHeader("accept");
             var send: []const u8 = r.items;
-            if (header) |h| {
-                if (std.mem.eql(u8, h.name, "application/json")) {
-                    send = if (prettizy.json.isFormatted(r.items)) r.items else try prettizy.json.prettify(self.allocator, r.items, .{});
-                } else if (std.mem.eql(u8, h.name, "application/xml")) {
-                    send = if (prettizy.xml.isFormatted(r.items)) r.items else try prettizy.xml.prettify(self.allocator, r.items, .{});
-                }
+            if (std.mem.startsWith(u8, send, "{")) {
+                send = if (prettizy.json.isFormatted(r.items)) r.items else try prettizy.json.prettify(self.allocator, r.items, .{});
+            } else if (std.mem.startsWith(u8, send, "<")) {
+                send = if (prettizy.xml.isFormatted(r.items)) r.items else try prettizy.xml.prettify(self.allocator, r.items, .{});
             }
             _ = try output_file.write(send);
         }

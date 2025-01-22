@@ -5,7 +5,7 @@ url https://bravenewcoin.p.rapidapi.com/oauth/token
 method POST
 
 ~[HEADERS]~
-content-type application/json
+Content-Type application/json
 X-RapidAPI-Key SIGN-UP-FOR-KEY
 X-RapidAPI-Host bravenewcoin.p.rapidapi.com
 

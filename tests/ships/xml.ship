@@ -5,4 +5,4 @@ url https://httpbin.org/xml
 method GET 
 
 ~[HEADERS]~
-accept application/xml
+Accept application/xml

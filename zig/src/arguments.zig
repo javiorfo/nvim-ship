@@ -12,7 +12,6 @@ pub const Arguments = struct {
     headers: std.mem.SplitIterator(u8, .sequence) = undefined,
     save: bool = false,
     ship_output_folder: []const u8 = undefined,
-    ship_log_file: []const u8 = undefined,
     insecure: bool = false,
 
     const ShowHeaders = enum(u3) { all, res, none };
@@ -41,8 +40,6 @@ pub const Arguments = struct {
                 arguments.ship_output_folder = arg_it.next().?;
             } else if (std.mem.eql(u8, arg, "-b")) {
                 arguments.body = arg_it.next().?;
-            } else if (std.mem.eql(u8, arg, "-l")) {
-                arguments.ship_log_file = arg_it.next().?;
             } else if (std.mem.eql(u8, arg, "-i")) {
                 arguments.insecure = if (std.mem.eql(u8, arg_it.next().?, "true")) true else false;
             } else {

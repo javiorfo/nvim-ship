@@ -16,7 +16,7 @@
 ```
 
 ## Caveats
-- **nvim-ship** needs `[zig](https://github.com/ziglang/zig) >= 0.13.0`, `[jq](https://github.com/stedolan/jq)` and `libcurl` to be installed. Otherwise it will throw a warning message.
+- **nvim-ship** needs [zig](https://github.com/ziglang/zig) >= 0.13.0, [jq](https://github.com/stedolan/jq) and `libcurl` to be installed. Otherwise it will throw a warning message.
 - This plugin has been developed on and for Linux following open source philosophy.
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />

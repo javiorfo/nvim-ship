@@ -3,8 +3,8 @@
 *nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL) written in Lua.*
 
 ## ⚠️ Breaking changes
-- This plugin was rewritten in `Zig` (in part) for maintenance purposes
-- The former bash version can be used setting the branch `bash` in the package builder
+- This plugin was rewritten (in part) in `Zig` for maintenance purposes.
+- The former bash version can still be used setting the branch `bash` in the plugin manager
 ```lua
 -- Lazy.nvim example
 {

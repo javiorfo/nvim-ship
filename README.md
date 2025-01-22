@@ -1,6 +1,6 @@
 # nvim-ship
 ### S.H.I.P. (Send Handwritten Inquisitive Petitions)
-*nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL) written in Lua.*
+*nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL).*
 
 ## ⚠️ Breaking changes
 - This plugin was rewritten (in part) in `Zig` for maintenance purposes.

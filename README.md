@@ -85,7 +85,7 @@ use {
     ft = 'ship',
     build = function()
         -- Update the backend in every plugin change
-        require'ship.command'.build()
+        require'ship.commands'.build()
     end,
     cmd = { "ShipBuild", "ShipCreate", "ShipCreateEnv" },
     dependencies = {

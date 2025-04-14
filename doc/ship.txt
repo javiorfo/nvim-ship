@@ -233,7 +233,7 @@ NOTE: It works ONLY WITH JSON
 
 These are the list of commands in nvim-ship:
     - :Ship -> This will send the request of a ship file
-    - :ShipBuild -> This will build zig binaries
+    - :ShipBuild -> This will build Rust binaries
     - :ShipCloseResponse -> This will close all the responses opened
     - :ShipCreate -> This will create a basic ship file
     - :ShipCreateEnv -> This will create a basic structure for env variables

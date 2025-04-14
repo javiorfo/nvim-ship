@@ -87,8 +87,8 @@ function M.decode_jwt()
 end
 
 function M.build()
-    if vim.fn.executable("zig") == 0 then
-        Logger:warn("Zig is required. Install it to use this plugin and then execute manually :ShipBuild")
+    if vim.fn.executable("cargo") == 0 then
+        Logger:warn("Rust is required. Install it to use this plugin and then execute manually :ShipBuild")
         return false
     end
 

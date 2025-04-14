@@ -3,7 +3,7 @@
 *nvim-ship is a Neovim plugin for calling APIs (REST and GraphQL).*
 
 ## ⚠️ Breaking changes
-- This plugin was rewritten (in part) in `Zig` for maintenance purposes.
+- This plugin was rewritten (in part) in `Rust` for maintenance purposes.
 - The former bash version can still be used setting the branch `bash` in the plugin manager
 ```lua
 -- Lazy.nvim example
@@ -16,7 +16,7 @@
 ```
 
 ## Caveats
-- **nvim-ship** needs [zig](https://github.com/ziglang/zig) >= 0.13.0, [jq](https://github.com/stedolan/jq) and `libcurl` to be installed. Otherwise it will throw a warning message.
+- **nvim-ship** needs [rust](https://github.com/rust-lang/rust) >= 1.85.0, and `libcurl` to be installed. Otherwise it will throw a warning message.
 - This plugin has been developed on and for Linux following open source philosophy.
 
 <img src="https://github.com/javiorfo/img/blob/master/nvim-ship/ship_initial.gif" alt="ship presentation" />
@@ -344,7 +344,7 @@ local localhost = dofile("/absolute/path/to/localhost.lua")
 vim.api.nvim_set_keymap('n', '<leader>sh', '<cmd>Ship<CR>', { noremap = true, silent = true })
 ```
 ### ShipBuild
-- This will build zig binaries (ship and jwt)
+- This will build Rust binaries (ship and jwt)
 
 ### ShipCloseResponse
 - This will close all the open responses

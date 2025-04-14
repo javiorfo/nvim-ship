@@ -39,8 +39,8 @@ function M.dependencies_installed()
         Logger:warn("jq is required to be installed in order to use nvim-ship.")
         return false
     end
-    if vim.fn.executable("zig") == 0 then
-        Logger:warn("Zig is required to be installed in order to use nvim-ship.")
+    if vim.fn.executable("cargo") == 0 then
+        Logger:warn("Rust is required to be installed in order to use nvim-ship.")
         return false
     end
     return true

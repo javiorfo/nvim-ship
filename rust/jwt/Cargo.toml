@@ -1,0 +1,9 @@
+[package]
+name = "jwt"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+base64 = "0.22.1"
+serde_json = { workspace = true }

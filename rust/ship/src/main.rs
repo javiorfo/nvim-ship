@@ -4,7 +4,6 @@ use arguments::Args;
 use request::Shipper;
 
 mod arguments;
-mod error;
 mod request;
 mod xml;
 

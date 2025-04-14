@@ -47,3 +47,27 @@ pub fn format_xml(src: &str) -> Result<String, Box<dyn std::error::Error>> {
 
     Ok(String::from_utf8(dest)?)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_format_xml() {
+        let input = r#"<root><child attr="value">Text</child></root>"#;
+        let expected_output = r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <child attr="value">Text</child>
+</root>"#;
+
+        let result = format_xml(input).unwrap();
+        assert_eq!(result, expected_output);
+    }
+
+    #[test]
+    fn test_format_xml_with_malformed_input() {
+        let input = r#"<root><child></root>"#;
+        let result = format_xml(input);
+        assert!(result.is_err());
+    }
+}

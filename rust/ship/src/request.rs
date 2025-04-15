@@ -7,6 +7,7 @@ use curl::easy::{Easy, Form, InfoType, List, Transfer};
 use serde_json::Value;
 
 use crate::arguments::{Args, ShowHeaders};
+use crate::error::{ShipError, ShipResult};
 use crate::xml::format_xml;
 
 #[derive(Debug)]
@@ -23,9 +24,9 @@ impl<'a> Shipper<'a> {
         }
     }
 
-    pub fn call(&mut self) {
+    pub fn call(&mut self) -> ShipResult {
         let filename = if self.args.save {
-            std::fs::create_dir_all(self.args.ship_output_folder).unwrap();
+            std::fs::create_dir_all(self.args.ship_output_folder).map_err(ShipError::Io)?;
             &format!("{}/{}", self.args.ship_output_folder, self.args.ship_file)
         } else {
             self.args.ship_file
@@ -35,22 +36,25 @@ impl<'a> Shipper<'a> {
             .create(true)
             .append(true)
             .open(filename)
-            .expect("Unable to open file");
+            .map_err(ShipError::Io)?;
 
         let response = RefCell::new(vec![]);
         let mut curl = Easy::new();
-        curl.url(self.args.url).unwrap();
-        curl.custom_request(self.args.method.as_ref()).unwrap();
-        curl.timeout(self.args.timeout).unwrap();
-        curl.ssl_verify_host(!self.args.insecure).unwrap();
-        curl.ssl_verify_peer(!self.args.insecure).unwrap();
+        curl.url(self.args.url).map_err(ShipError::Curl)?;
+        curl.custom_request(self.args.method.as_ref())
+            .map_err(ShipError::Curl)?;
+        curl.timeout(self.args.timeout).map_err(ShipError::Curl)?;
+        curl.ssl_verify_host(!self.args.insecure)
+            .map_err(ShipError::Curl)?;
+        curl.ssl_verify_peer(!self.args.insecure)
+            .map_err(ShipError::Curl)?;
 
         let is_multipart = self.args.headers.iter().any(|header| {
             header.to_lowercase().contains("content-type") && header.contains("multipart/form-data")
         });
 
         if let ShowHeaders::All = self.args.show_headers {
-            curl.verbose(true).unwrap();
+            curl.verbose(true).map_err(ShipError::Curl)?;
         }
 
         let headers = &self.args.headers;
@@ -66,15 +70,17 @@ impl<'a> Shipper<'a> {
 
         if let Some(body) = self.args.body {
             if is_multipart {
-                curl.httppost(self.new_form(body)).unwrap();
+                curl.httppost(self.new_form(body)?)
+                    .map_err(ShipError::Curl)?;
             } else if body.starts_with("@") {
                 let body = std::fs::read_to_string(body.replace("@", "")).unwrap();
                 self.inner_body = Some(body);
                 curl.post_field_size(self.inner_body.as_ref().unwrap().len() as u64)
-                    .unwrap();
+                    .map_err(ShipError::Curl)?;
             } else {
                 self.inner_body = Some(body.to_string());
-                curl.post_field_size(body.len() as u64).unwrap();
+                curl.post_field_size(body.len() as u64)
+                    .map_err(ShipError::Curl)?;
             }
         }
 
@@ -90,7 +96,7 @@ impl<'a> Shipper<'a> {
                         _ => {}
                     };
                 })
-                .unwrap();
+                .map_err(ShipError::Curl)?;
         }
 
         transfer
@@ -102,11 +108,11 @@ impl<'a> Shipper<'a> {
                 }
                 true
             })
-            .unwrap();
+            .map_err(ShipError::Curl)?;
 
         if self.inner_body.is_some() && !is_multipart {
             let body = self.inner_body.as_ref().unwrap();
-            self.set_body(body, &mut transfer);
+            self.set_body(body, &mut transfer)?;
         }
 
         let start = Instant::now();
@@ -115,30 +121,40 @@ impl<'a> Shipper<'a> {
                 response.borrow_mut().extend_from_slice(data);
                 Ok(data.len())
             })
-            .unwrap();
+            .map_err(ShipError::Curl)?;
 
-        transfer.perform().unwrap();
+        transfer.perform().map_err(ShipError::Curl)?;
         drop(transfer);
         let elapsed = start.elapsed();
 
         self.write_code_and_time_to_file(curl.response_code().unwrap_or(0), elapsed)
-            .unwrap();
+            .map_err(ShipError::Io)?;
 
         if response_headers.borrow().iter().any(|header| {
             header.to_lowercase().contains("content-type") && header.contains("application/xml")
         }) {
             let borrow_response = response.borrow();
             let xml_response = std::str::from_utf8(borrow_response.as_slice()).unwrap();
-            let pretty = format_xml(xml_response).unwrap();
-            self.write_to_ship_file(&mut ship_file, &pretty, response_headers.borrow().to_vec());
+            let pretty = format_xml(xml_response)
+                .map_err(|e| ShipError::Generic(format!("Error parsing XML {}", e)))?;
+            self.write_to_ship_file(&mut ship_file, &pretty, response_headers.borrow().to_vec())
+                .map_err(ShipError::Io)?;
         } else {
             let s: Value = serde_json::from_slice(response.borrow().as_slice()).unwrap();
-            let pretty = serde_json::to_string_pretty(&s).unwrap();
-            self.write_to_ship_file(&mut ship_file, &pretty, response_headers.borrow().to_vec());
+            let pretty = serde_json::to_string_pretty(&s)
+                .map_err(|e| ShipError::Generic(format!("Error parsing JSON {}", e)))?;
+            self.write_to_ship_file(&mut ship_file, &pretty, response_headers.borrow().to_vec())
+                .map_err(ShipError::Io)?;
         }
+        Ok(())
     }
 
-    fn write_to_ship_file(&self, ship_file: &mut File, content: &str, headers: Vec<String>) {
+    fn write_to_ship_file(
+        &self,
+        ship_file: &mut File,
+        content: &str,
+        headers: Vec<String>,
+    ) -> std::io::Result<()> {
         match self.args.show_headers {
             ShowHeaders::Res => {
                 let headers_to_str = headers.join("\n");
@@ -149,6 +165,8 @@ impl<'a> Shipper<'a> {
             ShowHeaders::None => {}
         }
         ship_file.write_all(content.as_bytes()).unwrap();
+
+        Ok(())
     }
 
     fn write_code_and_time_to_file(
@@ -156,21 +174,22 @@ impl<'a> Shipper<'a> {
         status_code: u32,
         elapsed: Duration,
     ) -> std::io::Result<()> {
-        let mut file = std::fs::File::create("/tmp/ship_code_time_tmp")?;
+        let mut file = File::create("/tmp/ship_code_time_tmp")?;
         let code_time = format!("{},{:.4}", status_code, elapsed.as_secs_f64());
 
         file.write_all(code_time.as_bytes())?;
         Ok(())
     }
 
-    fn set_body(&self, data: &'a str, transfer: &mut Transfer<'a, 'a>) {
+    fn set_body(&self, data: &'a str, transfer: &mut Transfer<'a, 'a>) -> ShipResult {
         let mut data = data.as_bytes();
         transfer
             .read_function(move |buf| Ok(data.read(buf).unwrap_or(0)))
-            .unwrap();
+            .map_err(ShipError::Curl)?;
+        Ok(())
     }
 
-    fn new_form(&self, body: &str) -> Form {
+    fn new_form(&self, body: &str) -> ShipResult<Form> {
         let mut form = Form::new();
 
         let fields: Vec<&str> = body.split('&').collect();
@@ -180,11 +199,14 @@ impl<'a> Shipper<'a> {
                 form.part(field)
                     .file(&value.replace("@", ""))
                     .add()
-                    .unwrap();
+                    .map_err(ShipError::Form)?;
             }
-            form.part(field).contents(value.as_bytes()).add().unwrap();
+            form.part(field)
+                .contents(value.as_bytes())
+                .add()
+                .map_err(ShipError::Form)?;
         }
 
-        form
+        Ok(form)
     }
 }

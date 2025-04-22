@@ -5,7 +5,7 @@
     .dependencies = .{
         .curl = .{
             .url = "https://github.com/jiacai2050/zig-curl/archive/refs/heads/master.tar.gz",
-            .hash = "122040c97ad2559e70319f98d752d85ffc5936f49b836ee427fc6e05fd06d3171acf",
+            .hash = "1220052b4170f05b9eabed41b3e56c6adc4c7aa897f41a204f309d3c4c6011502d93",
         },
         .prettizy = .{
             .url = "https://github.com/javiorfo/prettizy/archive/refs/heads/master.tar.gz",

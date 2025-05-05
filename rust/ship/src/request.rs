@@ -130,22 +130,44 @@ impl<'a> Shipper<'a> {
         self.write_code_and_time_to_file(curl.response_code().unwrap_or(0), elapsed)
             .map_err(ShipError::Io)?;
 
-        if response_headers.borrow().iter().any(|header| {
-            header.to_lowercase().contains("content-type") && header.contains("application/xml")
-        }) {
-            let borrow_response = response.borrow();
-            let xml_response = std::str::from_utf8(borrow_response.as_slice()).unwrap();
-            let pretty = format_xml(xml_response)
-                .map_err(|e| ShipError::Generic(format!("Error parsing XML {}", e)))?;
-            self.write_to_ship_file(&mut ship_file, &pretty, response_headers.borrow().to_vec())
+        match response_headers
+            .borrow()
+            .iter()
+            .find(|header| header.to_lowercase().contains("content-type"))
+        {
+            Some(header) if header.contains("application/xml") => {
+                let borrow_response = response.borrow();
+                let xml_response = std::str::from_utf8(borrow_response.as_slice()).unwrap();
+                let pretty = format_xml(xml_response)
+                    .map_err(|e| ShipError::Generic(format!("Error parsing XML {}", e)))?;
+                self.write_to_ship_file(
+                    &mut ship_file,
+                    &pretty,
+                    response_headers.borrow().to_vec(),
+                )
                 .map_err(ShipError::Io)?;
-        } else {
-            let s: Value = serde_json::from_slice(response.borrow().as_slice()).unwrap();
-            let pretty = serde_json::to_string_pretty(&s)
-                .map_err(|e| ShipError::Generic(format!("Error parsing JSON {}", e)))?;
-            self.write_to_ship_file(&mut ship_file, &pretty, response_headers.borrow().to_vec())
+            }
+            Some(header) if header.contains("application/json") => {
+                let s: Value = serde_json::from_slice(response.borrow().as_slice()).unwrap();
+                let pretty = serde_json::to_string_pretty(&s)
+                    .map_err(|e| ShipError::Generic(format!("Error parsing JSON {}", e)))?;
+                self.write_to_ship_file(
+                    &mut ship_file,
+                    &pretty,
+                    response_headers.borrow().to_vec(),
+                )
                 .map_err(ShipError::Io)?;
+            }
+            _ => {
+                self.write_to_ship_file(
+                    &mut ship_file,
+                    std::str::from_utf8(response.borrow().as_slice()).unwrap(),
+                    response_headers.borrow().to_vec(),
+                )
+                .map_err(ShipError::Io)?;
+            }
         }
+
         Ok(())
     }
 

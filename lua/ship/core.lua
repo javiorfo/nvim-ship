@@ -69,8 +69,8 @@ end
 local function process_headers(headers)
     local result = "'"
     for k, v in pairs(headers) do
-        local string_format = ";%s;%s"
-        if #result == 1 then string_format = "%s;%s" end
+        local string_format = ";%s:%s"
+        if #result == 1 then string_format = "%s:%s" end
         result = result .. string.format(string_format, k, v)
     end
     result = result .. "'"

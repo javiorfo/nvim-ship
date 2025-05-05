@@ -130,7 +130,7 @@ impl<'a> Shipper<'a> {
         self.write_code_and_time_to_file(curl.response_code().unwrap_or(0), elapsed)
             .map_err(ShipError::Io)?;
 
-        match response_headers
+        let response = match response_headers
             .borrow()
             .iter()
             .find(|header| header.to_lowercase().contains("content-type"))
@@ -138,35 +138,25 @@ impl<'a> Shipper<'a> {
             Some(header) if header.contains("application/xml") => {
                 let borrow_response = response.borrow();
                 let xml_response = std::str::from_utf8(borrow_response.as_slice()).unwrap();
-                let pretty = format_xml(xml_response)
-                    .map_err(|e| ShipError::Generic(format!("Error parsing XML {}", e)))?;
-                self.write_to_ship_file(
-                    &mut ship_file,
-                    &pretty,
-                    response_headers.borrow().to_vec(),
-                )
-                .map_err(ShipError::Io)?;
+                
+                format_xml(xml_response)
+                    .map_err(|e| ShipError::Generic(format!("Error parsing XML {}", e)))?
             }
             Some(header) if header.contains("application/json") => {
                 let s: Value = serde_json::from_slice(response.borrow().as_slice()).unwrap();
-                let pretty = serde_json::to_string_pretty(&s)
-                    .map_err(|e| ShipError::Generic(format!("Error parsing JSON {}", e)))?;
-                self.write_to_ship_file(
-                    &mut ship_file,
-                    &pretty,
-                    response_headers.borrow().to_vec(),
-                )
-                .map_err(ShipError::Io)?;
+                
+                serde_json::to_string_pretty(&s)
+                    .map_err(|e| ShipError::Generic(format!("Error parsing JSON {}", e)))?
             }
-            _ => {
-                self.write_to_ship_file(
-                    &mut ship_file,
-                    std::str::from_utf8(response.borrow().as_slice()).unwrap(),
-                    response_headers.borrow().to_vec(),
-                )
-                .map_err(ShipError::Io)?;
-            }
-        }
+            _ => String::from_utf8(response.borrow().to_vec()).unwrap(),
+        };
+
+        self.write_to_ship_file(
+            &mut ship_file,
+            &response,
+            response_headers.borrow().to_vec(),
+        )
+        .map_err(ShipError::Io)?;
 
         Ok(())
     }

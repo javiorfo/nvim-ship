@@ -86,7 +86,7 @@ pub const Shipper = struct {
 
         // Manage verbose to a stderr file
         const err_file_path = try std.fmt.allocPrintZ(self.allocator, "{s}.err", .{self.arguments.ship_file});
-        const err_file: *c.FILE = c.fopen(err_file_path, "wb");
+        const err_file: *c.FILE = c.fopen(err_file_path, "wb").?;
         errdefer _ = c.fclose(err_file);
         _ = c.curl_easy_setopt(self.easy.handle, c.CURLOPT_STDERR, err_file);
 

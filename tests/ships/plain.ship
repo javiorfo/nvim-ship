@@ -1,0 +1,8 @@
+# SHIP file 
+
+~[BASE]~
+url https://httpbin.org/robots.txt
+method GET 
+
+~[HEADERS]~
+Accept text/plain

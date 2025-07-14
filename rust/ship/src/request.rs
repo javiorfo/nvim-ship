@@ -138,15 +138,15 @@ impl<'a> Shipper<'a> {
             Some(header) if header.contains("application/xml") => {
                 let borrow_response = response.borrow();
                 let xml_response = std::str::from_utf8(borrow_response.as_slice()).unwrap();
-                
+
                 format_xml(xml_response)
-                    .map_err(|e| ShipError::Generic(format!("Error parsing XML {}", e)))?
+                    .map_err(|e| ShipError::Generic(format!("Error parsing XML {e}")))?
             }
             Some(header) if header.contains("application/json") => {
                 let s: Value = serde_json::from_slice(response.borrow().as_slice()).unwrap();
-                
+
                 serde_json::to_string_pretty(&s)
-                    .map_err(|e| ShipError::Generic(format!("Error parsing JSON {}", e)))?
+                    .map_err(|e| ShipError::Generic(format!("Error parsing JSON {e}")))?
             }
             _ => String::from_utf8(response.borrow().to_vec()).unwrap(),
         };
